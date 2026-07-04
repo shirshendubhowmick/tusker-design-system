@@ -1,0 +1,27 @@
+/*
+  Breakpoints (mobile-first)
+
+  We replace Tailwind’s default sm/md/lg/… scale with three product names:
+    mobile  — base (no prefix); 0–767px
+    tablet  — @media (min-width: 48rem)  → 768px+
+    desktop — @media (min-width: 64rem)  → 1024px+
+
+  Usage:
+    <div className="flex-col tablet:flex-row desktop:gap-8" />
+    <nav className="hidden desktop:block" />
+*/
+
+@theme {
+  /* Clear default Tailwind screens so only our tiers exist as variants. */
+  --breakpoint-*: initial;
+
+  /*
+    Mobile is the base tier — no min-width variant is required.
+    We still register a token for documentation / container queries / JS.
+  */
+  --breakpoint-mobile: 0rem;
+
+  /* min-width thresholds (Tailwind variants: tablet: / desktop:) */
+  --breakpoint-tablet: 48rem; /* 768px */
+  --breakpoint-desktop: 64rem; /* 1024px */
+}

@@ -1,0 +1,26 @@
+# Dependencies
+node_modules
+
+# Build
+dist
+storybook-static
+
+# Caches / tooling
+.turbo
+.cache
+*.tsbuildinfo
+
+# Env / OS
+.env
+.env.*
+.DS_Store
+
+# IDE
+.idea
+.vscode/*
+!.vscode/extensions.json
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*

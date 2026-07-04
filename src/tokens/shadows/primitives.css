@@ -1,0 +1,115 @@
+/*
+  Box shadows — CSS variables + @utility (not @theme shadow values)
+
+  Why: Tailwind v4 resolves @theme --shadow-* into baked hex inside .shadow-sm,
+  so .dark { --shadow-sm: … } never affects utilities. We register custom
+  utilities that read live CSS variables, which dark.css can override.
+*/
+
+/* Light defaults (also re-asserted under .light in dark.css) */
+:root,
+.light,
+.light-theme,
+[data-theme='light'] {
+  --shadow-none: 0 0 #0000;
+
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+
+  --shadow-sm:
+    0 1px 2px 0 rgb(0 0 0 / 0.06),
+    0 1px 3px 0 rgb(0 0 0 / 0.1);
+
+  --shadow-md:
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.08);
+
+  --shadow-lg:
+    0 10px 15px -3px rgb(0 0 0 / 0.12),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  --shadow-xl:
+    0 20px 25px -5px rgb(0 0 0 / 0.14),
+    0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+  --shadow-top-xs: 0 -1px 2px 0 rgb(0 0 0 / 0.05);
+
+  --shadow-top-sm:
+    0 -1px 2px 0 rgb(0 0 0 / 0.06),
+    0 -1px 3px 0 rgb(0 0 0 / 0.1);
+
+  --shadow-top-md:
+    0 -4px 6px -1px rgb(0 0 0 / 0.1),
+    0 -2px 4px -2px rgb(0 0 0 / 0.08);
+
+  --shadow-top-lg:
+    0 -10px 15px -3px rgb(0 0 0 / 0.12),
+    0 -4px 6px -4px rgb(0 0 0 / 0.1);
+
+  --shadow-inner: inset 0 1px 2px 0 rgb(0 0 0 / 0.06);
+
+  --shadow-border: 0 0 0 1px var(--color-border-default);
+
+  --shadow-focus: 0 0 0 3px
+    color-mix(in srgb, var(--color-focus-ring) 45%, transparent);
+}
+
+/*
+  Clear default Tailwind shadow scale so only our product tokens exist.
+  (Prevents conflict with baked-in shadow-sm from core.)
+*/
+@theme {
+  --shadow-*: initial;
+}
+
+/* Utilities that always read the live CSS variable (theme-aware). */
+@utility shadow-none {
+  box-shadow: var(--shadow-none);
+}
+
+@utility shadow-xs {
+  box-shadow: var(--shadow-xs);
+}
+
+@utility shadow-sm {
+  box-shadow: var(--shadow-sm);
+}
+
+@utility shadow-md {
+  box-shadow: var(--shadow-md);
+}
+
+@utility shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+@utility shadow-xl {
+  box-shadow: var(--shadow-xl);
+}
+
+@utility shadow-top-xs {
+  box-shadow: var(--shadow-top-xs);
+}
+
+@utility shadow-top-sm {
+  box-shadow: var(--shadow-top-sm);
+}
+
+@utility shadow-top-md {
+  box-shadow: var(--shadow-top-md);
+}
+
+@utility shadow-top-lg {
+  box-shadow: var(--shadow-top-lg);
+}
+
+@utility shadow-inner {
+  box-shadow: var(--shadow-inner);
+}
+
+@utility shadow-border {
+  box-shadow: var(--shadow-border);
+}
+
+@utility shadow-focus {
+  box-shadow: var(--shadow-focus);
+}

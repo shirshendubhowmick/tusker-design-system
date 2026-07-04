@@ -1,0 +1,24 @@
+/*
+  Semantic z-index tokens → Tailwind utilities
+
+  Usage:
+    className="relative z-dropdown"
+    className="fixed inset-0 z-overlay"
+    className="fixed z-modal"
+    style={{ zIndex: 'var(--z-index-toast)' }}
+
+  Scale (low → high):
+    base(0) < raised(10) < dropdown(100) < sticky(200)
+    < overlay(300) < modal(400) < toast(500) < tooltip(600)
+*/
+
+@theme {
+  --z-index-base: 0;
+  --z-index-raised: 10;
+  --z-index-dropdown: 100;
+  --z-index-sticky: 200;
+  --z-index-overlay: 300;
+  --z-index-modal: 400;
+  --z-index-toast: 500;
+  --z-index-tooltip: 600;
+}
