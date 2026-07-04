@@ -8,8 +8,8 @@ import {
   designSystemViewports,
   storybookViewportNotes,
   type BreakpointName,
-} from './breakpoints';
-import { colorModeMeta, type ColorMode } from './colors';
+} from '../../src/tokens/breakpoints';
+import { colorModeMeta, type ColorMode } from '../../src/tokens/colors';
 
 function useViewportWidth() {
   const [width, setWidth] = useState<number>(() =>

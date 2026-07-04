@@ -4,13 +4,13 @@ import {
   shadowElevationOrder,
   shadowTopOrder,
   type ShadowName,
-} from './shadows';
+} from '../../src/tokens/shadows';
 import {
   colorModeMeta,
   formatSemanticRef,
   semanticColorTokens,
   type ColorMode,
-} from './colors';
+} from '../../src/tokens/colors';
 
 /** Explicit utilities so Tailwind emits classes. */
 const shadowClass: Record<ShadowName, string> = {

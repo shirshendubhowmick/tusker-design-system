@@ -5,8 +5,8 @@ import {
   zIndexClass,
   zIndexCssVar,
   type ZIndexName,
-} from './z-index';
-import { colorModeMeta, type ColorMode } from './colors';
+} from '../../src/tokens/z-index';
+import { colorModeMeta, type ColorMode } from '../../src/tokens/colors';
 
 /** Explicit map so Tailwind keeps the utilities. */
 const zClass: Record<ZIndexName, string> = {

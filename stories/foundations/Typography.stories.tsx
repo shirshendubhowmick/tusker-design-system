@@ -14,8 +14,8 @@ import {
   type LetterSpacingName,
   type TextStyleGroup,
   type TextStyleName,
-} from './typography';
-import { colorModeMeta, type ColorMode } from './colors';
+} from '../../src/tokens/typography';
+import { colorModeMeta, type ColorMode } from '../../src/tokens/colors';
 
 const textStyleClass: Record<TextStyleName, string> = {
   'display-lg': 'text-display-lg',

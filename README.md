@@ -206,5 +206,7 @@ src/
   styles/                  # Tailwind entry + token imports
   lib/                     # cn, …
   index.ts
+stories/
+  foundations/             # Storybook foundation stories
 .storybook/
 ```

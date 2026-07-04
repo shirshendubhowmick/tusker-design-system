@@ -12,7 +12,7 @@ import {
   type SemanticColorGroup,
   type ColorMode,
   type RadixStep,
-} from './colors';
+} from '../../src/tokens/colors';
 
 const paletteBg: Record<PaletteName, Record<RadixStep, string>> = {
   gray: {
