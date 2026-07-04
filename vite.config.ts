@@ -2,7 +2,9 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import dts from 'vite-plugin-dts';
-import { resolve } from 'node:path';
+import { fileURLToPath, URL } from 'node:url';
+
+const rootDir = fileURLToPath(new URL('.', import.meta.url));
 
 // Storybook loads this config for the preview; only emit library artifacts for `vite build`.
 const isStorybook = process.argv[1]?.includes('storybook') ?? false;
@@ -17,13 +19,14 @@ export default defineConfig({
         exclude: ['src/**/*.stories.tsx', 'src/**/*.test.tsx'],
         rollupTypes: true,
         insertTypesEntry: true,
+        tsconfigPath: './tsconfig.json',
       }),
   ],
   build: isStorybook
     ? undefined
     : {
         lib: {
-          entry: resolve(__dirname, 'src/index.ts'),
+          entry: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
           name: 'DesignSystem',
           formats: ['es', 'cjs'],
           fileName: (format) => (format === 'es' ? 'index.js' : 'index.cjs'),
@@ -50,4 +53,6 @@ export default defineConfig({
         sourcemap: true,
         emptyOutDir: true,
       },
+  // keep root explicit for Vite 8 / Storybook resolution
+  root: isStorybook ? undefined : rootDir,
 });
