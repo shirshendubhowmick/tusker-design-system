@@ -39,8 +39,8 @@ Add a new app the same way under `apps/*/tsconfig.json`.
 
 | Requirement | Version |
 | ----------- | ------- |
-| Node.js     | ≥ 20.19 |
-| pnpm        | ≥ 9     |
+| Node.js     | ≥ 24 (see `.nvmrc`) |
+| pnpm        | ≥ 11 (`packageManager`: pnpm@11.7.0) |
 
 ## Getting started
 
