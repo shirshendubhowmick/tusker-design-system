@@ -9,6 +9,7 @@ export {
 
 export {
   colorModes,
+  colorModeCssSelectors,
   colorModeMeta,
   colorModeActivation,
   type ColorMode,

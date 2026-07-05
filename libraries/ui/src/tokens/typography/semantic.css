@@ -1,11 +1,13 @@
 /*
+  AUTO-GENERATED — do not edit by hand.
+  Source: TypeScript token modules under src/tokens/
+  Regenerate: pnpm tokens:generate
+*/
+
+/*
   Layer 3 — Semantic text style utilities
 
   Usage: className="text-heading-lg text-fg-default"
-         className="text-body-md text-fg-muted"
-         className="text-code-sm text-fg-default"
-
-  Each utility sets family, size, weight, leading, tracking (and transform).
 */
 
 @utility text-display-lg {
@@ -179,3 +181,4 @@
   letter-spacing: var(--tracking-normal);
   font-variant-numeric: tabular-nums;
 }
+

@@ -1,15 +1,18 @@
 /*
-  Layer 2 — Product palette primitives
+  AUTO-GENERATED — do not edit by hand.
+  Source: TypeScript token modules under src/tokens/
+  Regenerate: pnpm tokens:generate
+*/
 
-  Bound per mode so nested .light / .dark scopes (and html.dark) always resolve
-  against the correct Radix scale values. Do not rely on inheriting a single
-  :root chain of var(--color-gray-1) → var(--slate-1) through theme layers.
+/*
+  Layer 2 — Product palette primitives (Tailwind registration)
 
+  Solid + alpha scales for each product palette → Radix source.
   Utilities: bg-gray-1 … text-brand-11, bg-gray-a3, …
 */
 
-/* Shared alpha overlays (not mode-paired the same way) */
 @theme {
+  /* Overlay: black */
   --color-black-a1: var(--black-a1);
   --color-black-a2: var(--black-a2);
   --color-black-a3: var(--black-a3);
@@ -23,6 +26,7 @@
   --color-black-a11: var(--black-a11);
   --color-black-a12: var(--black-a12);
 
+  /* Overlay: white */
   --color-white-a1: var(--white-a1);
   --color-white-a2: var(--white-a2);
   --color-white-a3: var(--white-a3);
@@ -36,7 +40,8 @@
   --color-white-a11: var(--white-a11);
   --color-white-a12: var(--white-a12);
 
-  /* Register color tokens with Tailwind (defaults = light bindings). */
+  /* Product palettes (defaults = light bindings). */
+  /* gray ← slate (neutral) */
   --color-gray-1: var(--slate-1);
   --color-gray-2: var(--slate-2);
   --color-gray-3: var(--slate-3);
@@ -49,7 +54,6 @@
   --color-gray-10: var(--slate-10);
   --color-gray-11: var(--slate-11);
   --color-gray-12: var(--slate-12);
-
   --color-gray-a1: var(--slate-a1);
   --color-gray-a2: var(--slate-a2);
   --color-gray-a3: var(--slate-a3);
@@ -63,6 +67,7 @@
   --color-gray-a11: var(--slate-a11);
   --color-gray-a12: var(--slate-a12);
 
+  /* brand ← indigo (brand) */
   --color-brand-1: var(--indigo-1);
   --color-brand-2: var(--indigo-2);
   --color-brand-3: var(--indigo-3);
@@ -75,7 +80,6 @@
   --color-brand-10: var(--indigo-10);
   --color-brand-11: var(--indigo-11);
   --color-brand-12: var(--indigo-12);
-
   --color-brand-a1: var(--indigo-a1);
   --color-brand-a2: var(--indigo-a2);
   --color-brand-a3: var(--indigo-a3);
@@ -89,6 +93,7 @@
   --color-brand-a11: var(--indigo-a11);
   --color-brand-a12: var(--indigo-a12);
 
+  /* green ← green (success) */
   --color-green-1: var(--green-1);
   --color-green-2: var(--green-2);
   --color-green-3: var(--green-3);
@@ -101,11 +106,20 @@
   --color-green-10: var(--green-10);
   --color-green-11: var(--green-11);
   --color-green-12: var(--green-12);
+  --color-green-a1: var(--green-a1);
+  --color-green-a2: var(--green-a2);
   --color-green-a3: var(--green-a3);
   --color-green-a4: var(--green-a4);
   --color-green-a5: var(--green-a5);
+  --color-green-a6: var(--green-a6);
+  --color-green-a7: var(--green-a7);
+  --color-green-a8: var(--green-a8);
+  --color-green-a9: var(--green-a9);
+  --color-green-a10: var(--green-a10);
   --color-green-a11: var(--green-a11);
+  --color-green-a12: var(--green-a12);
 
+  /* amber ← amber (warning) */
   --color-amber-1: var(--amber-1);
   --color-amber-2: var(--amber-2);
   --color-amber-3: var(--amber-3);
@@ -118,11 +132,20 @@
   --color-amber-10: var(--amber-10);
   --color-amber-11: var(--amber-11);
   --color-amber-12: var(--amber-12);
+  --color-amber-a1: var(--amber-a1);
+  --color-amber-a2: var(--amber-a2);
   --color-amber-a3: var(--amber-a3);
   --color-amber-a4: var(--amber-a4);
   --color-amber-a5: var(--amber-a5);
+  --color-amber-a6: var(--amber-a6);
+  --color-amber-a7: var(--amber-a7);
+  --color-amber-a8: var(--amber-a8);
+  --color-amber-a9: var(--amber-a9);
+  --color-amber-a10: var(--amber-a10);
   --color-amber-a11: var(--amber-a11);
+  --color-amber-a12: var(--amber-a12);
 
+  /* red ← red (danger) */
   --color-red-1: var(--red-1);
   --color-red-2: var(--red-2);
   --color-red-3: var(--red-3);
@@ -135,11 +158,20 @@
   --color-red-10: var(--red-10);
   --color-red-11: var(--red-11);
   --color-red-12: var(--red-12);
+  --color-red-a1: var(--red-a1);
+  --color-red-a2: var(--red-a2);
   --color-red-a3: var(--red-a3);
   --color-red-a4: var(--red-a4);
   --color-red-a5: var(--red-a5);
+  --color-red-a6: var(--red-a6);
+  --color-red-a7: var(--red-a7);
+  --color-red-a8: var(--red-a8);
+  --color-red-a9: var(--red-a9);
+  --color-red-a10: var(--red-a10);
   --color-red-a11: var(--red-a11);
+  --color-red-a12: var(--red-a12);
 
+  /* blue ← blue (info) */
   --color-blue-1: var(--blue-1);
   --color-blue-2: var(--blue-2);
   --color-blue-3: var(--blue-3);
@@ -152,8 +184,17 @@
   --color-blue-10: var(--blue-10);
   --color-blue-11: var(--blue-11);
   --color-blue-12: var(--blue-12);
+  --color-blue-a1: var(--blue-a1);
+  --color-blue-a2: var(--blue-a2);
   --color-blue-a3: var(--blue-a3);
   --color-blue-a4: var(--blue-a4);
   --color-blue-a5: var(--blue-a5);
+  --color-blue-a6: var(--blue-a6);
+  --color-blue-a7: var(--blue-a7);
+  --color-blue-a8: var(--blue-a8);
+  --color-blue-a9: var(--blue-a9);
+  --color-blue-a10: var(--blue-a10);
   --color-blue-a11: var(--blue-a11);
+  --color-blue-a12: var(--blue-a12);
 }
+

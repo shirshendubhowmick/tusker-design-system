@@ -1,15 +1,14 @@
 /*
+  AUTO-GENERATED — do not edit by hand.
+  Source: TypeScript token modules under src/tokens/
+  Regenerate: pnpm tokens:generate
+*/
+
+/*
   Layer 3 — Explicit LIGHT / DARK semantic (and primitive) rebinding
 
-  Why this file exists:
-  Theme tokens registered via @theme live on :root. Nested mode scopes and
-  html.dark must re-declare the tokens that components use so background /
-  foreground actually flip. Values point at Radix vars, which themselves swap
-  under .dark / .light (from @radix-ui/colors *-dark.css).
-
-  Selectors cover:
-  - html.dark / .dark / .dark-theme / [data-theme="dark"]
-  - .light / .light-theme / [data-theme="light"] (nested light islands)
+  Theme tokens registered via @theme live on :root. Nested mode scopes
+  and html.dark re-declare tokens so backgrounds / foregrounds flip.
 */
 
 /* ─── DARK ───────────────────────────────────────────────────────────── */
@@ -32,7 +31,6 @@ html.dark,
   --color-gray-10: var(--slate-10);
   --color-gray-11: var(--slate-11);
   --color-gray-12: var(--slate-12);
-
   --color-brand-1: var(--indigo-1);
   --color-brand-2: var(--indigo-2);
   --color-brand-3: var(--indigo-3);
@@ -45,7 +43,6 @@ html.dark,
   --color-brand-10: var(--indigo-10);
   --color-brand-11: var(--indigo-11);
   --color-brand-12: var(--indigo-12);
-
   --color-green-1: var(--green-1);
   --color-green-2: var(--green-2);
   --color-green-3: var(--green-3);
@@ -58,7 +55,6 @@ html.dark,
   --color-green-10: var(--green-10);
   --color-green-11: var(--green-11);
   --color-green-12: var(--green-12);
-
   --color-amber-1: var(--amber-1);
   --color-amber-2: var(--amber-2);
   --color-amber-3: var(--amber-3);
@@ -71,7 +67,6 @@ html.dark,
   --color-amber-10: var(--amber-10);
   --color-amber-11: var(--amber-11);
   --color-amber-12: var(--amber-12);
-
   --color-red-1: var(--red-1);
   --color-red-2: var(--red-2);
   --color-red-3: var(--red-3);
@@ -84,7 +79,6 @@ html.dark,
   --color-red-10: var(--red-10);
   --color-red-11: var(--red-11);
   --color-red-12: var(--red-12);
-
   --color-blue-1: var(--blue-1);
   --color-blue-2: var(--blue-2);
   --color-blue-3: var(--blue-3);
@@ -98,14 +92,13 @@ html.dark,
   --color-blue-11: var(--blue-11);
   --color-blue-12: var(--blue-12);
 
-  /* Semantic — dark mappings (direct Radix; surface steps raised for elevation) */
+  /* Semantic — dark mappings */
   --color-bg-canvas: var(--slate-1);
   --color-bg-subtle: var(--slate-2);
   --color-bg-surface: var(--slate-3);
   --color-bg-surface-hover: var(--slate-4);
   --color-bg-surface-active: var(--slate-5);
   --color-bg-inverse: var(--slate-12);
-
   --color-fg-default: var(--slate-12);
   --color-fg-muted: var(--slate-11);
   --color-fg-subtle: var(--slate-10);
@@ -115,43 +108,36 @@ html.dark,
   --color-fg-on-warning: #1c2024;
   --color-fg-on-danger: white;
   --color-fg-on-info: white;
-
   --color-border-default: var(--slate-6);
   --color-border-muted: var(--slate-5);
   --color-border-strong: var(--slate-8);
   --color-border-hover: var(--slate-7);
-
   --color-accent-solid: var(--indigo-9);
   --color-accent-solid-hover: var(--indigo-10);
   --color-accent-subtle: var(--indigo-3);
   --color-accent-subtle-hover: var(--indigo-4);
   --color-accent-border: var(--indigo-7);
   --color-accent-text: var(--indigo-11);
-
   --color-success-solid: var(--green-9);
   --color-success-solid-hover: var(--green-10);
   --color-success-subtle: var(--green-3);
   --color-success-border: var(--green-7);
   --color-success-text: var(--green-11);
-
   --color-warning-solid: var(--amber-9);
   --color-warning-solid-hover: var(--amber-10);
   --color-warning-subtle: var(--amber-3);
   --color-warning-border: var(--amber-7);
   --color-warning-text: var(--amber-11);
-
   --color-danger-solid: var(--red-9);
   --color-danger-solid-hover: var(--red-10);
   --color-danger-subtle: var(--red-3);
   --color-danger-border: var(--red-7);
   --color-danger-text: var(--red-11);
-
   --color-info-solid: var(--blue-9);
   --color-info-solid-hover: var(--blue-10);
   --color-info-subtle: var(--blue-3);
   --color-info-border: var(--blue-7);
   --color-info-text: var(--blue-11);
-
   --color-focus-ring: var(--indigo-8);
   --color-overlay-scrim: var(--black-a9);
 }
@@ -163,6 +149,7 @@ html:not(.dark):not(.dark-theme),
 [data-theme='light'] {
   color-scheme: light;
 
+  /* Product primitives → Radix */
   --color-gray-1: var(--slate-1);
   --color-gray-2: var(--slate-2);
   --color-gray-3: var(--slate-3);
@@ -175,7 +162,6 @@ html:not(.dark):not(.dark-theme),
   --color-gray-10: var(--slate-10);
   --color-gray-11: var(--slate-11);
   --color-gray-12: var(--slate-12);
-
   --color-brand-1: var(--indigo-1);
   --color-brand-2: var(--indigo-2);
   --color-brand-3: var(--indigo-3);
@@ -188,7 +174,6 @@ html:not(.dark):not(.dark-theme),
   --color-brand-10: var(--indigo-10);
   --color-brand-11: var(--indigo-11);
   --color-brand-12: var(--indigo-12);
-
   --color-green-1: var(--green-1);
   --color-green-2: var(--green-2);
   --color-green-3: var(--green-3);
@@ -201,7 +186,6 @@ html:not(.dark):not(.dark-theme),
   --color-green-10: var(--green-10);
   --color-green-11: var(--green-11);
   --color-green-12: var(--green-12);
-
   --color-amber-1: var(--amber-1);
   --color-amber-2: var(--amber-2);
   --color-amber-3: var(--amber-3);
@@ -214,7 +198,6 @@ html:not(.dark):not(.dark-theme),
   --color-amber-10: var(--amber-10);
   --color-amber-11: var(--amber-11);
   --color-amber-12: var(--amber-12);
-
   --color-red-1: var(--red-1);
   --color-red-2: var(--red-2);
   --color-red-3: var(--red-3);
@@ -227,7 +210,6 @@ html:not(.dark):not(.dark-theme),
   --color-red-10: var(--red-10);
   --color-red-11: var(--red-11);
   --color-red-12: var(--red-12);
-
   --color-blue-1: var(--blue-1);
   --color-blue-2: var(--blue-2);
   --color-blue-3: var(--blue-3);
@@ -248,7 +230,6 @@ html:not(.dark):not(.dark-theme),
   --color-bg-surface-hover: var(--slate-3);
   --color-bg-surface-active: var(--slate-4);
   --color-bg-inverse: var(--slate-12);
-
   --color-fg-default: var(--slate-12);
   --color-fg-muted: var(--slate-11);
   --color-fg-subtle: var(--slate-10);
@@ -258,43 +239,37 @@ html:not(.dark):not(.dark-theme),
   --color-fg-on-warning: #1c2024;
   --color-fg-on-danger: white;
   --color-fg-on-info: white;
-
   --color-border-default: var(--slate-6);
   --color-border-muted: var(--slate-5);
   --color-border-strong: var(--slate-8);
   --color-border-hover: var(--slate-7);
-
   --color-accent-solid: var(--indigo-9);
   --color-accent-solid-hover: var(--indigo-10);
   --color-accent-subtle: var(--indigo-3);
   --color-accent-subtle-hover: var(--indigo-4);
   --color-accent-border: var(--indigo-7);
   --color-accent-text: var(--indigo-11);
-
   --color-success-solid: var(--green-9);
   --color-success-solid-hover: var(--green-10);
   --color-success-subtle: var(--green-3);
   --color-success-border: var(--green-7);
   --color-success-text: var(--green-11);
-
   --color-warning-solid: var(--amber-9);
   --color-warning-solid-hover: var(--amber-10);
   --color-warning-subtle: var(--amber-3);
   --color-warning-border: var(--amber-7);
   --color-warning-text: var(--amber-11);
-
   --color-danger-solid: var(--red-9);
   --color-danger-solid-hover: var(--red-10);
   --color-danger-subtle: var(--red-3);
   --color-danger-border: var(--red-7);
   --color-danger-text: var(--red-11);
-
   --color-info-solid: var(--blue-9);
   --color-info-solid-hover: var(--blue-10);
   --color-info-subtle: var(--blue-3);
   --color-info-border: var(--blue-7);
   --color-info-text: var(--blue-11);
-
   --color-focus-ring: var(--indigo-8);
   --color-overlay-scrim: var(--black-a8);
 }
+

@@ -3,6 +3,8 @@
   "private": true,
   "description": "Monorepo for the design system and related apps",
   "scripts": {
+    "tokens:generate": "pnpm --filter @design-system/ui tokens:generate",
+    "tokens:check": "pnpm --filter @design-system/ui tokens:check",
     "dev": "pnpm --filter @design-system/ui dev",
     "build": "pnpm -r --filter @design-system/ui build",
     "storybook": "pnpm --filter @design-system/ui storybook",

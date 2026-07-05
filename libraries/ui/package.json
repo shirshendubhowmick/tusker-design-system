@@ -29,10 +29,12 @@
     "./dist/design-system.css"
   ],
   "scripts": {
-    "dev": "storybook dev -p 6006",
-    "build": "tsc --noEmit && vite build && vite build --mode styles",
-    "build-storybook": "storybook build",
-    "storybook": "storybook dev -p 6006",
+    "tokens:generate": "node --experimental-strip-types ./scripts/generate-tokens.mts",
+    "tokens:check": "node --experimental-strip-types ./scripts/generate-tokens.mts --check",
+    "dev": "pnpm tokens:generate && storybook dev -p 6006",
+    "build": "pnpm tokens:generate && tsc --noEmit && vite build && vite build --mode styles",
+    "build-storybook": "pnpm tokens:generate && storybook build",
+    "storybook": "pnpm tokens:generate && storybook dev -p 6006",
     "typecheck": "tsc --noEmit",
     "lint": "tsc --noEmit"
   },
