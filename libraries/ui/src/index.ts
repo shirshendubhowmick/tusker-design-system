@@ -64,12 +64,7 @@ export {
 } from './tokens/breakpoints';
 export type { BreakpointName, DesignSystemViewport } from './tokens/breakpoints';
 
-export {
-  zIndexTokens,
-  zIndexOrder,
-  zIndexClass,
-  zIndexCssVar,
-} from './tokens/z-index';
+export { zIndexTokens, zIndexOrder, zIndexClass, zIndexCssVar } from './tokens/z-index';
 export type { ZIndexName } from './tokens/z-index';
 
 export {

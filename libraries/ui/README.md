@@ -2,10 +2,10 @@
 
 React + TypeScript design system for a **Dev tool SaaS** — tokens, utilities, and helpers built with **Tailwind CSS v4** and **Radix Colors**.
 
-- **ESM-first**, tree-shakeable JS API  
-- **Compiled stylesheet** with semantic tokens (color, type, shadow, z-index, breakpoints)  
-- **Light / dark** via `.dark` / `data-theme`  
-- **Storybook** for foundations documentation  
+- **ESM-first**, tree-shakeable JS API
+- **Compiled stylesheet** with semantic tokens (color, type, shadow, z-index, breakpoints)
+- **Light / dark** via `.dark` / `data-theme`
+- **Storybook** for foundations documentation
 
 Package name: `@design-system/ui`
 
@@ -136,8 +136,11 @@ function ThemeToggle() {
   const toggle = () => {
     document.documentElement.classList.toggle('dark');
     // optional mirror for scoped theming:
-    document.documentElement.dataset.theme =
-      document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    document.documentElement.dataset.theme = document.documentElement.classList.contains(
+      'dark',
+    )
+      ? 'dark'
+      : 'light';
   };
 
   return (
@@ -151,8 +154,9 @@ function ThemeToggle() {
 ```html
 <!-- SSR / static default -->
 <html class="light" data-theme="light">
-<!-- or -->
-<html class="dark" data-theme="dark">
+  <!-- or -->
+  <html class="dark" data-theme="dark"></html>
+</html>
 ```
 
 Nested islands are supported: a `.light` region can sit inside a dark app and re-assert light tokens.
@@ -163,10 +167,10 @@ Nested islands are supported: a `.light` region can sit inside a dark app and re
 
 ### Do I need Tailwind in the consuming app?
 
-| Goal | What to do |
-| --- | --- |
-| Use design-system utilities only (`bg-bg-canvas`, `text-heading-lg`, `shadow-md`, …) | Import `@design-system/ui/styles.css` — **no app Tailwind required** |
-| Also write custom Tailwind in the app | Install Tailwind in the app as usual; **still import** the design-system stylesheet for DS tokens/utilities |
+| Goal                                                                                 | What to do                                                                                                  |
+| ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| Use design-system utilities only (`bg-bg-canvas`, `text-heading-lg`, `shadow-md`, …) | Import `@design-system/ui/styles.css` — **no app Tailwind required**                                        |
+| Also write custom Tailwind in the app                                                | Install Tailwind in the app as usual; **still import** the design-system stylesheet for DS tokens/utilities |
 
 The package ships a **precompiled** CSS bundle. App-level Tailwind does not need to scan this package for those utilities to work.
 
@@ -224,8 +228,8 @@ import '@design-system/ui/styles.css';
 import '@design-system/ui';
 ```
 
-- Package is **ESM-first** with `preserveModules` output.  
-- `sideEffects` lists **CSS only** so pure JS can be eliminated.  
+- Package is **ESM-first** with `preserveModules` output.
+- `sideEffects` lists **CSS only** so pure JS can be eliminated.
 - Prefer `import` over CJS `require` for best shaking.
 
 ---
@@ -250,7 +254,11 @@ import {
 } from '@design-system/ui';
 
 // Classnames
-const className = cn('rounded-md bg-bg-surface p-4', 'tablet:p-6', condition && 'shadow-md');
+const className = cn(
+  'rounded-md bg-bg-surface p-4',
+  'tablet:p-6',
+  condition && 'shadow-md',
+);
 
 // Runtime breakpoint helper (e.g. analytics / layout logic)
 const tier = resolveBreakpoint(window.innerWidth); // 'mobile' | 'tablet' | 'desktop'
@@ -268,14 +276,14 @@ console.log(zIndexTokens.modal.value); // 400
 
 Prefer **semantic** utilities:
 
-| Category | Examples |
-| --- | --- |
+| Category   | Examples                                                         |
+| ---------- | ---------------------------------------------------------------- |
 | Background | `bg-bg-canvas`, `bg-bg-subtle`, `bg-bg-surface`, `bg-bg-inverse` |
-| Foreground | `text-fg-default`, `text-fg-muted`, `text-fg-on-accent` |
-| Border | `border-border-default`, `border-border-muted` |
-| Accent | `bg-accent-solid`, `text-accent-text`, `bg-accent-subtle` |
-| Status | `bg-success-solid`, `text-warning-text`, `bg-danger-subtle` |
-| Focus | `ring-focus-ring`, `shadow-focus` |
+| Foreground | `text-fg-default`, `text-fg-muted`, `text-fg-on-accent`          |
+| Border     | `border-border-default`, `border-border-muted`                   |
+| Accent     | `bg-accent-solid`, `text-accent-text`, `bg-accent-subtle`        |
+| Status     | `bg-success-solid`, `text-warning-text`, `bg-danger-subtle`      |
+| Focus      | `ring-focus-ring`, `shadow-focus`                                |
 
 Primitives (when needed): `bg-gray-1`…`12`, `bg-brand-9`, `text-green-11`, …
 
@@ -283,23 +291,23 @@ Palette: **gray**←slate · **brand**←indigo · green · amber · red · blue
 
 ### Typography
 
-| Style | Example class |
-| --- | --- |
-| Headings | `text-heading-xl` … `text-heading-xs` |
-| Body | `text-body-lg`, `text-body-md` (default 14px), `text-body-sm` |
-| Labels | `text-label-lg`, `text-label-md`, `text-label-overline` |
-| Code | `text-code-md`, `text-code-sm`, `text-code-block` |
-| Metrics | `text-metric-lg`, `text-metric-md`, `text-metric-sm` |
+| Style    | Example class                                                 |
+| -------- | ------------------------------------------------------------- |
+| Headings | `text-heading-xl` … `text-heading-xs`                         |
+| Body     | `text-body-lg`, `text-body-md` (default 14px), `text-body-sm` |
+| Labels   | `text-label-lg`, `text-label-md`, `text-label-overline`       |
+| Code     | `text-code-md`, `text-code-sm`, `text-code-block`             |
+| Metrics  | `text-metric-lg`, `text-metric-md`, `text-metric-sm`          |
 
 Families: `font-sans` (Inter) · `font-mono` (JetBrains Mono).
 
 ### Breakpoints (mobile-first)
 
-| Tier | Min width | Variant |
-| --- | --- | --- |
-| mobile | 0 | _(base — no prefix)_ |
-| tablet | 768px | `tablet:` |
-| desktop | 1024px | `desktop:` |
+| Tier    | Min width | Variant              |
+| ------- | --------- | -------------------- |
+| mobile  | 0         | _(base — no prefix)_ |
+| tablet  | 768px     | `tablet:`            |
+| desktop | 1024px    | `desktop:`           |
 
 Default Tailwind `sm` / `md` / `lg` screens are **replaced** by these names in the shipped CSS.
 
@@ -312,24 +320,24 @@ Default Tailwind `sm` / `md` / `lg` screens are **replaced** by these names in t
 
 ### Z-index
 
-| Token | Value | Class |
-| --- | --- | --- |
-| base | 0 | `z-base` |
-| raised | 10 | `z-raised` |
-| dropdown | 100 | `z-dropdown` |
-| sticky | 200 | `z-sticky` |
-| overlay | 300 | `z-overlay` |
-| modal | 400 | `z-modal` |
-| toast | 500 | `z-toast` |
-| tooltip | 600 | `z-tooltip` |
+| Token    | Value | Class        |
+| -------- | ----- | ------------ |
+| base     | 0     | `z-base`     |
+| raised   | 10    | `z-raised`   |
+| dropdown | 100   | `z-dropdown` |
+| sticky   | 200   | `z-sticky`   |
+| overlay  | 300   | `z-overlay`  |
+| modal    | 400   | `z-modal`    |
+| toast    | 500   | `z-toast`    |
+| tooltip  | 600   | `z-tooltip`  |
 
 ### Shadows
 
-| Direction | Classes | Use |
-| --- | --- | --- |
-| Down | `shadow-xs` … `shadow-xl` | Cards, menus, modals |
-| Up (top) | `shadow-top-xs` … `shadow-top-lg` | Bottom sheets, sticky footers |
-| Special | `shadow-inner`, `shadow-border`, `shadow-focus` | Wells, outline, focus |
+| Direction | Classes                                         | Use                           |
+| --------- | ----------------------------------------------- | ----------------------------- |
+| Down      | `shadow-xs` … `shadow-xl`                       | Cards, menus, modals          |
+| Up (top)  | `shadow-top-xs` … `shadow-top-lg`               | Bottom sheets, sticky footers |
+| Special   | `shadow-inner`, `shadow-border`, `shadow-focus` | Wells, outline, focus         |
 
 ```tsx
 <div className="rounded-lg border border-border-default bg-bg-surface shadow-sm">Card</div>
@@ -357,16 +365,16 @@ pnpm --filter @design-system/ui storybook
 pnpm --filter @design-system/ui build
 ```
 
-| Command | Description |
-| --- | --- |
-| `pnpm tokens:generate` | Generate token CSS from TypeScript sources |
-| `pnpm tokens:check` | Fail if generated CSS is stale (CI-friendly) |
-| `pnpm test` | Run Vitest (token catalog + codegen) |
-| `pnpm test:watch` | Vitest watch mode |
-| `pnpm dev` / `pnpm storybook` | Generate tokens + Storybook dev server |
-| `pnpm build` | Generate tokens + `tsc` + Vite lib + styles |
-| `pnpm build-storybook` | Generate tokens + static Storybook |
-| `pnpm typecheck` | TypeScript only |
+| Command                       | Description                                  |
+| ----------------------------- | -------------------------------------------- |
+| `pnpm tokens:generate`        | Generate token CSS from TypeScript sources   |
+| `pnpm tokens:check`           | Fail if generated CSS is stale (CI-friendly) |
+| `pnpm test`                   | Run Vitest (token catalog + codegen)         |
+| `pnpm test:watch`             | Vitest watch mode                            |
+| `pnpm dev` / `pnpm storybook` | Generate tokens + Storybook dev server       |
+| `pnpm build`                  | Generate tokens + `tsc` + Vite lib + styles  |
+| `pnpm build-storybook`        | Generate tokens + static Storybook           |
+| `pnpm typecheck`              | TypeScript only                              |
 
 ### Tokens (TypeScript is the source of truth)
 
@@ -408,11 +416,11 @@ libraries/ui/
 
 This package extends the monorepo base config:
 
-| File | Role |
-| --- | --- |
-| `../../tsconfig.base.json` | Shared strict compiler options |
-| `tsconfig.json` | Library sources under `src/` |
-| `tsconfig.node.json` | Vite, Vitest, Storybook, token scripts |
+| File                       | Role                                   |
+| -------------------------- | -------------------------------------- |
+| `../../tsconfig.base.json` | Shared strict compiler options         |
+| `tsconfig.json`            | Library sources under `src/`           |
+| `tsconfig.node.json`       | Vite, Vitest, Storybook, token scripts |
 
 ```bash
 pnpm typecheck   # both tsconfig.json and tsconfig.node.json

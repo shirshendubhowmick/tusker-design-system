@@ -68,8 +68,8 @@ function ZIndexDoc({ theme }: { theme: ColorMode }) {
       <section className="mb-10">
         <h2 className="mb-2 text-heading-md text-fg-default">Stacking preview</h2>
         <p className="mb-4 text-body-sm text-fg-muted">
-          Cards share one positioning context and use each semantic layer. Higher layers paint on
-          top (offset so every card stays visible).
+          Cards share one positioning context and use each semantic layer. Higher layers
+          paint on top (offset so every card stays visible).
         </p>
         <div className="relative h-[28rem] overflow-hidden rounded-xl border border-border-default bg-bg-subtle">
           {zIndexOrder.map((name, index) => {
@@ -83,7 +83,9 @@ function ZIndexDoc({ theme }: { theme: ColorMode }) {
               >
                 <p className="font-mono text-sm font-semibold">z-{name}</p>
                 <p className="mt-0.5 font-mono text-xs opacity-90">value {token.value}</p>
-                <p className="mt-1 text-xs leading-snug opacity-90">{token.description}</p>
+                <p className="mt-1 text-xs leading-snug opacity-90">
+                  {token.description}
+                </p>
               </div>
             );
           })}
@@ -112,14 +114,18 @@ function ZIndexDoc({ theme }: { theme: ColorMode }) {
                     <td className="px-3 py-2.5 font-mono text-xs font-semibold text-fg-default">
                       {name}
                     </td>
-                    <td className="px-3 py-2.5 font-mono text-xs text-fg-default">{token.value}</td>
+                    <td className="px-3 py-2.5 font-mono text-xs text-fg-default">
+                      {token.value}
+                    </td>
                     <td className="px-3 py-2.5 font-mono text-xs text-accent-text">
                       {zIndexClass(name)}
                     </td>
                     <td className="px-3 py-2.5 font-mono text-xs text-fg-muted">
                       {zIndexCssVar(name)}
                     </td>
-                    <td className="px-3 py-2.5 text-xs text-fg-muted">{token.description}</td>
+                    <td className="px-3 py-2.5 text-xs text-fg-muted">
+                      {token.description}
+                    </td>
                   </tr>
                 );
               })}
@@ -132,7 +138,7 @@ function ZIndexDoc({ theme }: { theme: ColorMode }) {
       <section>
         <h2 className="mb-3 text-heading-md text-fg-default">Usage</h2>
         <pre className="overflow-x-auto rounded-lg border border-border-default bg-bg-subtle p-3 text-code-sm text-fg-default">
-{`{/* Backdrop under the dialog */}
+          {`{/* Backdrop under the dialog */}
 <div className="fixed inset-0 z-overlay bg-overlay-scrim" />
 
 {/* Dialog surface */}
@@ -151,16 +157,17 @@ function ZIndexDoc({ theme }: { theme: ColorMode }) {
         </pre>
         <ul className="mt-4 list-disc space-y-2 pl-5 text-body-sm text-fg-muted">
           <li>
-            Parent stacking contexts (<code className="text-code-sm text-fg-default">transform</code>
-            , <code className="text-code-sm text-fg-default">opacity &lt; 1</code>,{' '}
-            <code className="text-code-sm text-fg-default">filter</code>) can trap children — prefer
-            portaling modals/toasts to <code className="text-code-sm text-fg-default">document.body</code>
-            .
+            Parent stacking contexts (
+            <code className="text-code-sm text-fg-default">transform</code>,{' '}
+            <code className="text-code-sm text-fg-default">opacity &lt; 1</code>,{' '}
+            <code className="text-code-sm text-fg-default">filter</code>) can trap
+            children — prefer portaling modals/toasts to{' '}
+            <code className="text-code-sm text-fg-default">document.body</code>.
           </li>
           <li>
             Need a new layer? Add it to{' '}
-            <code className="text-code-sm text-fg-default">zIndexTokens</code> between neighbors —
-            don’t invent one-off values in components.
+            <code className="text-code-sm text-fg-default">zIndexTokens</code> between
+            neighbors — don’t invent one-off values in components.
           </li>
         </ul>
       </section>

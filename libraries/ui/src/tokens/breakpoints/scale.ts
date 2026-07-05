@@ -47,7 +47,11 @@ export const breakpoints = {
 export type BreakpointName = keyof typeof breakpoints;
 
 /** Ordered from smallest to largest. */
-export const breakpointOrder = ['mobile', 'tablet', 'desktop'] as const satisfies readonly BreakpointName[];
+export const breakpointOrder = [
+  'mobile',
+  'tablet',
+  'desktop',
+] as const satisfies readonly BreakpointName[];
 
 /**
  * Resolve which named breakpoint a viewport width falls into (mobile-first ranges).

@@ -63,8 +63,7 @@ export const shadowTokens = {
     utility: 'shadow-sm',
     cssVar: '--shadow-sm',
     description: 'Default card / panel elevation on the canvas',
-    light:
-      '0 1px 2px 0 rgb(0 0 0 / 0.06), 0 1px 3px 0 rgb(0 0 0 / 0.1)',
+    light: '0 1px 2px 0 rgb(0 0 0 / 0.06), 0 1px 3px 0 rgb(0 0 0 / 0.1)',
     dark: '0 1px 2px 0 rgb(0 0 0 / 0.95), 0 4px 8px 0 rgb(0 0 0 / 0.8), 0 8px 20px 0 rgb(0 0 0 / 0.7)',
   },
   md: {
@@ -73,8 +72,7 @@ export const shadowTokens = {
     utility: 'shadow-md',
     cssVar: '--shadow-md',
     description: 'Dropdowns, popovers, select menus, floating toolbars',
-    light:
-      '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.08)',
+    light: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.08)',
     dark: '0 2px 4px 0 rgb(0 0 0 / 0.95), 0 8px 16px -2px rgb(0 0 0 / 0.85), 0 16px 32px -4px rgb(0 0 0 / 0.75)',
   },
   lg: {
@@ -83,8 +81,7 @@ export const shadowTokens = {
     utility: 'shadow-lg',
     cssVar: '--shadow-lg',
     description: 'Modals, drawers, command palette, large floating panels',
-    light:
-      '0 10px 15px -3px rgb(0 0 0 / 0.12), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+    light: '0 10px 15px -3px rgb(0 0 0 / 0.12), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
     dark: '0 4px 8px 0 rgb(0 0 0 / 0.95), 0 12px 24px -2px rgb(0 0 0 / 0.9), 0 28px 48px -6px rgb(0 0 0 / 0.8)',
   },
   xl: {
@@ -93,8 +90,7 @@ export const shadowTokens = {
     utility: 'shadow-xl',
     cssVar: '--shadow-xl',
     description: 'Highest elevation — rare full-screen takeovers, marketing moments',
-    light:
-      '0 20px 25px -5px rgb(0 0 0 / 0.14), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+    light: '0 20px 25px -5px rgb(0 0 0 / 0.14), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
     dark: '0 6px 12px 0 rgb(0 0 0 / 0.95), 0 20px 36px -4px rgb(0 0 0 / 0.92), 0 40px 64px -8px rgb(0 0 0 / 0.85)',
   },
 
@@ -114,8 +110,7 @@ export const shadowTokens = {
     utility: 'shadow-top-sm',
     cssVar: '--shadow-top-sm',
     description: 'Default bottom sheet / mobile action bar separation from content above',
-    light:
-      '0 -1px 2px 0 rgb(0 0 0 / 0.06), 0 -1px 3px 0 rgb(0 0 0 / 0.1)',
+    light: '0 -1px 2px 0 rgb(0 0 0 / 0.06), 0 -1px 3px 0 rgb(0 0 0 / 0.1)',
     dark: '0 -1px 2px 0 rgb(0 0 0 / 0.95), 0 -4px 8px 0 rgb(0 0 0 / 0.8), 0 -8px 20px 0 rgb(0 0 0 / 0.7)',
   },
   'top-md': {
@@ -124,8 +119,7 @@ export const shadowTokens = {
     utility: 'shadow-top-md',
     cssVar: '--shadow-top-md',
     description: 'Elevated bottom sheet or docked panel floating over scrollable content',
-    light:
-      '0 -4px 6px -1px rgb(0 0 0 / 0.1), 0 -2px 4px -2px rgb(0 0 0 / 0.08)',
+    light: '0 -4px 6px -1px rgb(0 0 0 / 0.1), 0 -2px 4px -2px rgb(0 0 0 / 0.08)',
     dark: '0 -2px 4px 0 rgb(0 0 0 / 0.95), 0 -8px 16px -2px rgb(0 0 0 / 0.85), 0 -16px 32px -4px rgb(0 0 0 / 0.75)',
   },
   'top-lg': {
@@ -133,9 +127,9 @@ export const shadowTokens = {
     group: 'top',
     utility: 'shadow-top-lg',
     cssVar: '--shadow-top-lg',
-    description: 'Strong top shadow — large bottom sheets, media scrubbers, prominent docks',
-    light:
-      '0 -10px 15px -3px rgb(0 0 0 / 0.12), 0 -4px 6px -4px rgb(0 0 0 / 0.1)',
+    description:
+      'Strong top shadow — large bottom sheets, media scrubbers, prominent docks',
+    light: '0 -10px 15px -3px rgb(0 0 0 / 0.12), 0 -4px 6px -4px rgb(0 0 0 / 0.1)',
     dark: '0 -4px 8px 0 rgb(0 0 0 / 0.95), 0 -12px 24px -2px rgb(0 0 0 / 0.9), 0 -28px 48px -6px rgb(0 0 0 / 0.8)',
   },
 

@@ -1,17 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import {
-  shadowElevationOrder,
-  shadowOrder,
-  shadowTokens,
-  shadowTopOrder,
-} from './scale';
+import { shadowElevationOrder, shadowOrder, shadowTokens, shadowTopOrder } from './scale';
 
 describe('shadowTokens', () => {
   it('includes every token in shadowOrder exactly once', () => {
     expect(new Set(shadowOrder).size).toBe(shadowOrder.length);
-    expect([...shadowOrder].sort()).toEqual(
-      Object.keys(shadowTokens).sort(),
-    );
+    expect([...shadowOrder].sort()).toEqual(Object.keys(shadowTokens).sort());
   });
 
   it('has matching name, utility, and cssVar for each token', () => {
@@ -26,20 +19,8 @@ describe('shadowTokens', () => {
   });
 
   it('splits elevation and top scales without overlap (except shared catalog)', () => {
-    expect([...shadowElevationOrder]).toEqual([
-      'none',
-      'xs',
-      'sm',
-      'md',
-      'lg',
-      'xl',
-    ]);
-    expect([...shadowTopOrder]).toEqual([
-      'top-xs',
-      'top-sm',
-      'top-md',
-      'top-lg',
-    ]);
+    expect([...shadowElevationOrder]).toEqual(['none', 'xs', 'sm', 'md', 'lg', 'xl']);
+    expect([...shadowTopOrder]).toEqual(['top-xs', 'top-sm', 'top-md', 'top-lg']);
     for (const name of shadowTopOrder) {
       expect(shadowTokens[name].group).toBe('top');
     }

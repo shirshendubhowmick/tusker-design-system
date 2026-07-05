@@ -1,10 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  zIndexClass,
-  zIndexCssVar,
-  zIndexOrder,
-  zIndexTokens,
-} from './scale';
+import { zIndexClass, zIndexCssVar, zIndexOrder, zIndexTokens } from './scale';
 
 describe('zIndexTokens', () => {
   it('lists every token once in ascending order', () => {

@@ -121,7 +121,9 @@ function SurfaceRow({
             ) : null}
           </p>
         </div>
-        <code className={`shrink-0 font-mono text-[11px] ${mutedClass}`}>{surface.utility}</code>
+        <code className={`shrink-0 font-mono text-[11px] ${mutedClass}`}>
+          {surface.utility}
+        </code>
       </header>
 
       <div className={`${surface.utility} overflow-visible p-8`}>
@@ -172,8 +174,12 @@ function SurfaceRow({
                     className={`absolute inset-x-0 bottom-0 rounded-t-lg border border-b-0 border-border-default bg-bg-surface px-3 py-3 ${shadowClass[name]}`}
                   >
                     <div className="mx-auto mb-2 h-1 w-8 rounded-full bg-border-strong" />
-                    <p className="text-[11px] font-semibold text-fg-default">Bottom sheet</p>
-                    <p className="text-[10px] text-fg-muted">Top shadow onto content above</p>
+                    <p className="text-[11px] font-semibold text-fg-default">
+                      Bottom sheet
+                    </p>
+                    <p className="text-[10px] text-fg-muted">
+                      Top shadow onto content above
+                    </p>
                   </div>
                 </div>
               </div>
@@ -199,8 +205,10 @@ function ShadowsDoc({ theme }: { theme: ColorMode }) {
           </span>
         </div>
         <p className="mt-2 max-w-2xl text-body-md text-fg-muted">
-          Elevation previewed on product <strong className="text-fg-default">semantic surfaces</strong>{' '}
-          — canvas → subtle → surface → hover → active → inverse. Dark mode uses black occlusion (darker penumbra), not grey glows. Switch theme from the toolbar.
+          Elevation previewed on product{' '}
+          <strong className="text-fg-default">semantic surfaces</strong> — canvas → subtle
+          → surface → hover → active → inverse. Dark mode uses black occlusion (darker
+          penumbra), not grey glows. Switch theme from the toolbar.
         </p>
       </header>
 
@@ -242,8 +250,8 @@ function ShadowsDoc({ theme }: { theme: ColorMode }) {
           <h2 className="text-heading-md text-fg-default">1. Downward elevation</h2>
           <p className="mt-1 text-body-sm text-fg-muted">
             Shadow falls below the sample. Sample fill is{' '}
-            <code className="text-code-sm text-fg-default">bg-bg-surface</code> so the black
-            penumbra darkens the semantic backdrop behind it.
+            <code className="text-code-sm text-fg-default">bg-bg-surface</code> so the
+            black penumbra darkens the semantic backdrop behind it.
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
             {elevationShadows.map((name) => (
@@ -255,13 +263,13 @@ function ShadowsDoc({ theme }: { theme: ColorMode }) {
               </code>
             ))}
           </div>
-        <p className="mt-2 text-body-sm text-fg-muted">
-          Dark mode tip: <code className="text-code-sm">canvas</code> /{' '}
-          <code className="text-code-sm">subtle</code> are already near-black, so penumbra headroom
-          is small. Prefer floating UI on those backdrops at{' '}
-          <code className="text-code-sm">shadow-sm</code>+ (not xs), and lift the element with{' '}
-          <code className="text-code-sm">bg-bg-surface</code>.
-        </p>
+          <p className="mt-2 text-body-sm text-fg-muted">
+            Dark mode tip: <code className="text-code-sm">canvas</code> /{' '}
+            <code className="text-code-sm">subtle</code> are already near-black, so
+            penumbra headroom is small. Prefer floating UI on those backdrops at{' '}
+            <code className="text-code-sm">shadow-sm</code>+ (not xs), and lift the
+            element with <code className="text-code-sm">bg-bg-surface</code>.
+          </p>
         </div>
 
         {semanticSurfaces.map((surface) => (
@@ -358,8 +366,12 @@ function ShadowsDoc({ theme }: { theme: ColorMode }) {
                     <td className="px-3 py-2 font-mono text-xs font-medium text-accent-text">
                       {token.utility}
                     </td>
-                    <td className="px-3 py-2 text-xs capitalize text-fg-muted">{token.group}</td>
-                    <td className="px-3 py-2 text-xs text-fg-muted">{token.description}</td>
+                    <td className="px-3 py-2 text-xs capitalize text-fg-muted">
+                      {token.group}
+                    </td>
+                    <td className="px-3 py-2 text-xs text-fg-muted">
+                      {token.description}
+                    </td>
                   </tr>
                 );
               })}

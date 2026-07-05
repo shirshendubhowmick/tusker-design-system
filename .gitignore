@@ -9,6 +9,7 @@ storybook-static
 .turbo
 .cache
 *.tsbuildinfo
+coverage
 
 # Env / OS
 .env
@@ -17,8 +18,7 @@ storybook-static
 
 # IDE
 .idea
-.vscode/*
-!.vscode/extensions.json
+
 
 # Logs
 *.log
