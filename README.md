@@ -10,8 +10,25 @@ pnpm workspace monorepo for the design system and consuming applications.
 ├── libraries/            # Shared libraries
 │   └── ui/               # @design-system/ui — tokens, utilities, Storybook
 ├── package.json          # Root workspace scripts
-└── pnpm-workspace.yaml
+├── pnpm-workspace.yaml
+├── tsconfig.base.json    # Shared TypeScript compiler options
+└── tsconfig.json         # Root TS entry (extends base; packages extend base too)
 ```
+
+### TypeScript
+
+Shared options live in **`tsconfig.base.json`**. Workspace packages extend it and only override what they need (DOM libs, `rootDir`, includes, etc.):
+
+```json
+// libraries/ui/tsconfig.json
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": { "lib": ["ES2022", "DOM", "DOM.Iterable"] },
+  "include": ["src"]
+}
+```
+
+Add a new app the same way under `apps/*/tsconfig.json`.
 
 | Workspace | Path | Package |
 | --- | --- | --- |
@@ -44,6 +61,8 @@ pnpm storybook
 | --- | --- |
 | `pnpm install` | Install dependencies for all workspaces |
 | `pnpm tokens:generate` | Generate token CSS from TypeScript (single source of truth) |
+| `pnpm tokens:check` | Fail if generated token CSS is stale |
+| `pnpm test` | Run package tests (Vitest) |
 | `pnpm build` | Build `@design-system/ui` (runs token codegen first) |
 | `pnpm storybook` / `pnpm dev` | Storybook dev server |
 | `pnpm typecheck` | Typecheck all packages that define the script |

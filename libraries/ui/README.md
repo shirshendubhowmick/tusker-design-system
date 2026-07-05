@@ -361,6 +361,8 @@ pnpm --filter @design-system/ui build
 | --- | --- |
 | `pnpm tokens:generate` | Generate token CSS from TypeScript sources |
 | `pnpm tokens:check` | Fail if generated CSS is stale (CI-friendly) |
+| `pnpm test` | Run Vitest (token catalog + codegen) |
+| `pnpm test:watch` | Vitest watch mode |
 | `pnpm dev` / `pnpm storybook` | Generate tokens + Storybook dev server |
 | `pnpm build` | Generate tokens + `tsc` + Vite lib + styles |
 | `pnpm build-storybook` | Generate tokens + static Storybook |
@@ -400,6 +402,20 @@ libraries/ui/
     foundations/             # Storybook stories
   .storybook/
   vite.config.ts             # lib | styles | storybook modes
+```
+
+### TypeScript (package)
+
+This package extends the monorepo base config:
+
+| File | Role |
+| --- | --- |
+| `../../tsconfig.base.json` | Shared strict compiler options |
+| `tsconfig.json` | Library sources under `src/` |
+| `tsconfig.node.json` | Vite, Vitest, Storybook, token scripts |
+
+```bash
+pnpm typecheck   # both tsconfig.json and tsconfig.node.json
 ```
 
 ### Stack (maintainers)
