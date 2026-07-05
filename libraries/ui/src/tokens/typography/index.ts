@@ -1,6 +1,7 @@
 export { fontFamilies, type FontFamilyName } from './families';
 export {
   fontSizes,
+  fontSizeAliases,
   fontWeights,
   lineHeights,
   letterSpacings,

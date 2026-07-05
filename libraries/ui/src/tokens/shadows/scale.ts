@@ -35,7 +35,8 @@ export type ShadowToken = {
 } & ShadowModeValues;
 
 /**
- * Canonical shadow list. CSS must stay in sync with light/dark values here.
+ * Canonical shadow list — single source of truth.
+ * CSS is generated via `pnpm tokens:generate` (do not hand-edit shadow CSS).
  */
 export const shadowTokens = {
   none: {

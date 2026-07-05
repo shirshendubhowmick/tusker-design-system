@@ -1,13 +1,18 @@
 /*
+  AUTO-GENERATED — do not edit by hand.
+  Source: TypeScript token modules under src/tokens/
+  Regenerate: pnpm tokens:generate
+*/
+
+/*
   Layer 3 — Semantic colors (Tailwind registration + LIGHT defaults)
 
-  Defaults use direct Radix vars (slate/indigo/…) so mode switches that update
-  those vars immediately affect utilities. Dark remaps live in semantic-dark.css
-  and also re-bind every semantic token under .dark / [data-theme=dark].
+  Defaults use direct Radix vars so mode switches that update those
+  vars immediately affect utilities. Dark remaps live in semantic-dark.css.
 */
 
 @theme {
-  /* Backgrounds */
+  /* background */
   --color-bg-canvas: var(--slate-1);
   --color-bg-subtle: var(--slate-2);
   --color-bg-surface: var(--slate-2);
@@ -15,7 +20,7 @@
   --color-bg-surface-active: var(--slate-4);
   --color-bg-inverse: var(--slate-12);
 
-  /* Foreground */
+  /* foreground */
   --color-fg-default: var(--slate-12);
   --color-fg-muted: var(--slate-11);
   --color-fg-subtle: var(--slate-10);
@@ -26,13 +31,13 @@
   --color-fg-on-danger: white;
   --color-fg-on-info: white;
 
-  /* Borders */
+  /* border */
   --color-border-default: var(--slate-6);
   --color-border-muted: var(--slate-5);
   --color-border-strong: var(--slate-8);
   --color-border-hover: var(--slate-7);
 
-  /* Accent (brand ← indigo) */
+  /* accent */
   --color-accent-solid: var(--indigo-9);
   --color-accent-solid-hover: var(--indigo-10);
   --color-accent-subtle: var(--indigo-3);
@@ -40,35 +45,38 @@
   --color-accent-border: var(--indigo-7);
   --color-accent-text: var(--indigo-11);
 
-  /* Success */
+  /* success */
   --color-success-solid: var(--green-9);
   --color-success-solid-hover: var(--green-10);
   --color-success-subtle: var(--green-3);
   --color-success-border: var(--green-7);
   --color-success-text: var(--green-11);
 
-  /* Warning */
+  /* warning */
   --color-warning-solid: var(--amber-9);
   --color-warning-solid-hover: var(--amber-10);
   --color-warning-subtle: var(--amber-3);
   --color-warning-border: var(--amber-7);
   --color-warning-text: var(--amber-11);
 
-  /* Danger */
+  /* danger */
   --color-danger-solid: var(--red-9);
   --color-danger-solid-hover: var(--red-10);
   --color-danger-subtle: var(--red-3);
   --color-danger-border: var(--red-7);
   --color-danger-text: var(--red-11);
 
-  /* Info */
+  /* info */
   --color-info-solid: var(--blue-9);
   --color-info-solid-hover: var(--blue-10);
   --color-info-subtle: var(--blue-3);
   --color-info-border: var(--blue-7);
   --color-info-text: var(--blue-11);
 
-  /* Focus / overlay */
+  /* focus */
   --color-focus-ring: var(--indigo-8);
+
+  /* overlay */
   --color-overlay-scrim: var(--black-a8);
 }
+

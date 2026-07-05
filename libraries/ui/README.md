@@ -345,7 +345,7 @@ From the **monorepo root**:
 ```bash
 pnpm install
 pnpm storybook    # http://localhost:6006 — foundations docs
-pnpm build        # JS (tree-shakeable) + design-system.css
+pnpm build        # tokens → JS (tree-shakeable) + design-system.css
 pnpm typecheck
 pnpm build-storybook
 ```
@@ -359,22 +359,41 @@ pnpm --filter @design-system/ui build
 
 | Command | Description |
 | --- | --- |
-| `pnpm dev` / `pnpm storybook` | Storybook dev server |
-| `pnpm build` | `tsc` + Vite lib build + styles build (`--mode styles`) |
-| `pnpm build-storybook` | Static Storybook |
+| `pnpm tokens:generate` | Generate token CSS from TypeScript sources |
+| `pnpm tokens:check` | Fail if generated CSS is stale (CI-friendly) |
+| `pnpm dev` / `pnpm storybook` | Generate tokens + Storybook dev server |
+| `pnpm build` | Generate tokens + `tsc` + Vite lib + styles |
+| `pnpm build-storybook` | Generate tokens + static Storybook |
 | `pnpm typecheck` | TypeScript only |
+
+### Tokens (TypeScript is the source of truth)
+
+Edit **only** the `.ts` modules under `src/tokens/`. CSS under those folders is **generated** — do not hand-edit it.
+
+```bash
+# after changing any token .ts file
+pnpm tokens:generate
+```
+
+`build`, `storybook`, and `dev` run `tokens:generate` automatically.
+
+Hand-written CSS that is **not** generated:
+
+- `src/styles/index.css` — Tailwind entry, Radix imports, base layer, radius
 
 ### Project layout
 
 ```
 libraries/ui/
+  scripts/
+    generate-tokens.mts      # TS → CSS codegen
   src/
-    tokens/colors/           # palette → primitives → semantic
-    tokens/typography/       # families → scales → text styles
+    tokens/colors/           # palette / modes / semantic (*.ts source, *.css generated)
+    tokens/typography/       # families / scales / text styles
     tokens/breakpoints/      # mobile / tablet / desktop
     tokens/z-index/          # semantic stacking layers
     tokens/shadows/          # elevation + top shadows
-    styles/                  # Tailwind entry + token CSS
+    styles/                  # Tailwind entry (hand-written) + token CSS imports
     lib/                     # cn helper
     index.ts                 # public JS API (no CSS side effects)
   stories/

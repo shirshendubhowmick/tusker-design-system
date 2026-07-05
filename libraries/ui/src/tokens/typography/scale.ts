@@ -3,22 +3,78 @@
  *
  * Sized for dense developer tooling: default body is 14px (`sm`), not 16px.
  * Values are rem-based (root 16px assumed).
+ *
+ * `defaultLineHeight` is the line-height Tailwind pairs with bare `text-*`
+ * size utilities (semantic text styles set their own leading).
  */
 
 /** Font size steps → rem / px reference */
 export const fontSizes = {
-  '2xs': { rem: '0.6875rem', px: 11, description: 'Micro labels, dense badges' },
-  xs: { rem: '0.75rem', px: 12, description: 'Captions, meta, table secondary' },
-  sm: { rem: '0.875rem', px: 14, description: 'Default body / controls (tool density)' },
-  md: { rem: '1rem', px: 16, description: 'Comfortable body, dialog copy' },
-  lg: { rem: '1.125rem', px: 18, description: 'Emphasized body, small titles' },
-  xl: { rem: '1.25rem', px: 20, description: 'Section titles' },
-  '2xl': { rem: '1.5rem', px: 24, description: 'Page section headings' },
-  '3xl': { rem: '1.875rem', px: 30, description: 'Page titles' },
-  '4xl': { rem: '2.25rem', px: 36, description: 'Marketing / empty-state hero' },
+  '2xs': {
+    rem: '0.6875rem',
+    px: 11,
+    defaultLineHeight: '1.25',
+    description: 'Micro labels, dense badges',
+  },
+  xs: {
+    rem: '0.75rem',
+    px: 12,
+    defaultLineHeight: '1.5',
+    description: 'Captions, meta, table secondary',
+  },
+  sm: {
+    rem: '0.875rem',
+    px: 14,
+    defaultLineHeight: '1.5',
+    description: 'Default body / controls (tool density)',
+  },
+  md: {
+    rem: '1rem',
+    px: 16,
+    defaultLineHeight: '1.5',
+    description: 'Comfortable body, dialog copy',
+  },
+  lg: {
+    rem: '1.125rem',
+    px: 18,
+    defaultLineHeight: '1.375',
+    description: 'Emphasized body, small titles',
+  },
+  xl: {
+    rem: '1.25rem',
+    px: 20,
+    defaultLineHeight: '1.25',
+    description: 'Section titles',
+  },
+  '2xl': {
+    rem: '1.5rem',
+    px: 24,
+    defaultLineHeight: '1.25',
+    description: 'Page section headings',
+  },
+  '3xl': {
+    rem: '1.875rem',
+    px: 30,
+    defaultLineHeight: '1.25',
+    description: 'Page titles',
+  },
+  '4xl': {
+    rem: '2.25rem',
+    px: 36,
+    defaultLineHeight: '1.25',
+    description: 'Marketing / empty-state hero',
+  },
 } as const;
 
 export type FontSizeName = keyof typeof fontSizes;
+
+/**
+ * Extra Tailwind size aliases emitted into CSS (not primary product steps).
+ * `base` keeps `text-base` working as the comfortable 16px body (`md`).
+ */
+export const fontSizeAliases = {
+  base: 'md',
+} as const satisfies Record<string, FontSizeName>;
 
 export const fontWeights = {
   regular: { value: '400', description: 'Body copy' },

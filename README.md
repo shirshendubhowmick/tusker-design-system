@@ -43,7 +43,8 @@ pnpm storybook
 | Command | Description |
 | --- | --- |
 | `pnpm install` | Install dependencies for all workspaces |
-| `pnpm build` | Build `@design-system/ui` |
+| `pnpm tokens:generate` | Generate token CSS from TypeScript (single source of truth) |
+| `pnpm build` | Build `@design-system/ui` (runs token codegen first) |
 | `pnpm storybook` / `pnpm dev` | Storybook dev server |
 | `pnpm typecheck` | Typecheck all packages that define the script |
 | `pnpm build-storybook` | Static Storybook build |

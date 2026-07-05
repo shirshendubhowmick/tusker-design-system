@@ -52,9 +52,8 @@ function fixedBoth(value: string): Pick<SemanticToken, 'light' | 'dark'> {
 }
 
 /**
- * Canonical semantic color list. CSS must stay in sync:
- * - `semantic.css` → light (@theme defaults)
- * - `semantic-dark.css` → dark (.dark overrides)
+ * Canonical semantic color list — single source of truth.
+ * CSS (`semantic.css`, `semantic-dark.css`) is generated via `pnpm tokens:generate`.
  */
 export const semanticColorTokens = [
   // ── Backgrounds ────────────────────────────────────────────────────

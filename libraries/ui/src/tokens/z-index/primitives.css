@@ -1,15 +1,18 @@
 /*
+  AUTO-GENERATED — do not edit by hand.
+  Source: TypeScript token modules under src/tokens/
+  Regenerate: pnpm tokens:generate
+*/
+
+/*
   Semantic z-index tokens → Tailwind utilities
 
   Usage:
     className="relative z-dropdown"
     className="fixed inset-0 z-overlay"
-    className="fixed z-modal"
     style={{ zIndex: 'var(--z-index-toast)' }}
 
-  Scale (low → high):
-    base(0) < raised(10) < dropdown(100) < sticky(200)
-    < overlay(300) < modal(400) < toast(500) < tooltip(600)
+  Scale (low → high): base(0) < raised(10) < dropdown(100) < sticky(200) < overlay(300) < modal(400) < toast(500) < tooltip(600)
 */
 
 @theme {
@@ -22,3 +25,4 @@
   --z-index-toast: 500;
   --z-index-tooltip: 600;
 }
+

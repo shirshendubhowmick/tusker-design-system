@@ -12,6 +12,7 @@ export {
   overlays,
   RADIX_STEPS,
   colorModes,
+  colorModeCssSelectors,
   colorModeMeta,
   colorModeActivation,
   semanticColorTokens,
@@ -34,6 +35,7 @@ export type {
 export {
   fontFamilies,
   fontSizes,
+  fontSizeAliases,
   fontWeights,
   lineHeights,
   letterSpacings,

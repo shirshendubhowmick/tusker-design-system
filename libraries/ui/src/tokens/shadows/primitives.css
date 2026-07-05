@@ -1,13 +1,18 @@
 /*
-  Box shadows — CSS variables + @utility (not @theme shadow values)
-
-  Why: Tailwind v4 resolves @theme --shadow-* into baked hex inside .shadow-sm,
-  so .dark { --shadow-sm: … } never affects utilities. We register custom
-  utilities that read live CSS variables, which dark.css can override.
+  AUTO-GENERATED — do not edit by hand.
+  Source: TypeScript token modules under src/tokens/
+  Regenerate: pnpm tokens:generate
 */
 
-/* Light defaults (also re-asserted under .light in dark.css)
-   Values must match shadowTokens.*.light in scale.ts */
+/*
+  Box shadows — CSS variables + @utility (not @theme shadow values)
+
+  Why: Tailwind v4 resolves @theme --shadow-* into baked hex inside
+  utilities, so .dark { --shadow-sm: … } would not affect them.
+  Custom utilities read live CSS variables instead.
+*/
+
+/* Light defaults */
 :root,
 .light,
 .light-theme,
@@ -50,13 +55,11 @@
 
   --shadow-border: 0 0 0 1px var(--color-border-default);
 
-  --shadow-focus: 0 0 0 3px
-    color-mix(in srgb, var(--color-focus-ring) 45%, transparent);
+  --shadow-focus: 0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 45%, transparent);
 }
 
 /*
   Clear default Tailwind shadow scale so only our product tokens exist.
-  (Prevents conflict with baked-in shadow-sm from core.)
 */
 @theme {
   --shadow-*: initial;
@@ -114,3 +117,4 @@
 @utility shadow-focus {
   box-shadow: var(--shadow-focus);
 }
+
