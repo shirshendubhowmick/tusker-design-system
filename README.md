@@ -1,115 +1,361 @@
-# Design System
+# @design-system/ui
 
-React + TypeScript component library for a **Dev tool SaaS**, styled with **Tailwind CSS** and **Radix Colors**.
+React + TypeScript design system for a **Dev tool SaaS** — tokens, utilities, and helpers built with **Tailwind CSS v4** and **Radix Colors**.
 
-## Stack
+- **ESM-first**, tree-shakeable JS API  
+- **Compiled stylesheet** with semantic tokens (color, type, shadow, z-index, breakpoints)  
+- **Light / dark** via `.dark` / `data-theme`  
+- **Storybook** for foundations documentation  
 
-- **pnpm** — package manager
-- **TypeScript** — type safety
-- **React 19** — UI runtime (peer dependency)
-- **Tailwind CSS v4** — utility styling
-- **Radix Colors** — accessible light/dark color scales
-- **Vite** — library bundler
-- **Storybook 10** — component docs & playground
+Package name: `@design-system/ui`
 
-## Color system (3 layers)
+---
 
+## Requirements
+
+| Requirement | Version |
+| --- | --- |
+| Node.js | ≥ 20.19 |
+| React / React DOM | ≥ 18 (19 supported) |
+| Bundler | Vite, webpack, Next.js, etc. (ESM preferred) |
+
+---
+
+## Installation
+
+### From the monorepo / local path (development)
+
+Build the library once, then depend on it from your app:
+
+```bash
+# in this repo
+pnpm install
+pnpm build
 ```
-Radix scales  →  product primitives  →  semantic tokens
-(slate, …)       (gray, brand, …)       (bg-canvas, accent-solid, …)
+
+**pnpm workspace** (recommended if the app shares a monorepo):
+
+```yaml
+# pnpm-workspace.yaml (repo root)
+packages:
+  - 'apps/*'
+  - 'packages/*'   # or path to this design-system package
 ```
 
-### 1. Palette picks
+```json
+// apps/web/package.json
+{
+  "dependencies": {
+    "@design-system/ui": "workspace:*",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}
+```
 
-| Product name | Radix scale | Role |
-| --- | --- | --- |
-| `gray` | **slate** | Neutral chrome |
-| `brand` | **indigo** | Primary / accent |
-| `green` | green | Success |
-| `amber` | amber | Warning |
-| `red` | red | Danger |
-| `blue` | blue | Info (not brand) |
+**File / link dependency** (app outside the workspace):
 
-### 2. Primitives
+```bash
+# from the consuming app
+pnpm add link:../path/to/design-system
+# or after publish-style packing:
+# pnpm add ../path/to/design-system
+```
 
-Utilities: `bg-gray-1` … `bg-gray-12`, `text-brand-11`, `border-red-7`, alpha `bg-gray-a3`.
+```json
+{
+  "dependencies": {
+    "@design-system/ui": "file:../design-system"
+  }
+}
+```
 
-Steps follow Radix: **1–2** backgrounds · **3–5** surfaces · **6–8** borders · **9–10** solids · **11–12** text.
+### From a registry (when published)
 
-### 3. Semantic tokens (prefer these)
+```bash
+pnpm add @design-system/ui react react-dom
+# npm i @design-system/ui react react-dom
+# yarn add @design-system/ui react react-dom
+```
+
+Peer dependencies (must be installed in the app):
+
+```bash
+pnpm add react react-dom
+```
+
+Runtime helpers used by `cn()` are declared as dependencies of the library (`clsx`, `tailwind-merge`, `class-variance-authority`) and install automatically with the package.
+
+---
+
+## Quick start
+
+### 1. Import styles once at the app root
+
+Styles are **opt-in** and separate from JS so unused modules can be tree-shaken.
+
+**Vite + React**
 
 ```tsx
-<div className="bg-bg-canvas text-fg-default border border-border-default">
-  <button className="bg-accent-solid text-fg-on-accent hover:bg-accent-solid-hover">
-    Deploy
-  </button>
-  <span className="text-success-text">Healthy</span>
-</div>
+// src/main.tsx
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import '@design-system/ui/styles.css';
+import { App } from './App';
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+);
 ```
+
+**Next.js (App Router)**
+
+```tsx
+// app/layout.tsx
+import type { ReactNode } from 'react';
+import '@design-system/ui/styles.css';
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en" className="light" suppressHydrationWarning>
+      <body className="min-h-screen bg-bg-canvas text-fg-default antialiased">
+        {children}
+      </body>
+    </html>
+  );
+}
+```
+
+**Next.js (Pages Router)**
+
+```tsx
+// pages/_app.tsx
+import type { AppProps } from 'next/app';
+import '@design-system/ui/styles.css';
+
+export default function App({ Component, pageProps }: AppProps) {
+  return <Component {...pageProps} />;
+}
+```
+
+### 2. Use tokens in UI
+
+The stylesheet ships **ready-to-use utility classes** (semantic colors, type styles, shadows, z-index, breakpoints). You do **not** need to reconfigure Tailwind in the app just to use these classes—importing `styles.css` is enough.
+
+```tsx
+// src/App.tsx
+import { cn, breakpoints, resolveBreakpoint } from '@design-system/ui';
+
+export function App() {
+  return (
+    <div className="min-h-screen bg-bg-canvas text-fg-default">
+      <header className="sticky top-0 z-sticky border-b border-border-default bg-bg-surface/95 shadow-sm backdrop-blur">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+          <h1 className="text-heading-sm text-fg-default">Deployments</h1>
+          <button
+            type="button"
+            className={cn(
+              'rounded-md bg-accent-solid px-3 py-1.5',
+              'text-label-lg text-fg-on-accent shadow-sm',
+              'hover:bg-accent-solid-hover',
+              'focus-visible:shadow-focus',
+            )}
+          >
+            New deploy
+          </button>
+        </div>
+      </header>
+
+      <main className="mx-auto grid max-w-5xl gap-4 p-4 tablet:grid-cols-2 desktop:grid-cols-3">
+        <article className="rounded-lg border border-border-default bg-bg-surface p-4 shadow-sm">
+          <p className="text-label-md text-fg-muted">Production</p>
+          <p className="mt-1 text-metric-sm text-fg-default">99.98%</p>
+          <p className="mt-2 text-body-sm text-success-text">All systems healthy</p>
+        </article>
+      </main>
+    </div>
+  );
+}
+```
+
+### 3. Enable dark mode
+
+Add the `dark` class (or `data-theme="dark"`) on a root element—usually `<html>`:
+
+```tsx
+// Toggle example
+function ThemeToggle() {
+  const toggle = () => {
+    document.documentElement.classList.toggle('dark');
+    // optional mirror for scoped theming:
+    document.documentElement.dataset.theme =
+      document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+  };
+
+  return (
+    <button type="button" onClick={toggle} className="text-label-md text-accent-text">
+      Toggle theme
+    </button>
+  );
+}
+```
+
+```html
+<!-- SSR / static default -->
+<html class="light" data-theme="light">
+<!-- or -->
+<html class="dark" data-theme="dark">
+```
+
+Nested islands are supported: a `.light` region can sit inside a dark app and re-assert light tokens.
+
+---
+
+## Configuration notes
+
+### Do I need Tailwind in the consuming app?
+
+| Goal | What to do |
+| --- | --- |
+| Use design-system utilities only (`bg-bg-canvas`, `text-heading-lg`, `shadow-md`, …) | Import `@design-system/ui/styles.css` — **no app Tailwind required** |
+| Also write custom Tailwind in the app | Install Tailwind in the app as usual; **still import** the design-system stylesheet for DS tokens/utilities |
+
+The package ships a **precompiled** CSS bundle. App-level Tailwind does not need to scan this package for those utilities to work.
+
+### TypeScript
+
+Types ship with the package (`dist/index.d.ts`). Ensure the app uses a modern `moduleResolution` (e.g. `bundler` or `node16`+):
+
+```json
+// tsconfig.json (app)
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true
+  }
+}
+```
+
+### Vite (consuming app)
+
+No special `optimizeDeps` is required for the CSS path. For linked workspace packages you may want:
+
+```ts
+// vite.config.ts (app)
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    fs: {
+      // allow importing a linked local package outside app root if needed
+      allow: ['..'],
+    },
+  },
+});
+```
+
+### Next.js
+
+- Import CSS only from the root layout / `_app` (not inside client components repeatedly).
+- Use `suppressHydrationWarning` on `<html>` if you set `class="dark"` from a client script before paint.
+
+### Tree-shaking
+
+```tsx
+// ✅ Named imports — unused token modules can be dropped by the app bundler
+import { cn, breakpoints } from '@design-system/ui';
+
+// ✅ Styles only when you need them
+import '@design-system/ui/styles.css';
+
+// ❌ Don't rely on the root JS entry to inject CSS (it won't)
+import '@design-system/ui';
+```
+
+- Package is **ESM-first** with `preserveModules` output.  
+- `sideEffects` lists **CSS only** so pure JS can be eliminated.  
+- Prefer `import` over CJS `require` for best shaking.
+
+---
+
+## Using the JS API
+
+```tsx
+import {
+  cn,
+  // layout
+  breakpoints,
+  resolveBreakpoint,
+  // elevation / stacking (token metadata)
+  shadowTokens,
+  zIndexTokens,
+  // color system metadata
+  semanticColorTokens,
+  palette,
+  // typography metadata
+  textStyles,
+  fontFamilies,
+} from '@design-system/ui';
+
+// Classnames
+const className = cn('rounded-md bg-bg-surface p-4', 'tablet:p-6', condition && 'shadow-md');
+
+// Runtime breakpoint helper (e.g. analytics / layout logic)
+const tier = resolveBreakpoint(window.innerWidth); // 'mobile' | 'tablet' | 'desktop'
+
+// Inspect token metadata (docs, theme tooling, Storybook-style UIs)
+console.log(shadowTokens.sm.utility); // "shadow-sm"
+console.log(zIndexTokens.modal.value); // 400
+```
+
+---
+
+## Design tokens (reference)
+
+### Color
+
+Prefer **semantic** utilities:
 
 | Category | Examples |
 | --- | --- |
-| Background | `bg-canvas`, `bg-subtle`, `bg-surface`, `bg-surface-hover` |
-| Foreground | `fg-default`, `fg-muted`, `fg-subtle`, `fg-on-accent` |
-| Border | `border-default`, `border-muted`, `border-strong` |
-| Accent | `accent-solid`, `accent-subtle`, `accent-text` |
-| Status | `success-*`, `warning-*`, `danger-*`, `info-*` |
-| Focus | `focus-ring` |
+| Background | `bg-bg-canvas`, `bg-bg-subtle`, `bg-bg-surface`, `bg-bg-inverse` |
+| Foreground | `text-fg-default`, `text-fg-muted`, `text-fg-on-accent` |
+| Border | `border-border-default`, `border-border-muted` |
+| Accent | `bg-accent-solid`, `text-accent-text`, `bg-accent-subtle` |
+| Status | `bg-success-solid`, `text-warning-text`, `bg-danger-subtle` |
+| Focus | `ring-focus-ring`, `shadow-focus` |
 
-### Light & dark modes
+Primitives (when needed): `bg-gray-1`…`12`, `bg-brand-9`, `text-green-11`, …
 
-Both modes are first-class:
+Palette: **gray**←slate · **brand**←indigo · green · amber · red · blue.
 
-1. **Primitives** — Radix light + dark CSS (`slate.css` / `slate-dark.css`, …). Class `.dark` (or `.dark-theme`) swaps underlying scale values.
-2. **Semantic tokens** — each token has explicit `light` and `dark` refs in `semantic.ts`.
-   - Defaults: same step in both modes (e.g. `fg-default` → `gray.12`).
-   - Overrides where product needs it (e.g. `bg-surface` light=`gray.2` / dark=`gray.3`; `overlay-scrim` darker in dark).
-3. **CSS** — light defaults in `semantic.css` (`@theme`); dark (and nested `.light`) in `semantic-dark.css`.
+### Typography
 
-```html
-<html class="dark">…</html>
-```
-
-Source of truth:
-
-- `src/tokens/colors/palette.ts` — scale choices
-- `src/tokens/colors/modes.ts` — mode contract
-- `src/tokens/colors/primitives.css` — primitive CSS variables
-- `src/tokens/colors/semantic.ts` — light + dark semantic map
-- `src/tokens/colors/semantic.css` / `semantic-dark.css` — CSS application
-
-## Typography (3 layers)
-
-```
-typefaces  →  scales (size/weight/leading/tracking)  →  semantic text styles
-(sans/mono)   (sm=14px default body, …)                 (heading-lg, body-md, code-sm, …)
-```
-
-| Layer | Details |
+| Style | Example class |
 | --- | --- |
-| Families | `font-sans` (Inter), `font-mono` (JetBrains Mono) |
-| Sizes | `text-2xs` … `text-4xl` (body default **14px** / `sm`) |
-| Weights | `font-regular` 400 · `medium` 500 · `semibold` 600 · `bold` 700 |
-| Semantic | `text-heading-lg`, `text-body-md`, `text-label-sm`, `text-code-sm`, `text-metric-lg`, … |
+| Headings | `text-heading-xl` … `text-heading-xs` |
+| Body | `text-body-lg`, `text-body-md` (default 14px), `text-body-sm` |
+| Labels | `text-label-lg`, `text-label-md`, `text-label-overline` |
+| Code | `text-code-md`, `text-code-sm`, `text-code-block` |
+| Metrics | `text-metric-lg`, `text-metric-md`, `text-metric-sm` |
 
-```tsx
-<h1 className="text-heading-xl text-fg-default">Deployments</h1>
-<p className="text-body-md text-fg-muted">Last 24 hours of production activity.</p>
-<code className="text-code-sm text-fg-default">git push origin main</code>
-```
+Families: `font-sans` (Inter) · `font-mono` (JetBrains Mono).
 
-Source: `src/tokens/typography/` (`families.ts`, `scale.ts`, `semantic.ts` + CSS).
+### Breakpoints (mobile-first)
 
-
-## Breakpoints
-
-Mobile-first tiers (default Tailwind `sm` / `md` / `lg` are replaced):
-
-| Tier | Min width | Tailwind |
+| Tier | Min width | Variant |
 | --- | --- | --- |
-| **mobile** | 0 | base styles (no prefix) |
-| **tablet** | 768px (`48rem`) | `tablet:` |
-| **desktop** | 1024px (`64rem`) | `desktop:` |
+| mobile | 0 | _(base — no prefix)_ |
+| tablet | 768px | `tablet:` |
+| desktop | 1024px | `desktop:` |
+
+Default Tailwind `sm` / `md` / `lg` screens are **replaced** by these names in the shipped CSS.
 
 ```tsx
 <div className="flex flex-col gap-4 tablet:flex-row desktop:gap-8">
@@ -118,91 +364,52 @@ Mobile-first tiers (default Tailwind `sm` / `md` / `lg` are replaced):
 </div>
 ```
 
-Source: `src/tokens/breakpoints/`.
+### Z-index
 
-
-## Z-index
-
-Semantic stacking layers (prefer these over raw numbers):
-
-| Token | Value | Utility |
+| Token | Value | Class |
 | --- | --- | --- |
-| `base` | 0 | `z-base` |
-| `raised` | 10 | `z-raised` |
-| `dropdown` | 100 | `z-dropdown` |
-| `sticky` | 200 | `z-sticky` |
-| `overlay` | 300 | `z-overlay` |
-| `modal` | 400 | `z-modal` |
-| `toast` | 500 | `z-toast` |
-| `tooltip` | 600 | `z-tooltip` |
+| base | 0 | `z-base` |
+| raised | 10 | `z-raised` |
+| dropdown | 100 | `z-dropdown` |
+| sticky | 200 | `z-sticky` |
+| overlay | 300 | `z-overlay` |
+| modal | 400 | `z-modal` |
+| toast | 500 | `z-toast` |
+| tooltip | 600 | `z-tooltip` |
+
+### Shadows
+
+| Direction | Classes | Use |
+| --- | --- | --- |
+| Down | `shadow-xs` … `shadow-xl` | Cards, menus, modals |
+| Up (top) | `shadow-top-xs` … `shadow-top-lg` | Bottom sheets, sticky footers |
+| Special | `shadow-inner`, `shadow-border`, `shadow-focus` | Wells, outline, focus |
 
 ```tsx
-<div className="fixed inset-0 z-overlay bg-overlay-scrim" />
-<div className="fixed z-modal">…dialog…</div>
-```
-
-Source: `src/tokens/z-index/`.
-
-
-## Shadows
-
-Elevation + focus shadows (light/dark values differ slightly):
-
-| Token | Utility | Typical use |
-| --- | --- | --- |
-| `xs` – `xl` | `shadow-xs` … `shadow-xl` | Downward elevation |
-| `top-xs` – `top-lg` | `shadow-top-xs` … `shadow-top-lg` | Upward (bottom sheets, sticky footers) |
-| `sm` | `shadow-sm` | Cards / panels |
-| `md` | `shadow-md` | Dropdowns, toasts |
-| `lg` | `shadow-lg` | Modals / side drawers |
-| `top-sm` / `top-md` | `shadow-top-sm` / `shadow-top-md` | Bottom sheets |
-| `inner` | `shadow-inner` | Recessed wells |
-| `border` | `shadow-border` | 1px outline via shadow |
-| `focus` | `shadow-focus` | Focus ring |
-
-```tsx
-<div className="rounded-lg bg-bg-surface shadow-sm">Card</div>
-<div className="z-dropdown shadow-md">Menu</div>
-<div className="z-modal shadow-lg">Dialog</div>
+<div className="rounded-lg border border-border-default bg-bg-surface shadow-sm">Card</div>
 <div className="fixed inset-x-0 bottom-0 z-modal shadow-top-md">Bottom sheet</div>
 ```
 
-Source: `src/tokens/shadows/`.
+---
 
-## Getting started
+## Developing this package
 
 ```bash
 pnpm install
-pnpm storybook   # http://localhost:6006
-pnpm build       # emit library to dist/
+pnpm storybook    # http://localhost:6006 — foundations docs
+pnpm build        # JS (tree-shakeable) + design-system.css
+pnpm typecheck
+pnpm build-storybook
 ```
-
-## Scripts
 
 | Command | Description |
 | --- | --- |
-| `pnpm storybook` / `pnpm dev` | Start Storybook |
-| `pnpm build` | Typecheck + build the library |
-| `pnpm build-storybook` | Static Storybook build |
-| `pnpm typecheck` | Run TypeScript only |
+| `pnpm dev` / `pnpm storybook` | Storybook dev server |
+| `pnpm build` | `tsc` + Vite lib build + styles build (`--mode styles`) |
+| `pnpm build-storybook` | Static Storybook |
+| `pnpm typecheck` | TypeScript only |
 
-## Usage
-
-```tsx
-// CSS is opt-in so JS imports stay tree-shakeable
-import '@design-system/ui/styles.css';
-
-import { cn, shadowTokens, breakpoints } from '@design-system/ui';
-// Unused named exports are dropped by modern bundlers (ESM + sideEffects).
-```
-
-Tree-shaking notes:
-
-- Package is **ESM-first** (`import` condition → `dist/index.js` with `preserveModules`).
-- **`sideEffects`** only marks CSS — pure JS modules can be eliminated.
-- Do **not** import the root entry solely for styles; use `./styles.css`.
-
-## Project layout
+### Project layout
 
 ```
 src/
@@ -210,11 +417,22 @@ src/
   tokens/typography/       # families → scales → text styles
   tokens/breakpoints/      # mobile / tablet / desktop
   tokens/z-index/          # semantic stacking layers
-  tokens/shadows/          # elevation + focus shadows
-  styles/                  # Tailwind entry + token imports
-  lib/                     # cn, …
-  index.ts
+  tokens/shadows/          # elevation + top shadows
+  styles/                  # Tailwind entry + token CSS
+  lib/                     # cn helper
+  index.ts                 # public JS API (no CSS side effects)
 stories/
-  foundations/             # Storybook foundation stories
+  foundations/             # Storybook stories
 .storybook/
+vite.config.ts             # lib | styles | storybook modes
 ```
+
+### Stack (maintainers)
+
+- pnpm · TypeScript 6 · React 19 · Tailwind CSS v4 · Vite 8 · Storybook 10 · Radix Colors
+
+---
+
+## License
+
+Private / unpublished unless otherwise specified.
