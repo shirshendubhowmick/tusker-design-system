@@ -6,7 +6,8 @@
   utilities that read live CSS variables, which dark.css can override.
 */
 
-/* Light defaults (also re-asserted under .light in dark.css) */
+/* Light defaults (also re-asserted under .light in dark.css)
+   Values must match shadowTokens.*.light in scale.ts */
 :root,
 .light,
 .light-theme,
