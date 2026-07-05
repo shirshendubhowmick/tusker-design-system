@@ -37,9 +37,9 @@ Add a new app the same way under `apps/*/tsconfig.json`.
 
 ## Requirements
 
-| Requirement | Version |
-| ----------- | ------- |
-| Node.js     | ≥ 24 (see `.nvmrc`) |
+| Requirement | Version                              |
+| ----------- | ------------------------------------ |
+| Node.js     | ≥ 24 (see `.nvmrc`)                  |
 | pnpm        | ≥ 11 (`packageManager`: pnpm@11.7.0) |
 
 ## Getting started
@@ -57,28 +57,38 @@ pnpm storybook
 
 ### Useful root scripts
 
-| Command                       | Description                                                 |
-| ----------------------------- | ----------------------------------------------------------- |
-| `pnpm install`                | Install dependencies for all workspaces                     |
-| `pnpm tokens:generate`        | Generate token CSS from TypeScript (single source of truth) |
-| `pnpm tokens:check`           | Fail if generated token CSS is stale                        |
-| `pnpm test`                   | Run package tests (Vitest)                                  |
-| `pnpm lint` / `pnpm lint:fix` | ESLint (flat config at repo root)                           |
-| `pnpm format` / `pnpm format:check` | Prettier write / check                                |
-| `pnpm build`                  | Build `@design-system/ui` (runs token codegen first)        |
-| `pnpm storybook` / `pnpm dev` | Storybook dev server                                        |
-| `pnpm typecheck`              | Typecheck all packages that define the script               |
-| `pnpm build-storybook`        | Static Storybook build                                      |
+| Command                             | Description                                                 |
+| ----------------------------------- | ----------------------------------------------------------- |
+| `pnpm install`                      | Install dependencies for all workspaces                     |
+| `pnpm tokens:generate`              | Generate token CSS from TypeScript (single source of truth) |
+| `pnpm tokens:check`                 | Fail if generated token CSS is stale                        |
+| `pnpm test`                         | Run package tests (Vitest)                                  |
+| `pnpm lint` / `pnpm lint:fix`       | ESLint (flat config at repo root)                           |
+| `pnpm format` / `pnpm format:check` | Prettier write / check                                      |
+| `pnpm build`                        | Build `@design-system/ui` (runs token codegen first)        |
+| `pnpm storybook` / `pnpm dev`       | Storybook dev server                                        |
+| `pnpm typecheck`                    | Typecheck all packages that define the script               |
+| `pnpm build-storybook`              | Static Storybook build                                      |
 
 ### Lint & format
 
 Configured at the monorepo root (packages share these configs):
 
-| File | Role |
-| --- | --- |
-| `eslint.config.mjs` | ESLint 10 flat config (TypeScript, `@eslint-react`, Prettier-compatible) |
-| `.prettierrc.json` | Prettier 3 options |
-| `.prettierignore` | Build output, lockfile, generated token CSS |
+| File                           | Role                                                                     |
+| ------------------------------ | ------------------------------------------------------------------------ |
+| `eslint.config.mjs`            | ESLint 10 flat config (TypeScript, `@eslint-react`, Prettier-compatible) |
+| `.prettierrc.json`             | Prettier 3 options                                                       |
+| `.prettierignore`              | Build output, lockfile, generated token CSS                              |
+| `package.json` → `lint-staged` | Pre-commit tasks for staged files only                                   |
+| `.husky/pre-commit`            | Runs `lint-staged`                                                       |
+
+**Pre-commit (Husky + lint-staged)** runs on `git commit` after `pnpm install` (via the `prepare` script):
+
+1. **Prettier** — format staged files
+2. **ESLint** — check staged JS/TS (no autofix; fails on errors/warnings)
+3. **Token CSS** — if token sources or the generator change, run `pnpm tokens:generate` and stage the updated CSS
+
+Skip hooks only when necessary: `git commit --no-verify` (avoid for normal work).
 
 ### Working with a single package
 
