@@ -437,7 +437,7 @@ function generateTypographySemantic(): string {
       `  font-weight: var(--font-weight-${style.weight});`,
       `  letter-spacing: var(--tracking-${style.tracking});`,
     ];
-    if (style.transform === 'uppercase') {
+    if ('transform' in style && style.transform === 'uppercase') {
       props.push('  text-transform: uppercase;');
     }
     if (style.group === 'metric') {

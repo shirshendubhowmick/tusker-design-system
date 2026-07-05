@@ -9,6 +9,7 @@
     "build": "pnpm -r --filter @design-system/ui build",
     "storybook": "pnpm --filter @design-system/ui storybook",
     "build-storybook": "pnpm --filter @design-system/ui build-storybook",
+    "test": "pnpm -r --if-present test",
     "typecheck": "pnpm -r typecheck",
     "lint": "pnpm -r lint"
   },
@@ -16,5 +17,9 @@
     "node": ">=20.19.0",
     "pnpm": ">=9"
   },
-  "packageManager": "pnpm@11.7.0"
+  "packageManager": "pnpm@11.7.0",
+  "devDependencies": {
+    "@types/node": "^26.1.0",
+    "typescript": "^6.0.3"
+  }
 }
