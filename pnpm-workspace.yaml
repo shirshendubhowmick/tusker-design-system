@@ -1,4 +1,5 @@
 packages:
-  - '.'
+  - 'apps/*'
+  - 'libraries/*'
 allowBuilds:
   esbuild: true
