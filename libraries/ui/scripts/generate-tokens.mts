@@ -11,16 +11,9 @@ import { writeFileSync, mkdirSync, readFileSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import {
-  palette,
-  overlays,
-  RADIX_STEPS,
-} from '../src/tokens/colors/palette.ts';
+import { palette, overlays, RADIX_STEPS } from '../src/tokens/colors/palette.ts';
 import { colorModeCssSelectors } from '../src/tokens/colors/modes.ts';
-import {
-  semanticColorTokens,
-  type SemanticRef,
-} from '../src/tokens/colors/semantic.ts';
+import { semanticColorTokens, type SemanticRef } from '../src/tokens/colors/semantic.ts';
 import { shadowTokens } from '../src/tokens/shadows/scale.ts';
 import { zIndexTokens, zIndexOrder } from '../src/tokens/z-index/scale.ts';
 import { breakpoints } from '../src/tokens/breakpoints/scale.ts';
@@ -92,7 +85,11 @@ function formatFontStack(stack: readonly string[]): string {
   return stack
     .map((part) => {
       // Quote multi-word family names that aren't CSS keywords / generics.
-      if (/^(ui-|system-ui|sans-serif|monospace|serif|cursive|fantasy|-apple-system)/.test(part)) {
+      if (
+        /^(ui-|system-ui|sans-serif|monospace|serif|cursive|fantasy|-apple-system)/.test(
+          part,
+        )
+      ) {
         return part;
       }
       if (part.includes(' ') || part === 'Segoe UI') return `'${part}'`;
@@ -248,10 +245,7 @@ function generateShadowPrimitives(): string {
   while (varLines[varLines.length - 1] === '') varLines.pop();
 
   const utilities = Object.values(shadowTokens)
-    .map(
-      (t) =>
-        `@utility ${t.utility} {\n  box-shadow: var(${t.cssVar});\n}`,
-    )
+    .map((t) => `@utility ${t.utility} {\n  box-shadow: var(${t.cssVar});\n}`)
     .join('\n\n');
 
   return [
@@ -321,7 +315,7 @@ function generateZIndex(): string {
     '  Usage:',
     '    className="relative z-dropdown"',
     '    className="fixed inset-0 z-overlay"',
-    '    style={{ zIndex: \'var(--z-index-toast)\' }}',
+    "    style={{ zIndex: 'var(--z-index-toast)' }}",
     '',
     `  Scale (low → high): ${scaleComment}`,
     '*/',
@@ -354,9 +348,7 @@ function generateBreakpoints(): string {
       bp.tailwindVariant == null
         ? 'base tier — no min-width variant'
         : `variant: ${bp.tailwindVariant}:`;
-    lines.push(
-      `  /* ${bp.name}: ≥ ${bp.minWidthPx}px (${variantNote}) */`,
-    );
+    lines.push(`  /* ${bp.name}: ≥ ${bp.minWidthPx}px (${variantNote}) */`);
     lines.push(`  ${bp.cssVar}: ${bp.minWidthRem};`);
   }
 
@@ -489,9 +481,7 @@ function main(): void {
       }
     }
     if (drifted > 0) {
-      console.error(
-        `\n${drifted} file(s) out of date. Run: pnpm tokens:generate`,
-      );
+      console.error(`\n${drifted} file(s) out of date. Run: pnpm tokens:generate`);
       process.exit(1);
     }
     console.log('All generated token CSS files are up to date.');

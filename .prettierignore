@@ -1,0 +1,14 @@
+# deps / build
+node_modules
+dist
+storybook-static
+coverage
+.cache
+.turbo
+
+# lockfiles & generated
+pnpm-lock.yaml
+**/*.tsbuildinfo
+
+# token CSS is generated from TypeScript — format sources, not output
+libraries/ui/src/tokens/**/*.css

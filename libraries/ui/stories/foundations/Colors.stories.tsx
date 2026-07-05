@@ -253,14 +253,14 @@ function CopyChip({
   title?: string;
 }) {
   const [state, setState] = useState<'idle' | 'copied' | 'error'>('idle');
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const onCopy = async (e: React.MouseEvent) => {
     e.stopPropagation();
     const ok = await copyText(value);
     setState(ok ? 'copied' : 'error');
-    if (timer.current) clearTimeout(timer.current);
-    timer.current = setTimeout(() => setState('idle'), 1400);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setState('idle'), 1400);
   };
 
   return (
@@ -456,13 +456,14 @@ function ColorsDoc({ theme }: { theme: ColorMode }) {
           </span>
         </div>
         <p className="mt-2 max-w-3xl text-sm text-fg-muted">
-          Use the <strong className="font-semibold text-fg-default">Theme</strong> control in the
-          Storybook toolbar (sun / moon) to switch light and dark. Click any chip to copy token,
-          CSS variable, class, or live hex for the active mode.
+          Use the <strong className="font-semibold text-fg-default">Theme</strong> control
+          in the Storybook toolbar (sun / moon) to switch light and dark. Click any chip
+          to copy token, CSS variable, class, or live hex for the active mode.
         </p>
         {overrides.length > 0 ? (
           <p className="mt-3 text-xs text-fg-muted">
-            Tokens with different light/dark mappings: {overrides.map((t) => t.name).join(', ')}.
+            Tokens with different light/dark mappings:{' '}
+            {overrides.map((t) => t.name).join(', ')}.
           </p>
         ) : null}
       </header>

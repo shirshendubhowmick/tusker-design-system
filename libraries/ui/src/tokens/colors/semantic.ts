@@ -41,7 +41,10 @@ function p(palette: PaletteName, step: RadixStep): SemanticRef {
 }
 
 /** Same step mapping in both modes (Radix scale values still change). */
-function both(palette: PaletteName, step: RadixStep): Pick<SemanticToken, 'light' | 'dark'> {
+function both(
+  palette: PaletteName,
+  step: RadixStep,
+): Pick<SemanticToken, 'light' | 'dark'> {
   const ref = p(palette, step);
   return { light: ref, dark: ref };
 }

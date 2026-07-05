@@ -68,11 +68,7 @@ function libConfig(): UserConfig {
       tailwindcss(),
       dts({
         include: ['src'],
-        exclude: [
-          'src/**/*.stories.tsx',
-          'src/**/*.test.ts',
-          'src/**/*.test.tsx',
-        ],
+        exclude: ['src/**/*.stories.tsx', 'src/**/*.test.ts', 'src/**/*.test.tsx'],
         // unplugin-dts: formerly `rollupTypes`
         bundleTypes: true,
         insertTypesEntry: true,

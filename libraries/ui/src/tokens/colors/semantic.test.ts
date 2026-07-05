@@ -49,12 +49,7 @@ describe('semanticColorTokens', () => {
     const names = elevated.map((t) => t.name).sort();
     // These are intentional mode overrides in the catalog today.
     expect(names).toEqual(
-      [
-        'bg-surface',
-        'bg-surface-active',
-        'bg-surface-hover',
-        'overlay-scrim',
-      ].sort(),
+      ['bg-surface', 'bg-surface-active', 'bg-surface-hover', 'overlay-scrim'].sort(),
     );
   });
 

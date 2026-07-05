@@ -37,8 +37,10 @@
     "storybook": "pnpm tokens:generate && storybook dev -p 6006",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json",
-    "lint": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json"
+    "lint": "eslint ."
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
@@ -56,6 +58,7 @@
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^6.0.3",
+    "@vitest/coverage-v8": "^4.1.9",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "storybook": "10.4.6",

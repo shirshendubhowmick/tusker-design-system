@@ -10,8 +10,13 @@
     "storybook": "pnpm --filter @design-system/ui storybook",
     "build-storybook": "pnpm --filter @design-system/ui build-storybook",
     "test": "pnpm -r --if-present test",
+    "test:coverage": "pnpm -r --if-present test:coverage",
+    "coverage": "pnpm -r --if-present coverage",
     "typecheck": "pnpm -r typecheck",
-    "lint": "pnpm -r lint"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "engines": {
     "node": ">=20.19.0",
@@ -19,7 +24,15 @@
   },
   "packageManager": "pnpm@11.7.0",
   "devDependencies": {
+    "@eslint-react/eslint-plugin": "^5.10.4",
+    "@eslint/js": "^10.0.1",
     "@types/node": "^26.1.0",
-    "typescript": "^6.0.3"
+    "eslint": "^10.6.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.7.0",
+    "prettier": "^3.9.4",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.62.1"
   }
 }

@@ -79,5 +79,8 @@ export type PaletteRole = (typeof palette)[PaletteName]['role'];
 /** Overlay primitives (not 12-step scales). */
 export const overlays = {
   black: { radix: 'black', description: 'Dark scrims / modals (alpha scale)' },
-  white: { radix: 'white', description: 'Light highlights on dark surfaces (alpha scale)' },
+  white: {
+    radix: 'white',
+    description: 'Light highlights on dark surfaces (alpha scale)',
+  },
 } as const;

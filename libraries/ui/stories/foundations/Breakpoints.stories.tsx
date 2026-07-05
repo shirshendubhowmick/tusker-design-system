@@ -17,8 +17,8 @@ function useViewportWidth() {
   );
 
   useEffect(() => {
+    // Initial width comes from useState; only subscribe to resizes here.
     const onResize = () => setWidth(window.innerWidth);
-    onResize();
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
@@ -26,13 +26,7 @@ function useViewportWidth() {
   return width;
 }
 
-function BreakpointCard({
-  name,
-  active,
-}: {
-  name: BreakpointName;
-  active: boolean;
-}) {
+function BreakpointCard({ name, active }: { name: BreakpointName; active: boolean }) {
   const bp = breakpoints[name];
   const variant = bp.tailwindVariant;
 
@@ -60,25 +54,35 @@ function BreakpointCard({
       <p className="text-body-sm text-fg-muted">{bp.description}</p>
 
       <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 rounded-md border border-border-default bg-bg-subtle px-3 py-2.5">
-        <dt className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Range</dt>
+        <dt className="text-xs font-semibold uppercase tracking-wide text-fg-muted">
+          Range
+        </dt>
         <dd className="font-mono text-xs font-medium text-fg-default">
           {formatBreakpointRange(name)}
         </dd>
 
-        <dt className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Min width</dt>
+        <dt className="text-xs font-semibold uppercase tracking-wide text-fg-muted">
+          Min width
+        </dt>
         <dd className="font-mono text-xs font-medium text-fg-default">
           {bp.minWidthPx}px · {bp.minWidthRem}
         </dd>
 
-        <dt className="text-xs font-semibold uppercase tracking-wide text-fg-muted">CSS var</dt>
+        <dt className="text-xs font-semibold uppercase tracking-wide text-fg-muted">
+          CSS var
+        </dt>
         <dd className="font-mono text-xs font-medium text-fg-default">{bp.cssVar}</dd>
 
-        <dt className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Variant</dt>
+        <dt className="text-xs font-semibold uppercase tracking-wide text-fg-muted">
+          Variant
+        </dt>
         <dd className="font-mono text-xs font-medium text-fg-default">
           {variant ? `${variant}:` : 'base (no prefix)'}
         </dd>
 
-        <dt className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Media</dt>
+        <dt className="text-xs font-semibold uppercase tracking-wide text-fg-muted">
+          Media
+        </dt>
         <dd className="font-mono text-xs font-medium text-fg-default">
           {bp.minWidthPx === 0
             ? 'default styles (always applied)'
@@ -93,8 +97,8 @@ function ResponsiveDemo() {
   return (
     <div className="space-y-4">
       <p className="text-body-sm text-fg-muted">
-        Resize the Storybook viewport (or browser window). Layout and labels update with the active
-        tier.
+        Resize the Storybook viewport (or browser window). Layout and labels update with
+        the active tier.
       </p>
 
       {/* Stack on mobile → row from tablet */}
@@ -103,7 +107,9 @@ function ResponsiveDemo() {
           <p className="text-label-md text-fg-muted">Layout</p>
           <p className="mt-1 text-body-md font-semibold text-fg-default">
             <span className="tablet:hidden">Column stack (mobile)</span>
-            <span className="hidden tablet:inline desktop:hidden">Row · two columns (tablet)</span>
+            <span className="hidden tablet:inline desktop:hidden">
+              Row · two columns (tablet)
+            </span>
             <span className="hidden desktop:inline">Row · three columns (desktop)</span>
           </p>
         </div>
@@ -138,7 +144,7 @@ function ResponsiveDemo() {
       </div>
 
       <pre className="overflow-x-auto rounded-lg border border-border-default bg-bg-subtle p-3 text-code-sm text-fg-default">
-{`<div className="flex flex-col gap-3 tablet:flex-row desktop:gap-8">
+        {`<div className="flex flex-col gap-3 tablet:flex-row desktop:gap-8">
   <aside className="hidden desktop:block">Sidebar</aside>
   <main className="flex-1">…</main>
 </div>`}
@@ -173,8 +179,8 @@ function BreakpointsDoc({ theme }: { theme: ColorMode }) {
             desktop:
           </code>
           . Switch sizes with the Storybook{' '}
-          <strong className="font-semibold text-fg-default">viewport</strong> toolbar (Mobile /
-          Tablet / Desktop) — the same tokens as the design system.
+          <strong className="font-semibold text-fg-default">viewport</strong> toolbar
+          (Mobile / Tablet / Desktop) — the same tokens as the design system.
         </p>
 
         <div className="mt-4 rounded-lg border border-border-default bg-bg-subtle px-4 py-3">
@@ -193,11 +199,14 @@ function BreakpointsDoc({ theme }: { theme: ColorMode }) {
       </section>
 
       <section className="mb-10">
-        <h2 className="mb-2 text-heading-md text-fg-default">Storybook viewport toolbar</h2>
+        <h2 className="mb-2 text-heading-md text-fg-default">
+          Storybook viewport toolbar
+        </h2>
         <p className="mb-4 text-body-sm text-fg-muted">
           The toolbar lists only these three options (configured in{' '}
-          <code className="text-code-sm text-fg-default">.storybook/preview.tsx</code> from{' '}
-          <code className="text-code-sm text-fg-default">designSystemViewports</code>).
+          <code className="text-code-sm text-fg-default">.storybook/preview.tsx</code>{' '}
+          from <code className="text-code-sm text-fg-default">designSystemViewports</code>
+          ).
         </p>
         <div className="overflow-hidden rounded-lg border border-border-default">
           <table className="w-full text-left text-sm">
@@ -238,8 +247,8 @@ function BreakpointsDoc({ theme }: { theme: ColorMode }) {
         <h2 className="mb-3 text-heading-md text-fg-default">Usage</h2>
         <ul className="list-disc space-y-2 pl-5 text-body-sm text-fg-muted">
           <li>
-            <strong className="text-fg-default">Mobile-first:</strong> write mobile styles with no
-            prefix, then override at larger tiers.
+            <strong className="text-fg-default">Mobile-first:</strong> write mobile styles
+            with no prefix, then override at larger tiers.
           </li>
           <li>
             Default Tailwind <code className="text-code-sm text-fg-default">sm:</code> /{' '}
@@ -250,8 +259,8 @@ function BreakpointsDoc({ theme }: { theme: ColorMode }) {
             <code className="text-code-sm text-fg-default">desktop:</code> only.
           </li>
           <li>
-            Prefer layout changes (stack → row, hide sidebar) over unrelated visual rewrites per
-            breakpoint.
+            Prefer layout changes (stack → row, hide sidebar) over unrelated visual
+            rewrites per breakpoint.
           </li>
         </ul>
       </section>

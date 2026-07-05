@@ -30,17 +30,17 @@ Shared options live in **`tsconfig.base.json`**. Workspace packages extend it an
 
 Add a new app the same way under `apps/*/tsconfig.json`.
 
-| Workspace | Path | Package |
-| --- | --- | --- |
+| Workspace | Path           | Package                               |
+| --------- | -------------- | ------------------------------------- |
 | Libraries | `libraries/ui` | [`@design-system/ui`](./libraries/ui) |
-| Apps | `apps/*` | _(add app packages here)_ |
+| Apps      | `apps/*`       | _(add app packages here)_             |
 
 ## Requirements
 
 | Requirement | Version |
-| --- | --- |
-| Node.js | ≥ 20.19 |
-| pnpm | ≥ 9 |
+| ----------- | ------- |
+| Node.js     | ≥ 20.19 |
+| pnpm        | ≥ 9     |
 
 ## Getting started
 
@@ -57,16 +57,28 @@ pnpm storybook
 
 ### Useful root scripts
 
-| Command | Description |
+| Command                       | Description                                                 |
+| ----------------------------- | ----------------------------------------------------------- |
+| `pnpm install`                | Install dependencies for all workspaces                     |
+| `pnpm tokens:generate`        | Generate token CSS from TypeScript (single source of truth) |
+| `pnpm tokens:check`           | Fail if generated token CSS is stale                        |
+| `pnpm test`                   | Run package tests (Vitest)                                  |
+| `pnpm lint` / `pnpm lint:fix` | ESLint (flat config at repo root)                           |
+| `pnpm format` / `pnpm format:check` | Prettier write / check                                |
+| `pnpm build`                  | Build `@design-system/ui` (runs token codegen first)        |
+| `pnpm storybook` / `pnpm dev` | Storybook dev server                                        |
+| `pnpm typecheck`              | Typecheck all packages that define the script               |
+| `pnpm build-storybook`        | Static Storybook build                                      |
+
+### Lint & format
+
+Configured at the monorepo root (packages share these configs):
+
+| File | Role |
 | --- | --- |
-| `pnpm install` | Install dependencies for all workspaces |
-| `pnpm tokens:generate` | Generate token CSS from TypeScript (single source of truth) |
-| `pnpm tokens:check` | Fail if generated token CSS is stale |
-| `pnpm test` | Run package tests (Vitest) |
-| `pnpm build` | Build `@design-system/ui` (runs token codegen first) |
-| `pnpm storybook` / `pnpm dev` | Storybook dev server |
-| `pnpm typecheck` | Typecheck all packages that define the script |
-| `pnpm build-storybook` | Static Storybook build |
+| `eslint.config.mjs` | ESLint 10 flat config (TypeScript, `@eslint-react`, Prettier-compatible) |
+| `.prettierrc.json` | Prettier 3 options |
+| `.prettierignore` | Build output, lockfile, generated token CSS |
 
 ### Working with a single package
 

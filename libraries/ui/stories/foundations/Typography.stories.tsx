@@ -68,9 +68,7 @@ function primaryFace(family: FontFamilyName): string {
 
 function describeFamily(family: FontFamilyName): string {
   const face = primaryFace(family);
-  return family === 'mono'
-    ? `${face} (monospace / code)`
-    : `${face} (sans-serif / UI)`;
+  return family === 'mono' ? `${face} (monospace / code)` : `${face} (sans-serif / UI)`;
 }
 
 function describeWeight(weight: FontWeightName): string {
@@ -149,7 +147,9 @@ function SemanticStyleCard({
   return (
     <div className="rounded-lg border border-border-default bg-bg-canvas p-4 shadow-sm">
       <div className="mb-1 flex flex-wrap items-baseline justify-between gap-2">
-        <code className="text-code-sm font-semibold text-accent-text">text-{style.name}</code>
+        <code className="text-code-sm font-semibold text-accent-text">
+          text-{style.name}
+        </code>
         <span className="rounded-md border border-border-default bg-bg-subtle px-1.5 py-0.5 text-xs font-medium capitalize text-fg-default">
           {group}
         </span>
@@ -181,9 +181,9 @@ function TypographyDoc({ theme }: { theme: ColorMode }) {
           </span>
         </div>
         <p className="mt-2 max-w-2xl text-body-md text-fg-muted">
-          Use the <strong className="font-semibold text-fg-default">Theme</strong> control in the
-          Storybook toolbar (sun / moon) to switch light and dark. Each specimen lists family,
-          weight, and size in plain language.
+          Use the <strong className="font-semibold text-fg-default">Theme</strong> control
+          in the Storybook toolbar (sun / moon) to switch light and dark. Each specimen
+          lists family, weight, and size in plain language.
         </p>
         <p className="mt-4 text-body-md text-fg-default">
           The quick deploy jumped over the flaky test — default body on canvas.
@@ -207,8 +207,12 @@ function TypographyDoc({ theme }: { theme: ColorMode }) {
                 className="rounded-lg border border-border-default bg-bg-canvas p-4 shadow-sm"
               >
                 <div className="mb-1 flex flex-wrap items-baseline gap-2">
-                  <span className="text-label-lg text-fg-default">font-{family.name}</span>
-                  <span className="text-body-sm font-medium text-fg-muted">{family.role}</span>
+                  <span className="text-label-lg text-fg-default">
+                    font-{family.name}
+                  </span>
+                  <span className="text-body-sm font-medium text-fg-muted">
+                    {family.role}
+                  </span>
                 </div>
                 <p className="text-sm font-medium text-fg-default">
                   Primary face: {family.stack[0]}
@@ -246,8 +250,8 @@ function TypographyDoc({ theme }: { theme: ColorMode }) {
         <section>
           <h2 className="mb-2 text-heading-md text-fg-default">2. Size scale</h2>
           <p className="mb-4 text-body-sm text-fg-muted">
-            Size tokens change font-size (and default line-height). Family stays Inter / font-sans
-            unless paired with a semantic style or font-mono.
+            Size tokens change font-size (and default line-height). Family stays Inter /
+            font-sans unless paired with a semantic style or font-mono.
           </p>
           <div className="overflow-hidden rounded-lg border border-border-default bg-bg-canvas shadow-sm">
             {(Object.keys(fontSizes) as FontSizeName[]).map((name) => {
@@ -290,8 +294,12 @@ function TypographyDoc({ theme }: { theme: ColorMode }) {
                   key={name}
                   className="border-b border-border-muted pb-3 last:border-b-0 last:pb-0"
                 >
-                  <p className="text-body-md text-fg-default" style={{ fontWeight: token.value }}>
-                    Inter · {name} ({token.value}) — The quick deploy jumped over the flaky test.
+                  <p
+                    className="text-body-md text-fg-default"
+                    style={{ fontWeight: token.value }}
+                  >
+                    Inter · {name} ({token.value}) — The quick deploy jumped over the
+                    flaky test.
                   </p>
                   <p className="mt-1 font-mono text-xs text-fg-muted">
                     font-{name} · weight {token.value} · {token.description}
@@ -304,8 +312,8 @@ function TypographyDoc({ theme }: { theme: ColorMode }) {
           <div className="rounded-lg border border-border-default bg-bg-canvas p-4 shadow-sm">
             <h2 className="mb-1 text-heading-sm text-fg-default">Line height</h2>
             <p className="mb-3 text-body-sm text-fg-muted">
-              Unitless multipliers on the font size. Each sample uses the same multi-line paragraph
-              so you can compare vertical rhythm.
+              Unitless multipliers on the font size. Each sample uses the same multi-line
+              paragraph so you can compare vertical rhythm.
             </p>
             <ul className="space-y-5">
               {Object.entries(lineHeights).map(([name, token]) => (
@@ -324,9 +332,10 @@ function TypographyDoc({ theme }: { theme: ColorMode }) {
                     className="max-w-prose text-body-md text-fg-default"
                     style={{ lineHeight: token.value }}
                   >
-                    Monitor builds, previews, and production health from one place. Rollback in a
-                    click when something goes wrong. Share deploy links with your team and keep
-                    every environment in sync without leaving the dashboard.
+                    Monitor builds, previews, and production health from one place.
+                    Rollback in a click when something goes wrong. Share deploy links with
+                    your team and keep every environment in sync without leaving the
+                    dashboard.
                   </p>
                 </li>
               ))}
@@ -335,7 +344,9 @@ function TypographyDoc({ theme }: { theme: ColorMode }) {
 
           <div className="rounded-lg border border-border-default bg-bg-canvas p-4 shadow-sm">
             <h2 className="mb-1 text-heading-sm text-fg-default">Letter spacing</h2>
-            <p className="mb-3 text-body-sm text-fg-muted">Tracking in ems relative to font size.</p>
+            <p className="mb-3 text-body-sm text-fg-muted">
+              Tracking in ems relative to font size.
+            </p>
             <ul className="space-y-2">
               {Object.entries(letterSpacings).map(([name, token]) => (
                 <li key={name} className="text-body-sm text-fg-default">
@@ -354,9 +365,12 @@ function TypographyDoc({ theme }: { theme: ColorMode }) {
 
         {/* Semantic styles */}
         <section>
-          <h2 className="mb-2 text-heading-md text-fg-default">3. Semantic text styles</h2>
+          <h2 className="mb-2 text-heading-md text-fg-default">
+            3. Semantic text styles
+          </h2>
           <p className="mb-6 text-body-md text-fg-muted">
-            Full recipes: each card shows the live specimen plus family, weight, and size. Prefer{' '}
+            Full recipes: each card shows the live specimen plus family, weight, and size.
+            Prefer{' '}
             <code className="rounded bg-bg-surface-active px-1 text-code-sm text-fg-default">
               text-heading-lg
             </code>{' '}
@@ -382,7 +396,8 @@ function TypographyDoc({ theme }: { theme: ColorMode }) {
         <section>
           <h2 className="mb-2 text-heading-md text-fg-default">4. On-surface samples</h2>
           <p className="mb-4 text-body-sm text-fg-muted">
-            Common pairings of semantic type + foreground tokens. Specs call out face and weight.
+            Common pairings of semantic type + foreground tokens. Specs call out face and
+            weight.
           </p>
           <div className="space-y-3">
             <div className="rounded-lg border border-border-default bg-bg-canvas p-4">
@@ -391,7 +406,8 @@ function TypographyDoc({ theme }: { theme: ColorMode }) {
                 Inter · semibold (600) · 20px · text-heading-lg + text-fg-default
               </p>
               <p className="mt-2 text-body-md text-fg-muted">
-                Supporting copy — Inter · regular (400) · 14px · text-body-md + text-fg-muted
+                Supporting copy — Inter · regular (400) · 14px · text-body-md +
+                text-fg-muted
               </p>
             </div>
             <div className="rounded-lg border border-border-default bg-bg-surface p-4">
