@@ -73,4 +73,4 @@ In the app `package.json`:
 }
 ```
 
-See [`libraries/ui/README.md`](./libraries/ui/README.md) for package installation, tokens, and API usage.
+See [`libraries/ui/README.md`](./libraries/ui/README.md) for usage, tokens, and the JS API.

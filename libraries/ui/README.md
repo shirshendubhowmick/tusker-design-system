@@ -11,80 +11,26 @@ Package name: `@design-system/ui`
 
 ---
 
-## Requirements
-
-| Requirement | Version |
-| --- | --- |
-| Node.js | ≥ 20.19 |
-| React / React DOM | ≥ 18 (19 supported) |
-| Bundler | Vite, webpack, Next.js, etc. (ESM preferred) |
-
----
-
 ## Installation
 
-### From the monorepo / local path (development)
-
-Build the library once, then depend on it from your app:
+This package is consumed only via the monorepo workspace. From the repo root:
 
 ```bash
-# in this repo
 pnpm install
 pnpm build
 ```
 
-**pnpm workspace** (this monorepo already wires it up):
-
-```yaml
-# pnpm-workspace.yaml (repo root)
-packages:
-  - 'apps/*'
-  - 'libraries/*'
-```
-
-```json
-// apps/web/package.json
-{
-  "dependencies": {
-    "@design-system/ui": "workspace:*",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
-  }
-}
-```
-
-**File / link dependency** (app outside the workspace):
-
-```bash
-# from the consuming app
-pnpm add link:../path/to/design-system/libraries/ui
-# or after publish-style packing:
-# pnpm add ../path/to/design-system/libraries/ui
-```
+In an app under `apps/`, depend on it with:
 
 ```json
 {
   "dependencies": {
-    "@design-system/ui": "file:../design-system/libraries/ui"
+    "@design-system/ui": "workspace:*"
   }
 }
 ```
 
-### From a registry (when published)
-
-```bash
-pnpm add @design-system/ui react react-dom
-# npm i @design-system/ui react react-dom
-# yarn add @design-system/ui react react-dom
-```
-
-Peer dependencies (must be installed in the app):
-
-```bash
-pnpm add react react-dom
-```
-
-Runtime helpers used by `cn()` are declared as dependencies of the library (`clsx`, `tailwind-merge`, `class-variance-authority`) and install automatically with the package.
+The app must also provide the peer dependencies `react` and `react-dom` (^18 or ^19).
 
 ---
 
