@@ -189,10 +189,18 @@ pnpm build       # emit library to dist/
 ## Usage
 
 ```tsx
+// CSS is opt-in so JS imports stay tree-shakeable
 import '@design-system/ui/styles.css';
-// Tokens are available as Tailwind utilities after importing styles:
-// bg-bg-canvas, text-fg-default, bg-accent-solid, …
+
+import { cn, shadowTokens, breakpoints } from '@design-system/ui';
+// Unused named exports are dropped by modern bundlers (ESM + sideEffects).
 ```
+
+Tree-shaking notes:
+
+- Package is **ESM-first** (`import` condition → `dist/index.js` with `preserveModules`).
+- **`sideEffects`** only marks CSS — pure JS modules can be eliminated.
+- Do **not** import the root entry solely for styles; use `./styles.css`.
 
 ## Project layout
 

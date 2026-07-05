@@ -1,4 +1,9 @@
-import './styles/index.css';
+/**
+ * Public JS API — no side-effect imports.
+ *
+ * Styles are opt-in so unused token/modules can be tree-shaken:
+ *   import '@design-system/ui/styles.css'
+ */
 
 export { cn } from './lib/cn';
 
@@ -78,4 +83,3 @@ export type {
   ShadowGroup,
   ShadowModeValues,
 } from './tokens/shadows';
-
