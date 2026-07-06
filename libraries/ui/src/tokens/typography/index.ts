@@ -1,4 +1,4 @@
-export { fontFamilies, type FontFamilyName } from './families';
+export { fontFamilies, type FontFamilyName } from "./families";
 export {
   fontSizes,
   fontSizeAliases,
@@ -9,11 +9,11 @@ export {
   type FontWeightName,
   type LineHeightName,
   type LetterSpacingName,
-} from './scale';
+} from "./scale";
 export {
   textStyles,
   textStyleGroups,
   type TextStyle,
   type TextStyleName,
   type TextStyleGroup,
-} from './semantic';
+} from "./semantic";

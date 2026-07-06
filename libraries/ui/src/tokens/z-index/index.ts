@@ -4,4 +4,4 @@ export {
   zIndexClass,
   zIndexCssVar,
   type ZIndexName,
-} from './scale';
+} from "./scale";

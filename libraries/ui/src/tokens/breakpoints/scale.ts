@@ -13,34 +13,35 @@
 
 export const breakpoints = {
   mobile: {
-    name: 'mobile',
+    name: "mobile",
     /** Inclusive start of the range (always 0 for the base tier). */
     minWidthPx: 0,
-    minWidthRem: '0rem',
+    minWidthRem: "0rem",
     /** Exclusive end — width at which the next tier starts. */
     maxWidthPx: 767,
-    description: 'Default / base styles. Phones and narrow viewports.',
+    description: "Default / base styles. Phones and narrow viewports.",
     tailwindVariant: null,
     /** CSS custom property registered for docs (not a min-width query). */
-    cssVar: '--breakpoint-mobile',
+    cssVar: "--breakpoint-mobile",
   },
   tablet: {
-    name: 'tablet',
+    name: "tablet",
     minWidthPx: 768,
-    minWidthRem: '48rem',
+    minWidthRem: "48rem",
     maxWidthPx: 1023,
-    description: 'Tablets and small laptops. Side-by-side layouts begin.',
-    tailwindVariant: 'tablet',
-    cssVar: '--breakpoint-tablet',
+    description: "Tablets and small laptops. Side-by-side layouts begin.",
+    tailwindVariant: "tablet",
+    cssVar: "--breakpoint-tablet",
   },
   desktop: {
-    name: 'desktop',
+    name: "desktop",
     minWidthPx: 1024,
-    minWidthRem: '64rem',
+    minWidthRem: "64rem",
     maxWidthPx: null,
-    description: 'Laptops and desktops. Full app chrome and multi-column dashboards.',
-    tailwindVariant: 'desktop',
-    cssVar: '--breakpoint-desktop',
+    description:
+      "Laptops and desktops. Full app chrome and multi-column dashboards.",
+    tailwindVariant: "desktop",
+    cssVar: "--breakpoint-desktop",
   },
 } as const;
 
@@ -48,18 +49,18 @@ export type BreakpointName = keyof typeof breakpoints;
 
 /** Ordered from smallest to largest. */
 export const breakpointOrder = [
-  'mobile',
-  'tablet',
-  'desktop',
+  "mobile",
+  "tablet",
+  "desktop",
 ] as const satisfies readonly BreakpointName[];
 
 /**
  * Resolve which named breakpoint a viewport width falls into (mobile-first ranges).
  */
 export function resolveBreakpoint(widthPx: number): BreakpointName {
-  if (widthPx >= breakpoints.desktop.minWidthPx) return 'desktop';
-  if (widthPx >= breakpoints.tablet.minWidthPx) return 'tablet';
-  return 'mobile';
+  if (widthPx >= breakpoints.desktop.minWidthPx) return "desktop";
+  if (widthPx >= breakpoints.tablet.minWidthPx) return "tablet";
+  return "mobile";
 }
 
 /** Human-readable range label for docs. */

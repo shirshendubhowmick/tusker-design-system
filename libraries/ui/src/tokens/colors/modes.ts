@@ -15,7 +15,7 @@
  * ```
  */
 
-export const colorModes = ['light', 'dark'] as const;
+export const colorModes = ["light", "dark"] as const;
 export type ColorMode = (typeof colorModes)[number];
 
 /**
@@ -24,45 +24,45 @@ export type ColorMode = (typeof colorModes)[number];
  */
 export const colorModeCssSelectors = {
   /** Dark theme scopes (html class, local island, data attribute). */
-  dark: ['html.dark', '.dark', '.dark-theme', "[data-theme='dark']"],
+  dark: ["html.dark", ".dark", ".dark-theme", "[data-theme='dark']"],
   /**
    * Explicit light re-assert (nested light islands + default html without dark).
    * Excludes `html.dark-theme` as well as `html.dark`.
    */
   light: [
-    'html:not(.dark):not(.dark-theme)',
-    '.light',
-    '.light-theme',
+    "html:not(.dark):not(.dark-theme)",
+    ".light",
+    ".light-theme",
     "[data-theme='light']",
   ],
   /** Light defaults that also seed `:root` (e.g. shadow variables). */
-  lightWithRoot: [':root', '.light', '.light-theme', "[data-theme='light']"],
+  lightWithRoot: [":root", ".light", ".light-theme", "[data-theme='light']"],
 } as const;
 
 export const colorModeMeta = {
   light: {
-    className: 'light',
-    description: 'Light surfaces — near-white canvas, dark text (slate-12)',
-    selector: colorModeCssSelectors.light.join(', '),
+    className: "light",
+    description: "Light surfaces — near-white canvas, dark text (slate-12)",
+    selector: colorModeCssSelectors.light.join(", "),
     /** Expected feel for docs */
-    canvasStep: 'slate-1 (light ≈ #fcfcfd)',
-    foregroundStep: 'slate-12 (light ≈ #1c2024)',
+    canvasStep: "slate-1 (light ≈ #fcfcfd)",
+    foregroundStep: "slate-12 (light ≈ #1c2024)",
   },
   dark: {
-    className: 'dark',
-    description: 'Dark surfaces — near-black canvas, light text (slate-12)',
-    selector: colorModeCssSelectors.dark.join(', '),
-    canvasStep: 'slate-1 (dark ≈ #111113)',
-    foregroundStep: 'slate-12 (dark ≈ #edeef0)',
+    className: "dark",
+    description: "Dark surfaces — near-black canvas, light text (slate-12)",
+    selector: colorModeCssSelectors.dark.join(", "),
+    canvasStep: "slate-1 (dark ≈ #111113)",
+    foregroundStep: "slate-12 (dark ≈ #edeef0)",
   },
 } as const;
 
 export const colorModeActivation = {
-  rootClass: 'dark',
-  dataAttribute: 'data-theme',
-  mediaQuery: '(prefers-color-scheme: dark)',
+  rootClass: "dark",
+  dataAttribute: "data-theme",
+  mediaQuery: "(prefers-color-scheme: dark)",
   cssColorScheme: {
-    light: 'light',
-    dark: 'dark',
+    light: "light",
+    dark: "dark",
   },
 } as const;

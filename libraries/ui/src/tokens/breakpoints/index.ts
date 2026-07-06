@@ -4,11 +4,11 @@ export {
   resolveBreakpoint,
   formatBreakpointRange,
   type BreakpointName,
-} from './scale';
+} from "./scale";
 
 export {
   designSystemViewports,
   defaultStorybookViewport,
   storybookViewportNotes,
   type DesignSystemViewport,
-} from './viewports';
+} from "./viewports";

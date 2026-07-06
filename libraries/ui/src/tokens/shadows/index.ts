@@ -8,4 +8,4 @@ export {
   type ShadowToken,
   type ShadowGroup,
   type ShadowModeValues,
-} from './scale';
+} from "./scale";

@@ -1,8 +1,9 @@
-import { describe, expect, it } from 'vitest';
-import { zIndexClass, zIndexCssVar, zIndexOrder, zIndexTokens } from './scale';
+import { describe, expect, it } from "vitest";
 
-describe('zIndexTokens', () => {
-  it('lists every token once in ascending order', () => {
+import { zIndexClass, zIndexCssVar, zIndexOrder, zIndexTokens } from "./scale";
+
+describe("zIndexTokens", () => {
+  it("lists every token once in ascending order", () => {
     expect(new Set(zIndexOrder).size).toBe(zIndexOrder.length);
     expect([...zIndexOrder].sort()).toEqual(Object.keys(zIndexTokens).sort());
 
@@ -14,7 +15,7 @@ describe('zIndexTokens', () => {
     }
   });
 
-  it('matches the product stacking scale', () => {
+  it("matches the product stacking scale", () => {
     expect(zIndexTokens.base.value).toBe(0);
     expect(zIndexTokens.raised.value).toBe(10);
     expect(zIndexTokens.dropdown.value).toBe(100);
@@ -25,8 +26,8 @@ describe('zIndexTokens', () => {
     expect(zIndexTokens.tooltip.value).toBe(600);
   });
 
-  it('helpers build class and CSS variable names', () => {
-    expect(zIndexClass('modal')).toBe('z-modal');
-    expect(zIndexCssVar('toast')).toBe('--z-index-toast');
+  it("helpers build class and CSS variable names", () => {
+    expect(zIndexClass("modal")).toBe("z-modal");
+    expect(zIndexCssVar("toast")).toBe("--z-index-toast");
   });
 });

@@ -24,63 +24,63 @@ export const palette = {
    * sidebars). Pairs cleanly with monospaced code and indigo brand.
    */
   gray: {
-    radix: 'slate',
-    role: 'neutral',
-    description: 'App chrome: canvases, panels, borders, body text',
+    radix: "slate",
+    role: "neutral",
+    description: "App chrome: canvases, panels, borders, body text",
   },
   /**
    * Brand / accent — indigo reads modern and product-like without colliding
    * with status blue (info). Used for primary CTAs, selected nav, focus.
    */
   brand: {
-    radix: 'indigo',
-    role: 'brand',
-    description: 'Primary actions, selection, brand emphasis, focus ring',
+    radix: "indigo",
+    role: "brand",
+    description: "Primary actions, selection, brand emphasis, focus ring",
   },
   /**
    * Success — healthy deployments, passing checks, connected integrations.
    */
   green: {
-    radix: 'green',
-    role: 'success',
-    description: 'Positive status and confirmation',
+    radix: "green",
+    role: "success",
+    description: "Positive status and confirmation",
   },
   /**
    * Warning — degraded services, rate limits, non-blocking attention.
    * Amber over yellow for better contrast on both themes.
    */
   amber: {
-    radix: 'amber',
-    role: 'warning',
-    description: 'Caution and non-fatal issues',
+    radix: "amber",
+    role: "warning",
+    description: "Caution and non-fatal issues",
   },
   /**
    * Danger — failed jobs, destructive actions, blocking errors.
    */
   red: {
-    radix: 'red',
-    role: 'danger',
-    description: 'Errors and destructive actions',
+    radix: "red",
+    role: "danger",
+    description: "Errors and destructive actions",
   },
   /**
    * Info — neutral informational callouts, documentation, secondary links.
    * Kept distinct from brand (indigo) so “info” never looks like a primary CTA.
    */
   blue: {
-    radix: 'blue',
-    role: 'info',
-    description: 'Informational emphasis (not brand)',
+    radix: "blue",
+    role: "info",
+    description: "Informational emphasis (not brand)",
   },
 } as const;
 
 export type PaletteName = keyof typeof palette;
-export type PaletteRole = (typeof palette)[PaletteName]['role'];
+export type PaletteRole = (typeof palette)[PaletteName]["role"];
 
 /** Overlay primitives (not 12-step scales). */
 export const overlays = {
-  black: { radix: 'black', description: 'Dark scrims / modals (alpha scale)' },
+  black: { radix: "black", description: "Dark scrims / modals (alpha scale)" },
   white: {
-    radix: 'white',
-    description: 'Light highlights on dark surfaces (alpha scale)',
+    radix: "white",
+    description: "Light highlights on dark surfaces (alpha scale)",
   },
 } as const;

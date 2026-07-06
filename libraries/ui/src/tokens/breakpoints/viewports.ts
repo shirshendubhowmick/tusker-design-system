@@ -1,5 +1,5 @@
-import type { BreakpointName } from './scale';
-import { breakpoints } from './scale';
+import type { BreakpointName } from "./scale";
+import { breakpoints } from "./scale";
 
 /**
  * Storybook viewport entries aligned to product breakpoints.
@@ -12,42 +12,42 @@ import { breakpoints } from './scale';
  *
  * @see https://storybook.js.org/docs/essentials/viewport
  */
-export type DesignSystemViewport = {
+export interface DesignSystemViewport {
   name: string;
   styles: { width: string; height: string };
-  type: 'mobile' | 'tablet' | 'desktop';
-};
+  type: "mobile" | "tablet" | "desktop";
+}
 
 /** Viewport toolbar options (keys = Storybook viewport values). */
 export const designSystemViewports = {
   mobile: {
-    name: 'Mobile',
+    name: "Mobile",
     styles: {
-      width: '375px',
-      height: '812px',
+      width: "375px",
+      height: "812px",
     },
-    type: 'mobile' as const,
+    type: "mobile" as const,
   },
   tablet: {
-    name: 'Tablet',
+    name: "Tablet",
     styles: {
       width: `${breakpoints.tablet.minWidthPx}px`,
-      height: '1024px',
+      height: "1024px",
     },
-    type: 'tablet' as const,
+    type: "tablet" as const,
   },
   desktop: {
-    name: 'Desktop',
+    name: "Desktop",
     styles: {
-      width: '1280px',
-      height: '900px',
+      width: "1280px",
+      height: "900px",
     },
-    type: 'desktop' as const,
+    type: "desktop" as const,
   },
 } as const satisfies Record<BreakpointName, DesignSystemViewport>;
 
 /** Default Storybook viewport when opening the project. */
-export const defaultStorybookViewport: BreakpointName = 'desktop';
+export const defaultStorybookViewport: BreakpointName = "desktop";
 
 /** Human notes for docs (width used in the toolbar vs tier range). */
 export const storybookViewportNotes: Record<
@@ -56,18 +56,18 @@ export const storybookViewportNotes: Record<
 > = {
   mobile: {
     toolbarWidthPx: 375,
-    tier: formatTier('mobile'),
-    note: 'Representative phone width inside the mobile tier.',
+    tier: formatTier("mobile"),
+    note: "Representative phone width inside the mobile tier.",
   },
   tablet: {
     toolbarWidthPx: breakpoints.tablet.minWidthPx,
-    tier: formatTier('tablet'),
-    note: 'Starts exactly at the tablet min-width (768px).',
+    tier: formatTier("tablet"),
+    note: "Starts exactly at the tablet min-width (768px).",
   },
   desktop: {
     toolbarWidthPx: 1280,
-    tier: formatTier('desktop'),
-    note: 'Comfortable app shell above the 1024px desktop floor.',
+    tier: formatTier("desktop"),
+    note: "Comfortable app shell above the 1024px desktop floor.",
   },
 };
 

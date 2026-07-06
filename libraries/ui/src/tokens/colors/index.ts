@@ -5,7 +5,7 @@ export {
   type PaletteName,
   type PaletteRole,
   type RadixStep,
-} from './palette';
+} from "./palette";
 
 export {
   colorModes,
@@ -13,7 +13,7 @@ export {
   colorModeMeta,
   colorModeActivation,
   type ColorMode,
-} from './modes';
+} from "./modes";
 
 export {
   semanticColorTokens,
@@ -25,4 +25,4 @@ export {
   type SemanticColorGroup,
   type SemanticRef,
   type SemanticToken,
-} from './semantic';
+} from "./semantic";
