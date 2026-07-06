@@ -5,7 +5,7 @@
  *   import '@design-system/ui/styles.css'
  */
 
-export { cn } from "./lib/cn";
+export { cn, type ClassValue } from "./lib/cn";
 
 export {
   palette,
