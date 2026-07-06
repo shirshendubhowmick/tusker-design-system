@@ -1,14 +1,14 @@
-import { defineConfig, type UserConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import tailwindcss from '@tailwindcss/vite';
-import dts from 'vite-plugin-dts';
-import { fileURLToPath, URL } from 'node:url';
+import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react";
+import { URL, fileURLToPath } from "node:url";
+import { type UserConfig, defineConfig } from "vite";
+import dts from "vite-plugin-dts";
 
-const rootDir = fileURLToPath(new URL('.', import.meta.url));
+const rootDir = fileURLToPath(new URL(".", import.meta.url));
 const src = (rel: string) => fileURLToPath(new URL(rel, import.meta.url));
 
 /** Storybook loads this file for the preview pipeline. */
-const isStorybook = process.argv[1]?.includes('storybook') ?? false;
+const isStorybook = process.argv[1]?.includes("storybook") ?? false;
 
 /**
  * Build modes (single config file):
@@ -16,12 +16,12 @@ const isStorybook = process.argv[1]?.includes('storybook') ?? false;
  * - `styles`         → design-system.css only (vite build --mode styles)
  * - Storybook        → preview plugins only (no lib build options)
  */
-type BuildKind = 'storybook' | 'styles' | 'lib';
+type BuildKind = "storybook" | "styles" | "lib";
 
 function resolveBuildKind(mode: string): BuildKind {
-  if (isStorybook) return 'storybook';
-  if (mode === 'styles') return 'styles';
-  return 'lib';
+  if (isStorybook) return "storybook";
+  if (mode === "styles") return "styles";
+  return "lib";
 }
 
 /** Public JS graph is pure (no CSS imports). */
@@ -46,14 +46,14 @@ function stylesConfig(): UserConfig {
       // Required when the library entry is a CSS file.
       cssCodeSplit: true,
       lib: {
-        entry: src('./src/styles/index.css'),
-        formats: ['es'],
+        entry: src("./src/styles/index.css"),
+        formats: ["es"],
         // Tiny stub may be emitted by the bundler; not part of public exports.
-        fileName: () => 'design-system-styles.js',
+        fileName: () => "design-system-styles.js",
       },
       rollupOptions: {
         output: {
-          assetFileNames: 'design-system.[ext]',
+          assetFileNames: "design-system.[ext]",
         },
       },
     },
@@ -67,34 +67,38 @@ function libConfig(): UserConfig {
       react(),
       tailwindcss(),
       dts({
-        include: ['src'],
-        exclude: ['src/**/*.stories.tsx', 'src/**/*.test.ts', 'src/**/*.test.tsx'],
+        include: ["src"],
+        exclude: [
+          "src/**/*.stories.tsx",
+          "src/**/*.test.ts",
+          "src/**/*.test.tsx",
+        ],
         // unplugin-dts: formerly `rollupTypes`
         bundleTypes: true,
         insertTypesEntry: true,
-        tsconfigPath: './tsconfig.json',
+        tsconfigPath: "./tsconfig.json",
       }),
     ],
     build: {
       lib: {
-        entry: src('./src/index.ts'),
-        name: 'DesignSystem',
-        formats: ['es', 'cjs'],
+        entry: src("./src/index.ts"),
+        name: "DesignSystem",
+        formats: ["es", "cjs"],
       },
       minify: false,
       sourcemap: true,
       cssCodeSplit: true,
       emptyOutDir: true,
-      target: 'es2022',
+      target: "es2022",
       rollupOptions: {
         external: [
-          'react',
-          'react-dom',
-          'react/jsx-runtime',
-          'react/jsx-dev-runtime',
-          'class-variance-authority',
-          'clsx',
-          'tailwind-merge',
+          "react",
+          "react-dom",
+          "react/jsx-runtime",
+          "react/jsx-dev-runtime",
+          "class-variance-authority",
+          "clsx",
+          "tailwind-merge",
         ],
         treeshake: {
           moduleSideEffects: hasModuleSideEffects,
@@ -103,18 +107,18 @@ function libConfig(): UserConfig {
         },
         output: [
           {
-            format: 'es',
+            format: "es",
             preserveModules: true,
-            preserveModulesRoot: 'src',
-            entryFileNames: '[name].js',
-            exports: 'named',
+            preserveModulesRoot: "src",
+            entryFileNames: "[name].js",
+            exports: "named",
           },
           {
-            format: 'cjs',
+            format: "cjs",
             preserveModules: true,
-            preserveModulesRoot: 'src',
-            entryFileNames: '[name].cjs',
-            exports: 'named',
+            preserveModulesRoot: "src",
+            entryFileNames: "[name].cjs",
+            exports: "named",
           },
         ],
       },
@@ -127,11 +131,11 @@ export default defineConfig(({ mode }) => {
   const kind = resolveBuildKind(mode);
 
   switch (kind) {
-    case 'storybook':
+    case "storybook":
       return storybookConfig();
-    case 'styles':
+    case "styles":
       return stylesConfig();
-    case 'lib':
+    case "lib":
     default:
       return libConfig();
   }

@@ -1,9 +1,10 @@
-import type { Preview } from '@storybook/react';
-import '../src/styles/index.css';
+import type { Preview } from "@storybook/react";
+
+import "../src/styles/index.css";
 import {
-  designSystemViewports,
   defaultStorybookViewport,
-} from '../src/tokens/breakpoints';
+  designSystemViewports,
+} from "../src/tokens/breakpoints";
 
 const preview: Preview = {
   parameters: {
@@ -13,7 +14,7 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
-    layout: 'centered',
+    layout: "centered",
     backgrounds: {
       disable: true,
     },
@@ -26,21 +27,21 @@ const preview: Preview = {
     },
   },
   initialGlobals: {
-    theme: 'light',
+    theme: "light",
     /** Start on desktop so full app layouts are visible by default. */
     viewport: { value: defaultStorybookViewport, isRotated: false },
   },
   globalTypes: {
     theme: {
-      description: 'Color theme',
+      description: "Color theme",
       // defaultValue kept for older paths; initialGlobals is the SB 10 source of truth
-      defaultValue: 'light',
+      defaultValue: "light",
       toolbar: {
-        title: 'Theme',
-        icon: 'circlehollow',
+        title: "Theme",
+        icon: "circlehollow",
         items: [
-          { value: 'light', title: 'Light', icon: 'sun' },
-          { value: 'dark', title: 'Dark', icon: 'moon' },
+          { value: "light", title: "Light", icon: "sun" },
+          { value: "dark", title: "Dark", icon: "moon" },
         ],
         dynamicTitle: true,
       },
@@ -48,19 +49,20 @@ const preview: Preview = {
   },
   decorators: [
     (Story, context) => {
-      const theme = (context.globals.theme as string) === 'dark' ? 'dark' : 'light';
+      const theme =
+        (context.globals.theme as string) === "dark" ? "dark" : "light";
       const root = document.documentElement;
 
-      root.classList.toggle('dark', theme === 'dark');
-      root.classList.toggle('light', theme === 'light');
+      root.classList.toggle("dark", theme === "dark");
+      root.classList.toggle("light", theme === "light");
       root.dataset.theme = theme;
 
       return (
         <div
           className={
-            theme === 'dark'
-              ? 'dark min-h-screen bg-bg-canvas text-fg-default antialiased'
-              : 'light min-h-screen bg-bg-canvas text-fg-default antialiased'
+            theme === "dark"
+              ? "dark bg-bg-canvas text-fg-default min-h-screen antialiased"
+              : "light bg-bg-canvas text-fg-default min-h-screen antialiased"
           }
           data-theme={theme}
         >

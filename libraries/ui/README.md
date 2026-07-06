@@ -44,12 +44,13 @@ Styles are **opt-in** and separate from JS so unused modules can be tree-shaken.
 
 ```tsx
 // src/main.tsx
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import '@design-system/ui/styles.css';
-import { App } from './App';
+import "@design-system/ui/styles.css";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 
-createRoot(document.getElementById('root')!).render(
+import { App } from "./App";
+
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <App />
   </StrictMode>,
@@ -60,13 +61,13 @@ createRoot(document.getElementById('root')!).render(
 
 ```tsx
 // app/layout.tsx
-import type { ReactNode } from 'react';
-import '@design-system/ui/styles.css';
+import "@design-system/ui/styles.css";
+import type { ReactNode } from "react";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className="light" suppressHydrationWarning>
-      <body className="min-h-screen bg-bg-canvas text-fg-default antialiased">
+      <body className="bg-bg-canvas text-fg-default min-h-screen antialiased">
         {children}
       </body>
     </html>
@@ -78,8 +79,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
 ```tsx
 // pages/_app.tsx
-import type { AppProps } from 'next/app';
-import '@design-system/ui/styles.css';
+import "@design-system/ui/styles.css";
+import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
   return <Component {...pageProps} />;
@@ -92,21 +93,21 @@ The stylesheet ships **ready-to-use utility classes** (semantic colors, type sty
 
 ```tsx
 // src/App.tsx
-import { cn, breakpoints, resolveBreakpoint } from '@design-system/ui';
+import { breakpoints, cn, resolveBreakpoint } from "@design-system/ui";
 
 export function App() {
   return (
-    <div className="min-h-screen bg-bg-canvas text-fg-default">
-      <header className="sticky top-0 z-sticky border-b border-border-default bg-bg-surface/95 shadow-sm backdrop-blur">
+    <div className="bg-bg-canvas text-fg-default min-h-screen">
+      <header className="z-sticky border-border-default bg-bg-surface/95 sticky top-0 border-b shadow-sm backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <h1 className="text-heading-sm text-fg-default">Deployments</h1>
           <button
             type="button"
             className={cn(
-              'rounded-md bg-accent-solid px-3 py-1.5',
-              'text-label-lg text-fg-on-accent shadow-sm',
-              'hover:bg-accent-solid-hover',
-              'focus-visible:shadow-focus',
+              "bg-accent-solid rounded-md px-3 py-1.5",
+              "text-label-lg text-fg-on-accent shadow-sm",
+              "hover:bg-accent-solid-hover",
+              "focus-visible:shadow-focus",
             )}
           >
             New deploy
@@ -114,11 +115,13 @@ export function App() {
         </div>
       </header>
 
-      <main className="mx-auto grid max-w-5xl gap-4 p-4 tablet:grid-cols-2 desktop:grid-cols-3">
-        <article className="rounded-lg border border-border-default bg-bg-surface p-4 shadow-sm">
+      <main className="tablet:grid-cols-2 desktop:grid-cols-3 mx-auto grid max-w-5xl gap-4 p-4">
+        <article className="border-border-default bg-bg-surface rounded-lg border p-4 shadow-sm">
           <p className="text-label-md text-fg-muted">Production</p>
-          <p className="mt-1 text-metric-sm text-fg-default">99.98%</p>
-          <p className="mt-2 text-body-sm text-success-text">All systems healthy</p>
+          <p className="text-metric-sm text-fg-default mt-1">99.98%</p>
+          <p className="text-body-sm text-success-text mt-2">
+            All systems healthy
+          </p>
         </article>
       </main>
     </div>
@@ -134,17 +137,18 @@ Add the `dark` class (or `data-theme="dark"`) on a root element—usually `<html
 // Toggle example
 function ThemeToggle() {
   const toggle = () => {
-    document.documentElement.classList.toggle('dark');
+    document.documentElement.classList.toggle("dark");
     // optional mirror for scoped theming:
-    document.documentElement.dataset.theme = document.documentElement.classList.contains(
-      'dark',
-    )
-      ? 'dark'
-      : 'light';
+    document.documentElement.dataset.theme =
+      document.documentElement.classList.contains("dark") ? "dark" : "light";
   };
 
   return (
-    <button type="button" onClick={toggle} className="text-label-md text-accent-text">
+    <button
+      type="button"
+      onClick={toggle}
+      className="text-label-md text-accent-text"
+    >
       Toggle theme
     </button>
   );
@@ -196,15 +200,15 @@ No special `optimizeDeps` is required for the CSS path. For linked workspace pac
 
 ```ts
 // vite.config.ts (app)
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [react()],
   server: {
     fs: {
       // allow importing a linked local package outside app root if needed
-      allow: ['..'],
+      allow: [".."],
     },
   },
 });
@@ -219,13 +223,11 @@ export default defineConfig({
 
 ```tsx
 // ✅ Named imports — unused token modules can be dropped by the app bundler
-import { cn, breakpoints } from '@design-system/ui';
-
-// ✅ Styles only when you need them
-import '@design-system/ui/styles.css';
-
+import { breakpoints, cn } from "@design-system/ui";
 // ❌ Don't rely on the root JS entry to inject CSS (it won't)
-import '@design-system/ui';
+import "@design-system/ui";
+// ✅ Styles only when you need them
+import "@design-system/ui/styles.css";
 ```
 
 - Package is **ESM-first** with `preserveModules` output.
@@ -238,26 +240,26 @@ import '@design-system/ui';
 
 ```tsx
 import {
-  cn,
   // layout
   breakpoints,
+  cn,
+  fontFamilies,
+  palette,
   resolveBreakpoint,
-  // elevation / stacking (token metadata)
-  shadowTokens,
-  zIndexTokens,
   // color system metadata
   semanticColorTokens,
-  palette,
+  // elevation / stacking (token metadata)
+  shadowTokens,
   // typography metadata
   textStyles,
-  fontFamilies,
-} from '@design-system/ui';
+  zIndexTokens,
+} from "@design-system/ui";
 
 // Classnames
 const className = cn(
-  'rounded-md bg-bg-surface p-4',
-  'tablet:p-6',
-  condition && 'shadow-md',
+  "rounded-md bg-bg-surface p-4",
+  "tablet:p-6",
+  condition && "shadow-md",
 );
 
 // Runtime breakpoint helper (e.g. analytics / layout logic)
@@ -312,8 +314,8 @@ Families: `font-sans` (Inter) · `font-mono` (JetBrains Mono).
 Default Tailwind `sm` / `md` / `lg` screens are **replaced** by these names in the shipped CSS.
 
 ```tsx
-<div className="flex flex-col gap-4 tablet:flex-row desktop:gap-8">
-  <aside className="hidden desktop:block">Sidebar</aside>
+<div className="tablet:flex-row desktop:gap-8 flex flex-col gap-4">
+  <aside className="desktop:block hidden">Sidebar</aside>
   <main className="flex-1">Content</main>
 </div>
 ```
