@@ -97,7 +97,6 @@ function libConfig(): UserConfig {
           "react/jsx-runtime",
           "react/jsx-dev-runtime",
           "class-variance-authority",
-          "clsx",
           "tailwind-merge",
         ],
         treeshake: {

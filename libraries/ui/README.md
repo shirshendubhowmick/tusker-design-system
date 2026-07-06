@@ -30,7 +30,26 @@ In an app under `apps/`, depend on it with:
 }
 ```
 
-The app must also provide the peer dependencies `react` and `react-dom` (^18 or ^19).
+The app must also provide these **peer dependencies** (same idea as React — one shared install for app + design system):
+
+| Peer                       | Version    |
+| -------------------------- | ---------- |
+| `react` / `react-dom`      | ^18 or ^19 |
+| `class-variance-authority` | ^0.7       |
+
+```json
+// apps/web/package.json (example)
+{
+  "dependencies": {
+    "@design-system/ui": "workspace:*",
+    "class-variance-authority": "^0.7.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}
+```
+
+Use `cn` from this package for class merging. For variants, import `cva` / `VariantProps` from the app’s `class-variance-authority` peer (same pattern as importing `react` directly).
 
 ---
 
