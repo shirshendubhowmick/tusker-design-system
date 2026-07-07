@@ -226,12 +226,12 @@ describe("Button", () => {
   });
 
   it("merges consumer className with variant classes", () => {
-    render(<Button className="custom-hook data-[x]:underline">Merge</Button>);
+    render(<Button className="custom-hook data-x:underline">Merge</Button>);
     const button = screen.getByRole("button", { name: "Merge" });
 
     expectHasClasses(button.className, [
       "custom-hook",
-      "data-[x]:underline",
+      "data-x:underline",
       "bg-accent-solid",
     ]);
   });
