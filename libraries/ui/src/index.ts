@@ -8,6 +8,13 @@
 export { cn, type ClassValue } from "./lib/cn";
 
 export {
+  Button,
+  buttonVariants,
+  type ButtonProps,
+  type ButtonVariantProps,
+} from "./components/Button";
+
+export {
   palette,
   overlays,
   RADIX_STEPS,

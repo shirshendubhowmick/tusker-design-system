@@ -1,5 +1,3 @@
-import { describe, expect, it } from "vitest";
-
 import { RADIX_STEPS, palette } from "./palette";
 import {
   type SemanticRef,

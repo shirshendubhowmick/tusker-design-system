@@ -1,5 +1,3 @@
-import { describe, expect, it } from "vitest";
-
 import { RADIX_STEPS, overlays, palette } from "./palette";
 
 describe("palette", () => {

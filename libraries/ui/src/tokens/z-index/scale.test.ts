@@ -1,5 +1,3 @@
-import { describe, expect, it } from "vitest";
-
 import { zIndexClass, zIndexCssVar, zIndexOrder, zIndexTokens } from "./scale";
 
 describe("zIndexTokens", () => {

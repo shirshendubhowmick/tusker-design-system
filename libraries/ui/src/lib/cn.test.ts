@@ -1,5 +1,3 @@
-import { describe, expect, it } from "vitest";
-
 import { cn } from "./cn";
 
 describe("cn", () => {
@@ -21,5 +19,23 @@ describe("cn", () => {
     expect(cn({ "bg-accent-solid": true, "bg-bg-subtle": false })).toBe(
       "bg-accent-solid",
     );
+  });
+
+  it("keeps semantic text style + text color (no false conflict)", () => {
+    // Mirrors Button primary: size label + on-accent foreground.
+    expect(cn("text-label-lg", "text-fg-on-accent")).toBe(
+      "text-label-lg text-fg-on-accent",
+    );
+    expect(cn("text-fg-on-accent", "text-label-lg")).toBe(
+      "text-fg-on-accent text-label-lg",
+    );
+  });
+
+  it("still resolves conflicting semantic text styles (last wins)", () => {
+    expect(cn("text-label-md", "text-label-lg")).toBe("text-label-lg");
+  });
+
+  it("still resolves conflicting semantic text colors (last wins)", () => {
+    expect(cn("text-accent-text", "text-danger-text")).toBe("text-danger-text");
   });
 });

@@ -2,7 +2,6 @@ import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { describe, expect, it } from "vitest";
 
 import { breakpoints } from "../src/tokens/breakpoints/scale";
 import { RADIX_STEPS, palette } from "../src/tokens/colors/palette";
