@@ -1,6 +1,6 @@
 # Design System Monorepo
 
-pnpm workspace monorepo for the design system and consuming applications.
+pnpm + Turborepo monorepo for the design system and consuming applications.
 
 ## Structure
 
@@ -9,8 +9,9 @@ pnpm workspace monorepo for the design system and consuming applications.
 ├── apps/                 # Applications (consumers of the design system)
 ├── packages/             # Shared packages
 │   └── ui/               # @design-system/ui — tokens, utilities, Storybook
-├── package.json          # Root workspace scripts
-├── pnpm-workspace.yaml
+├── package.json          # Root workspace scripts (proxy through turbo)
+├── pnpm-workspace.yaml   # workspaces + catalog: pins (react, react-dom, …)
+├── turbo.json            # Task graph, caching, dependency ordering
 ├── tsconfig.base.json    # Shared TypeScript compiler options
 └── tsconfig.json         # Root TS entry (extends base; packages extend base too)
 ```
@@ -57,18 +58,22 @@ pnpm storybook
 
 ### Useful root scripts
 
+Orchestrated tasks (`dev`, `build`, `test`, `typecheck`) run via **Turborepo**. Package-local scripts (Storybook, token codegen) still use `pnpm --filter`.
+
 | Command                             | Description                                                 |
 | ----------------------------------- | ----------------------------------------------------------- |
 | `pnpm install`                      | Install dependencies for all workspaces                     |
 | `pnpm tokens:generate`              | Generate token CSS from TypeScript (single source of truth) |
 | `pnpm tokens:check`                 | Fail if generated token CSS is stale                        |
-| `pnpm test`                         | Run package tests (Vitest)                                  |
-| `pnpm lint` / `pnpm lint:fix`       | ESLint (flat config at repo root)                           |
+| `pnpm test`                         | `turbo run test` — Vitest across packages                   |
+| `pnpm lint` / `pnpm lint:fix`       | ESLint (flat config at repo root; monorepo-wide)            |
 | `pnpm format` / `pnpm format:check` | Prettier write / check                                      |
-| `pnpm build`                        | Build `@design-system/ui` (runs token codegen first)        |
-| `pnpm storybook` / `pnpm dev`       | Storybook dev server                                        |
-| `pnpm typecheck`                    | Typecheck all packages that define the script               |
+| `pnpm build`                        | `turbo run build` — package builds (graph + cache)          |
+| `pnpm storybook` / `pnpm dev`       | Storybook dev server (`dev` via turbo)                      |
+| `pnpm typecheck`                    | `turbo run typecheck` across packages                       |
 | `pnpm build-storybook`              | Static Storybook build                                      |
+
+Shared runtime peers (`react`, `react-dom`, `class-variance-authority`) are pinned in `pnpm-workspace.yaml` under `catalog:` and referenced as `"catalog:"` in package manifests so every workspace resolves the same version.
 
 ### Lint & format
 
@@ -110,9 +115,13 @@ In the app `package.json`:
 ```json
 {
   "dependencies": {
-    "@design-system/ui": "workspace:*"
+    "@design-system/ui": "workspace:*",
+    "react": "catalog:",
+    "react-dom": "catalog:"
   }
 }
 ```
+
+Use `catalog:` for React (and other catalog-pinned peers) so the app and design system never diverge.
 
 See [`packages/ui/README.md`](./packages/ui/README.md) for usage, tokens, and the JS API.

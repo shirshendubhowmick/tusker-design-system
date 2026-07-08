@@ -4,20 +4,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository
 
-pnpm workspace monorepo (Node ≥ 24, pnpm ≥ 11) for a design system targeting a Dev tool SaaS.
-The only package so far is `packages/ui` (**`@design-system/ui`** — React 18/19, Tailwind v4, Radix Colors, Storybook 10). `apps/` is reserved for consuming applications (none yet).
+pnpm + Turborepo monorepo (Node ≥ 24, pnpm ≥ 11) for a design system targeting a Dev tool SaaS.
+The only package so far is `packages/ui` (**`@design-system/ui`** — React 19 via `catalog:`, Tailwind v4, Radix Colors, Storybook 10). `apps/` is reserved for consuming applications (none yet).
+
+Shared peers (`react`, `react-dom`, `class-variance-authority`) are pinned in `pnpm-workspace.yaml` `catalog:` — bump there, not per package.
 
 ## Commands
 
-Root scripts proxy to `@design-system/ui` via `pnpm --filter`:
+Orchestrated tasks go through **Turborepo** (`turbo.json`). Package-local scripts use `pnpm --filter`:
 
 ```bash
 pnpm install               # install workspace deps
-pnpm dev                   # tokens:generate + Storybook on :6006 (same as pnpm storybook)
-pnpm build                 # tokens:generate + tsc --noEmit + vite build (lib + styles css)
-pnpm test                  # vitest run across workspace
-pnpm typecheck             # tsc -p tsconfig.json per package
-pnpm lint / lint:fix       # eslint from root
+pnpm dev                   # turbo run dev → Storybook on :6006
+pnpm build                 # turbo run build (package graph + cache)
+pnpm test                  # turbo run test
+pnpm typecheck             # turbo run typecheck
+pnpm lint / lint:fix       # eslint from root (monorepo-wide)
 pnpm tokens:generate       # regenerate CSS token files from TS sources
 pnpm tokens:check          # verify generated CSS matches TS (CI-style drift check)
 ```
