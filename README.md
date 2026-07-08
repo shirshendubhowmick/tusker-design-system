@@ -6,9 +6,12 @@ pnpm + Turborepo monorepo for the design system and consuming applications.
 
 ```
 .
-├── apps/                 # Applications (consumers of the design system)
+├── apps/                 # Applications (consumers) — see apps/README.md
 ├── packages/             # Shared packages
 │   └── ui/               # @design-system/ui — tokens, utilities, Storybook
+├── docs/
+│   ├── adr/              # Architecture decision records
+│   └── consuming-design-system.md  # JIT consumer contract (ADR-001)
 ├── package.json          # Root workspace scripts (proxy through turbo)
 ├── pnpm-workspace.yaml   # workspaces + catalog: pins (react, react-dom, …)
 ├── turbo.json            # Task graph, caching, dependency ordering
@@ -116,18 +119,28 @@ pnpm --filter @design-system/ui exports:generate
 
 ### Adding an app
 
+The design system is **JIT source** (ADR-001). Every app must transpile it, whitelist it in tests, and process styles with Tailwind v4.
+
+| Doc                                                                    | Purpose                                                                 |
+| ---------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| [`docs/consuming-design-system.md`](./docs/consuming-design-system.md) | Full consumer contract (transpile, Vitest/Jest, Tailwind `@source`, TS) |
+| [`apps/README.md`](./apps/README.md)                                   | Scaffold checklist for `apps/<name>`                                    |
+| [`packages/ui/README.md`](./packages/ui/README.md)                     | Public API, tokens, Storybook                                           |
+
 ```bash
 mkdir -p apps/web
-# scaffold your app under apps/web, then:
+# follow apps/README.md checklist, then:
 pnpm install
+pnpm typecheck
 ```
 
-In the app `package.json`:
+Minimum `package.json` dependencies:
 
 ```json
 {
   "dependencies": {
     "@design-system/ui": "workspace:*",
+    "class-variance-authority": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:"
   }
@@ -135,5 +148,3 @@ In the app `package.json`:
 ```
 
 Use `catalog:` for React (and other catalog-pinned peers) so the app and design system never diverge.
-
-See [`packages/ui/README.md`](./packages/ui/README.md) for usage, tokens, and the JS API.

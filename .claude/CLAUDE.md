@@ -37,6 +37,20 @@ pnpm exports:check         # verify exports map matches components/*/index.ts
 
 `scripts/gen-exports.mts` owns the `exports` map (run via pre-commit / `exports:check` in CI). Do not hand-edit `exports` in `package.json`. Components must only be reached via their public `index.ts` (eslint `import-x/no-internal-modules` backstop).
 
+### Consuming apps (JIT contract)
+
+Full write-up: `docs/consuming-design-system.md`. Scaffold checklist: `apps/README.md`.
+
+Every app **must**:
+
+1. Depend on `@design-system/ui: workspace:*` + peers via `catalog:`
+2. Transpile the package (Next: `transpilePackages`; Vite: usually automatic / `ssr.noExternal`)
+3. Whitelist it in the test runner (Vitest `server.deps.inline` — silent CI-red if missed)
+4. Import `@design-system/ui/styles.css` once and process with Tailwind v4; `@source` both the app and `packages/ui/src` so component class names emit
+5. Extend root `tsconfig.json` (typechecks DS **source**)
+
+Token CSS remains codegen (`tokens:generate` / `tokens:check`); that is not a lib build. Package `sideEffects: ["**/*.css"]` must stay.
+
 Single test (run from `packages/ui/`):
 
 ```bash

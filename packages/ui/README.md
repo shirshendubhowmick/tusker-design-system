@@ -50,11 +50,18 @@ No design-system library build step. In an app under `apps/`:
 
 Deep imports into component internals are blocked by `exports` (and eslint inside the package).
 
-### Consumer bundler obligations (ADR-001)
+### Consumer obligations (ADR-001) — summary
 
-- **Transpile the package** — e.g. Next.js `transpilePackages: ["@design-system/ui"]`
-- **Test runner** — whitelist the package (Vitest `server.deps.inline` / Jest transform)
-- **Typecheck** runs against DS **source** (`moduleResolution: "bundler"` via root `tsconfig.json`)
+Full contract: **[`docs/consuming-design-system.md`](../../docs/consuming-design-system.md)** · scaffold checklist: **[`apps/README.md`](../../apps/README.md)**
+
+| Obligation            | Example                                                                                                 |
+| --------------------- | ------------------------------------------------------------------------------------------------------- |
+| Transpile DS source   | Next `transpilePackages: ["@design-system/ui"]`; Vite usually OK (+ `ssr.noExternal` if SSR)            |
+| Test runner whitelist | Vitest `server.deps.inline: ["@design-system/ui"]` — silent CI failure if missed                        |
+| TypeScript            | Extend root `tsconfig.json` (`moduleResolution: "bundler"`) — typechecks DS **source**                  |
+| Styles                | Import `@design-system/ui/styles.css` once; process with Tailwind v4; `@source` app + `packages/ui/src` |
+| Peers                 | `react`, `react-dom`, `class-variance-authority` via `catalog:`                                         |
+| `sideEffects`         | Package declares `["**/*.css"]` so style imports are kept                                               |
 
 ---
 
@@ -173,24 +180,68 @@ Nested islands are supported: a `.light` region can sit inside a dark app and re
 
 ## Configuration notes
 
-### Do I need Tailwind in the consuming app?
+Canonical, copy-pasteable configs live in **[`docs/consuming-design-system.md`](../../docs/consuming-design-system.md)**. Short form below.
 
-| Goal                                  | What to do                                                                                       |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| Use DS components + token utilities   | Import `@design-system/ui/styles.css` **and** process it with **Tailwind v4** in the app bundler |
-| Also write custom Tailwind in the app | Same Tailwind pipeline; still import the DS stylesheet for tokens/utilities                      |
+### Styles & Tailwind v4
 
-`styles.css` is the package Tailwind entry (source). There is no prebuilt `dist/design-system.css`.
+`styles.css` is **source** (Tailwind entry + Radix + generated tokens). No prebuilt CSS bundle.
+
+```css
+/* apps/<name>/src/index.css */
+@import "@design-system/ui/styles.css";
+
+@source "./**/*.{ts,tsx}";
+@source "../../../packages/ui/src/**/*.{ts,tsx}";
+```
+
+| Goal                                | What to do                                                                                           |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| Use DS components + token utilities | Import the CSS above; run Tailwind v4 in the **app** (`@tailwindcss/vite` or `@tailwindcss/postcss`) |
+| App-only custom utilities           | Same pipeline; add classes in the app — still `@source` both trees                                   |
+| Skip scanning DS `src`              | **Don’t** — component `className`s live in the package; utilities won’t emit                         |
 
 ### TypeScript
 
-Extend the monorepo root `tsconfig.json` (`moduleResolution: "bundler"`, `module: "preserve"`, `verbatimModuleSyntax: true`) so package `exports` are enforced at typecheck time.
+Extend monorepo root `tsconfig.json` (`moduleResolution: "bundler"`, `module: "preserve"`, `verbatimModuleSyntax: true`).
 
 ### Next.js
 
-- `transpilePackages: ["@design-system/ui"]`
-- Import CSS only from the root layout / `_app`
-- Use `suppressHydrationWarning` on `<html>` if you set `class="dark"` from a client script before paint
+```js
+// next.config.mjs
+export default {
+  transpilePackages: ["@design-system/ui"],
+};
+```
+
+- Import CSS only from the root layout / `_app` (via your `globals.css` that `@import`s the DS entry).
+- `suppressHydrationWarning` on `<html>` if you set `class="dark"` before paint.
+
+### Vite
+
+```ts
+import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+  ssr: { noExternal: ["@design-system/ui"] },
+});
+```
+
+### Vitest (required)
+
+```ts
+import { defineConfig } from "vitest/config";
+
+export default defineConfig({
+  test: {
+    server: {
+      deps: { inline: ["@design-system/ui"] },
+    },
+  },
+});
+```
 
 ### Tree-shaking / import style
 
@@ -207,7 +258,7 @@ import { Button } from "@design-system/ui";
 import { Button } from "@design-system/ui/src/components/Button/Button";
 ```
 
-`sideEffects` is `["**/*.css"]` so pure JS can be eliminated by the consumer bundler.
+`sideEffects` is `["**/*.css"]` so pure JS can be eliminated by the consumer bundler; CSS side-effect imports are kept.
 
 ---
 
