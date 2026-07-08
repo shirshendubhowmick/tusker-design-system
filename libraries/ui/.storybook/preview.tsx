@@ -52,20 +52,21 @@ const preview: Preview = {
       const theme =
         (context.globals.theme as string) === "dark" ? "dark" : "light";
       const root = document.documentElement;
+      const body = document.body;
 
       root.classList.toggle("dark", theme === "dark");
       root.classList.toggle("light", theme === "light");
       root.dataset.theme = theme;
 
+      // Paint the preview surface on html/body so we do not need min-h-screen on
+      // the story wrapper. Docs embeds (often viewMode=story iframes) were each
+      // forced to 100vh and ballooned page scroll.
+      for (const el of [root, body]) {
+        el.classList.add("bg-bg-canvas", "text-fg-default", "antialiased");
+      }
+
       return (
-        <div
-          className={
-            theme === "dark"
-              ? "dark bg-bg-canvas text-fg-default min-h-screen antialiased"
-              : "light bg-bg-canvas text-fg-default min-h-screen antialiased"
-          }
-          data-theme={theme}
-        >
+        <div className={theme} data-theme={theme}>
           <Story />
         </div>
       );
