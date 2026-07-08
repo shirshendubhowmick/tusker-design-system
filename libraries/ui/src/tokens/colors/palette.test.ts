@@ -3,7 +3,7 @@ import { RADIX_STEPS, overlays, palette } from "./palette";
 describe("palette", () => {
   it("defines all product palettes with radix sources and roles", () => {
     expect(Object.keys(palette).sort()).toEqual(
-      ["amber", "blue", "brand", "gray", "green", "red"].sort(),
+      ["amber", "cyan", "brand", "gray", "green", "red"].sort(),
     );
 
     for (const [name, entry] of Object.entries(palette)) {
@@ -13,9 +13,9 @@ describe("palette", () => {
     }
   });
 
-  it("maps gray → slate and brand → indigo", () => {
+  it("maps gray → slate and brand → custom blue", () => {
     expect(palette.gray.radix).toBe("slate");
-    expect(palette.brand.radix).toBe("indigo");
+    expect(palette.brand.radix).toBe("blue");
   });
 
   it("exposes the full Radix 1–12 step list", () => {

@@ -38,12 +38,12 @@
   --color-border-hover: var(--slate-7);
 
   /* accent */
-  --color-accent-solid: var(--indigo-9);
-  --color-accent-solid-hover: var(--indigo-10);
-  --color-accent-subtle: var(--indigo-3);
-  --color-accent-subtle-hover: var(--indigo-4);
-  --color-accent-border: var(--indigo-7);
-  --color-accent-text: var(--indigo-11);
+  --color-accent-solid: var(--blue-9);
+  --color-accent-solid-hover: var(--blue-10);
+  --color-accent-subtle: var(--blue-3);
+  --color-accent-subtle-hover: var(--blue-4);
+  --color-accent-border: var(--blue-7);
+  --color-accent-text: var(--blue-11);
 
   /* success */
   --color-success-solid: var(--green-9);
@@ -67,14 +67,14 @@
   --color-danger-text: var(--red-11);
 
   /* info */
-  --color-info-solid: var(--blue-9);
-  --color-info-solid-hover: var(--blue-10);
-  --color-info-subtle: var(--blue-3);
-  --color-info-border: var(--blue-7);
-  --color-info-text: var(--blue-11);
+  --color-info-solid: var(--cyan-9);
+  --color-info-solid-hover: var(--cyan-10);
+  --color-info-subtle: var(--cyan-3);
+  --color-info-border: var(--cyan-7);
+  --color-info-text: var(--cyan-11);
 
   /* focus */
-  --color-focus-ring: var(--indigo-8);
+  --color-focus-ring: var(--blue-8);
 
   /* overlay */
   --color-overlay-scrim: var(--black-a8);

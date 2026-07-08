@@ -25,7 +25,7 @@ const layerColor: Record<ZIndexName, string> = {
   base: "bg-gray-3 border-border-default",
   raised: "bg-gray-5 border-border-strong",
   dropdown: "bg-brand-3 border-brand-7",
-  sticky: "bg-blue-3 border-blue-7",
+  sticky: "bg-cyan-3 border-cyan-7",
   overlay: "bg-gray-a8 border-gray-8",
   modal: "bg-bg-surface border-border-default",
   toast: "bg-success-subtle border-success-border",
@@ -36,7 +36,7 @@ const layerText: Record<ZIndexName, string> = {
   base: "text-fg-default",
   raised: "text-fg-default",
   dropdown: "text-brand-12",
-  sticky: "text-blue-12",
+  sticky: "text-cyan-12",
   overlay: "text-fg-default",
   modal: "text-fg-default",
   toast: "text-success-text",
@@ -75,7 +75,7 @@ function ZIndexDoc({ theme }: { theme: ColorMode }) {
           Cards share one positioning context and use each semantic layer.
           Higher layers paint on top (offset so every card stays visible).
         </p>
-        <div className="border-border-default bg-bg-subtle relative h-[28rem] overflow-hidden rounded-xl border">
+        <div className="border-border-default bg-bg-subtle relative h-112 overflow-hidden rounded-xl border">
           {zIndexOrder.map((name, index) => {
             const token = zIndexTokens[name];
             const offset = 16 + index * 36;

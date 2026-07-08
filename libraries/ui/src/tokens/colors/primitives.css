@@ -67,31 +67,31 @@
   --color-gray-a11: var(--slate-a11);
   --color-gray-a12: var(--slate-a12);
 
-  /* brand ← indigo (brand) */
-  --color-brand-1: var(--indigo-1);
-  --color-brand-2: var(--indigo-2);
-  --color-brand-3: var(--indigo-3);
-  --color-brand-4: var(--indigo-4);
-  --color-brand-5: var(--indigo-5);
-  --color-brand-6: var(--indigo-6);
-  --color-brand-7: var(--indigo-7);
-  --color-brand-8: var(--indigo-8);
-  --color-brand-9: var(--indigo-9);
-  --color-brand-10: var(--indigo-10);
-  --color-brand-11: var(--indigo-11);
-  --color-brand-12: var(--indigo-12);
-  --color-brand-a1: var(--indigo-a1);
-  --color-brand-a2: var(--indigo-a2);
-  --color-brand-a3: var(--indigo-a3);
-  --color-brand-a4: var(--indigo-a4);
-  --color-brand-a5: var(--indigo-a5);
-  --color-brand-a6: var(--indigo-a6);
-  --color-brand-a7: var(--indigo-a7);
-  --color-brand-a8: var(--indigo-a8);
-  --color-brand-a9: var(--indigo-a9);
-  --color-brand-a10: var(--indigo-a10);
-  --color-brand-a11: var(--indigo-a11);
-  --color-brand-a12: var(--indigo-a12);
+  /* brand ← blue (brand) */
+  --color-brand-1: var(--blue-1);
+  --color-brand-2: var(--blue-2);
+  --color-brand-3: var(--blue-3);
+  --color-brand-4: var(--blue-4);
+  --color-brand-5: var(--blue-5);
+  --color-brand-6: var(--blue-6);
+  --color-brand-7: var(--blue-7);
+  --color-brand-8: var(--blue-8);
+  --color-brand-9: var(--blue-9);
+  --color-brand-10: var(--blue-10);
+  --color-brand-11: var(--blue-11);
+  --color-brand-12: var(--blue-12);
+  --color-brand-a1: var(--blue-a1);
+  --color-brand-a2: var(--blue-a2);
+  --color-brand-a3: var(--blue-a3);
+  --color-brand-a4: var(--blue-a4);
+  --color-brand-a5: var(--blue-a5);
+  --color-brand-a6: var(--blue-a6);
+  --color-brand-a7: var(--blue-a7);
+  --color-brand-a8: var(--blue-a8);
+  --color-brand-a9: var(--blue-a9);
+  --color-brand-a10: var(--blue-a10);
+  --color-brand-a11: var(--blue-a11);
+  --color-brand-a12: var(--blue-a12);
 
   /* green ← green (success) */
   --color-green-1: var(--green-1);
@@ -171,30 +171,30 @@
   --color-red-a11: var(--red-a11);
   --color-red-a12: var(--red-a12);
 
-  /* blue ← blue (info) */
-  --color-blue-1: var(--blue-1);
-  --color-blue-2: var(--blue-2);
-  --color-blue-3: var(--blue-3);
-  --color-blue-4: var(--blue-4);
-  --color-blue-5: var(--blue-5);
-  --color-blue-6: var(--blue-6);
-  --color-blue-7: var(--blue-7);
-  --color-blue-8: var(--blue-8);
-  --color-blue-9: var(--blue-9);
-  --color-blue-10: var(--blue-10);
-  --color-blue-11: var(--blue-11);
-  --color-blue-12: var(--blue-12);
-  --color-blue-a1: var(--blue-a1);
-  --color-blue-a2: var(--blue-a2);
-  --color-blue-a3: var(--blue-a3);
-  --color-blue-a4: var(--blue-a4);
-  --color-blue-a5: var(--blue-a5);
-  --color-blue-a6: var(--blue-a6);
-  --color-blue-a7: var(--blue-a7);
-  --color-blue-a8: var(--blue-a8);
-  --color-blue-a9: var(--blue-a9);
-  --color-blue-a10: var(--blue-a10);
-  --color-blue-a11: var(--blue-a11);
-  --color-blue-a12: var(--blue-a12);
+  /* cyan ← cyan (info) */
+  --color-cyan-1: var(--cyan-1);
+  --color-cyan-2: var(--cyan-2);
+  --color-cyan-3: var(--cyan-3);
+  --color-cyan-4: var(--cyan-4);
+  --color-cyan-5: var(--cyan-5);
+  --color-cyan-6: var(--cyan-6);
+  --color-cyan-7: var(--cyan-7);
+  --color-cyan-8: var(--cyan-8);
+  --color-cyan-9: var(--cyan-9);
+  --color-cyan-10: var(--cyan-10);
+  --color-cyan-11: var(--cyan-11);
+  --color-cyan-12: var(--cyan-12);
+  --color-cyan-a1: var(--cyan-a1);
+  --color-cyan-a2: var(--cyan-a2);
+  --color-cyan-a3: var(--cyan-a3);
+  --color-cyan-a4: var(--cyan-a4);
+  --color-cyan-a5: var(--cyan-a5);
+  --color-cyan-a6: var(--cyan-a6);
+  --color-cyan-a7: var(--cyan-a7);
+  --color-cyan-a8: var(--cyan-a8);
+  --color-cyan-a9: var(--cyan-a9);
+  --color-cyan-a10: var(--cyan-a10);
+  --color-cyan-a11: var(--cyan-a11);
+  --color-cyan-a12: var(--cyan-a12);
 }
 

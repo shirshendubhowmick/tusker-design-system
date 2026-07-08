@@ -26,6 +26,9 @@ const GENERATED_CSS = [
   "typography/semantic.css",
 ] as const;
 
+/** Hand-authored CSS under tokens/ (e.g. custom Radix scales) — never codegen output. */
+const HAND_AUTHORED_CSS = ["colors/blue.css"] as const;
+
 function readTokenCss(rel: string): string {
   return readFileSync(join(tokensRoot, rel), "utf8");
 }
@@ -108,9 +111,15 @@ describe("token CSS codegen (TS → CSS)", () => {
     }
   });
 
-  it("does not leave non-generated token CSS files without the banner among known outputs", () => {
-    // Guard: every .css under tokens/ that we own should be in GENERATED_CSS
-    // (styles/index.css lives outside tokens/).
+  it("keeps hand-authored token CSS free of the AUTO-GENERATED banner", () => {
+    for (const rel of HAND_AUTHORED_CSS) {
+      expect(readTokenCss(rel), rel).not.toMatch(/AUTO-GENERATED/);
+    }
+  });
+
+  it("does not leave unknown token CSS files among known outputs", () => {
+    // Guard: every .css under tokens/ must be either codegen output or a
+    // declared hand-authored file (styles/index.css lives outside tokens/).
     function walk(dir: string, acc: string[] = []): string[] {
       for (const name of readdirSync(dir)) {
         const abs = join(dir, name);
@@ -123,6 +132,6 @@ describe("token CSS codegen (TS → CSS)", () => {
     }
 
     const onDisk = walk(tokensRoot).sort();
-    expect(onDisk).toEqual([...GENERATED_CSS].sort());
+    expect(onDisk).toEqual([...GENERATED_CSS, ...HAND_AUTHORED_CSS].sort());
   });
 });

@@ -1,0 +1,148 @@
+/*
+  Custom brand "blue" scale — navy blue seeded from #0D5BD8.
+  Generated with the Radix custom palette algorithm
+  (radix-ui.com/colors/custom; gray #8B8D98, light bg #FFFFFF, dark bg #111111).
+  Hand-authored source of truth: regenerate on the Radix site (both Light and
+  Dark appearances) or rerun the generator if the seed changes.
+*/
+
+:root, .light, .light-theme {
+  --blue-1: #fcfdfe;
+  --blue-2: #f6faff;
+  --blue-3: #ebf2ff;
+  --blue-4: #dcebff;
+  --blue-5: #cbe0ff;
+  --blue-6: #b6d3ff;
+  --blue-7: #9ec1fb;
+  --blue-8: #7ca8f3;
+  --blue-9: #0d5bd8;
+  --blue-10: #004bc7;
+  --blue-11: #1e60cf;
+  --blue-12: #142f5f;
+
+  --blue-a1: #0055aa03;
+  --blue-a2: #0072ff09;
+  --blue-a3: #005aff14;
+  --blue-a4: #006eff23;
+  --blue-a5: #0067ff34;
+  --blue-a6: #0066ff49;
+  --blue-a7: #005df561;
+  --blue-a8: #0056e883;
+  --blue-a9: #0052d6f2;
+  --blue-a10: #004bc7;
+  --blue-a11: #004bc9e1;
+  --blue-a12: #001d51eb;
+
+  --blue-contrast: #fff;
+  --blue-surface: #f4f9ffcc;
+  --blue-indicator: #0d5bd8;
+  --blue-track: #0d5bd8;
+}
+
+@supports (color: color(display-p3 1 1 1)) {
+  @media (color-gamut: p3) {
+    :root, .light, .light-theme {
+      --blue-1: oklch(99.4% 0.0017 260.6);
+      --blue-2: oklch(98.3% 0.0086 260.6);
+      --blue-3: oklch(96.1% 0.0182 260.6);
+      --blue-4: oklch(93.6% 0.0357 260.6);
+      --blue-5: oklch(90.4% 0.0539 260.6);
+      --blue-6: oklch(86.3% 0.0745 260.6);
+      --blue-7: oklch(80.7% 0.0912 260.6);
+      --blue-8: oklch(73.1% 0.1196 260.6);
+      --blue-9: oklch(51% 0.2043 260.6);
+      --blue-10: oklch(46.1% 0.2043 260.6);
+      --blue-11: oklch(51.5% 0.1845 260.6);
+      --blue-12: oklch(31.4% 0.0919 260.6);
+
+      --blue-a1: color(display-p3 0.0235 0.349 0.6745 / 0.012);
+      --blue-a2: color(display-p3 0.0196 0.3882 0.8784 / 0.032);
+      --blue-a3: color(display-p3 0.0078 0.3216 0.949 / 0.075);
+      --blue-a4: color(display-p3 0.0078 0.3804 0.9412 / 0.126);
+      --blue-a5: color(display-p3 0.0078 0.3373 0.9412 / 0.189);
+      --blue-a6: color(display-p3 0.0039 0.3294 0.9412 / 0.263);
+      --blue-a7: color(display-p3 0.0039 0.302 0.902 / 0.353);
+      --blue-a8: color(display-p3 0.0039 0.2824 0.8549 / 0.479);
+      --blue-a9: color(display-p3 0 0.2275 0.7804 / 0.84);
+      --blue-a10: color(display-p3 0 0.2 0.7216 / 0.887);
+      --blue-a11: color(display-p3 0 0.2196 0.7333 / 0.804);
+      --blue-a12: color(display-p3 0 0.0824 0.2863 / 0.895);
+
+      --blue-contrast: #fff;
+      --blue-surface: color(display-p3 0.9608 0.9765 1 / 0.8);
+      --blue-indicator: oklch(51% 0.2043 260.6);
+      --blue-track: oklch(51% 0.2043 260.6);
+    }
+  }
+}
+
+.dark, .dark-theme {
+  --blue-1: #0a111d;
+  --blue-2: #0f1826;
+  --blue-3: #10254a;
+  --blue-4: #113064;
+  --blue-5: #173a77;
+  --blue-6: #204687;
+  --blue-7: #28529b;
+  --blue-8: #2f60b6;
+  --blue-9: #0d5bd8;
+  --blue-10: #004bc7;
+  --blue-11: #85b7ff;
+  --blue-12: #d1e3ff;
+
+  --blue-a1: #0012fd0d;
+  --blue-a2: #005ffa17;
+  --blue-a3: #0d64fc3e;
+  --blue-a4: #116aff59;
+  --blue-a5: #1f70fd6e;
+  --blue-a6: #2f7bfd7f;
+  --blue-a7: #3981ff94;
+  --blue-a8: #3d83ffb1;
+  --blue-a9: #0d69fed6;
+  --blue-a10: #005dffc3;
+  --blue-a11: #85b7ff;
+  --blue-a12: #d1e3ff;
+
+  --blue-contrast: #fff;
+  --blue-surface: #0e1f3b80;
+  --blue-indicator: #0d5bd8;
+  --blue-track: #0d5bd8;
+}
+
+@supports (color: color(display-p3 1 1 1)) {
+  @media (color-gamut: p3) {
+    .dark, .dark-theme {
+      --blue-1: oklch(17.8% 0.0264 260.6);
+      --blue-2: oklch(20.7% 0.0323 260.6);
+      --blue-3: oklch(27.1% 0.0741 260.6);
+      --blue-4: oklch(31.8% 0.0996 260.6);
+      --blue-5: oklch(36.1% 0.1117 260.6);
+      --blue-6: oklch(40.4% 0.1182 260.6);
+      --blue-7: oklch(45% 0.1285 260.6);
+      --blue-8: oklch(50.3% 0.1467 260.6);
+      --blue-9: oklch(51% 0.2043 260.6);
+      --blue-10: oklch(46.1% 0.2043 260.6);
+      --blue-11: oklch(77.7% 0.1318 260.6);
+      --blue-12: oklch(91.1% 0.0457 260.6);
+
+      --blue-a1: color(display-p3 0 0.0667 0.9882 / 0.047);
+      --blue-a2: color(display-p3 0.0667 0.3882 0.9882 / 0.085);
+      --blue-a3: color(display-p3 0.1373 0.3961 1 / 0.227);
+      --blue-a4: color(display-p3 0.1608 0.4196 1 / 0.337);
+      --blue-a5: color(display-p3 0.2118 0.451 1 / 0.412);
+      --blue-a6: color(display-p3 0.2706 0.4941 1 / 0.479);
+      --blue-a7: color(display-p3 0.302 0.5176 1 / 0.559);
+      --blue-a8: color(display-p3 0.3098 0.5216 0.9961 / 0.669);
+      --blue-a9: color(display-p3 0.1843 0.4235 1 / 0.803);
+      --blue-a10: color(display-p3 0.1333 0.3725 1 / 0.736);
+      --blue-a11: color(display-p3 0.5804 0.7333 1 / 0.975);
+      --blue-a12: color(display-p3 0.8431 0.898 1 / 0.988);
+
+      --blue-contrast: #fff;
+      --blue-surface: color(display-p3 0.0627 0.1098 0.2196 / 0.5);
+      --blue-indicator: oklch(51% 0.2043 260.6);
+      --blue-track: oklch(51% 0.2043 260.6);
+    }
+  }
+}
+

@@ -21,7 +21,7 @@ export type RadixStep = (typeof RADIX_STEPS)[number];
 export const palette = {
   /**
    * Neutral chrome — cool slate for dense, technical UIs (dashboards, logs,
-   * sidebars). Pairs cleanly with monospaced code and indigo brand.
+   * sidebars). Pairs cleanly with monospaced code and the navy brand.
    */
   gray: {
     radix: "slate",
@@ -29,11 +29,13 @@ export const palette = {
     description: "App chrome: canvases, panels, borders, body text",
   },
   /**
-   * Brand / accent — indigo reads modern and product-like without colliding
-   * with status blue (info). Used for primary CTAs, selected nav, focus.
+   * Brand / accent — custom navy-blue scale seeded from #2855E6, generated
+   * with the Radix custom palette tool (`src/tokens/colors/blue.css`, not an
+   * npm scale). Info uses cyan so brand and info never collide. Used for
+   * primary CTAs, selected nav, focus.
    */
   brand: {
-    radix: "indigo",
+    radix: "blue",
     role: "brand",
     description: "Primary actions, selection, brand emphasis, focus ring",
   },
@@ -64,10 +66,12 @@ export const palette = {
   },
   /**
    * Info — neutral informational callouts, documentation, secondary links.
-   * Kept distinct from brand (indigo) so “info” never looks like a primary CTA.
+   * Cyan, not blue: the brand scale is a custom navy blue, so info stays in a
+   * clearly different hue and never looks like a primary CTA. (Radix `cyan`
+   * keeps white text on step-9 solids; `sky` would need dark ink.)
    */
-  blue: {
-    radix: "blue",
+  cyan: {
+    radix: "cyan",
     role: "info",
     description: "Informational emphasis (not brand)",
   },

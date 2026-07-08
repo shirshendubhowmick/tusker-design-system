@@ -325,31 +325,31 @@ export const semanticColorTokens = [
     name: "info-solid",
     group: "info",
     description: "Solid info fill",
-    ...both("blue", 9),
+    ...both("cyan", 9),
   },
   {
     name: "info-solid-hover",
     group: "info",
     description: "Solid info hover",
-    ...both("blue", 10),
+    ...both("cyan", 10),
   },
   {
     name: "info-subtle",
     group: "info",
     description: "Soft info background",
-    ...both("blue", 3),
+    ...both("cyan", 3),
   },
   {
     name: "info-border",
     group: "info",
     description: "Info border",
-    ...both("blue", 7),
+    ...both("cyan", 7),
   },
   {
     name: "info-text",
     group: "info",
     description: "Info-colored text / icons",
-    ...both("blue", 11),
+    ...both("cyan", 11),
   },
 
   // ── Focus / overlay ────────────────────────────────────────────────

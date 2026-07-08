@@ -93,19 +93,19 @@ const paletteBg: Record<PaletteName, Record<RadixStep, string>> = {
     11: "bg-red-11",
     12: "bg-red-12",
   },
-  blue: {
-    1: "bg-blue-1",
-    2: "bg-blue-2",
-    3: "bg-blue-3",
-    4: "bg-blue-4",
-    5: "bg-blue-5",
-    6: "bg-blue-6",
-    7: "bg-blue-7",
-    8: "bg-blue-8",
-    9: "bg-blue-9",
-    10: "bg-blue-10",
-    11: "bg-blue-11",
-    12: "bg-blue-12",
+  cyan: {
+    1: "bg-cyan-1",
+    2: "bg-cyan-2",
+    3: "bg-cyan-3",
+    4: "bg-cyan-4",
+    5: "bg-cyan-5",
+    6: "bg-cyan-6",
+    7: "bg-cyan-7",
+    8: "bg-cyan-8",
+    9: "bg-cyan-9",
+    10: "bg-cyan-10",
+    11: "bg-cyan-11",
+    12: "bg-cyan-12",
   },
 };
 
@@ -215,16 +215,20 @@ function cssColorToHex(input: string): string | null {
     return `#${toHex(r)}${toHex(g)}${toHex(b)}${toHex(Math.round(a * 255))}`;
   }
 
+  // Fallback for modern color syntax (oklch(), color(display-p3 …), …):
+  // paint one pixel and read it back — getImageData always returns sRGB,
+  // so wide-gamut values resolve to their closest sRGB hex.
   try {
     const canvas = document.createElement("canvas");
     canvas.width = canvas.height = 1;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
     if (!ctx) return null;
-    ctx.fillStyle = "#000";
     ctx.fillStyle = value;
-    const resolved = String(ctx.fillStyle);
-    if (resolved.startsWith("#")) return resolved.toUpperCase();
-    return cssColorToHex(resolved);
+    ctx.fillRect(0, 0, 1, 1);
+    const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
+    const toHex = (n: number) => n.toString(16).padStart(2, "0").toUpperCase();
+    if (a >= 254) return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}${toHex(a)}`;
   } catch {
     return null;
   }
