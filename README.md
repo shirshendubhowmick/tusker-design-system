@@ -6,7 +6,8 @@ pnpm + Turborepo monorepo for the design system and consuming applications.
 
 ```
 .
-├── apps/                 # Applications (consumers) — see apps/README.md
+├── apps/
+│   └── web/              # @design-system/web — Vite JIT consumer (Phase 5)
 ├── packages/             # Shared packages
 │   └── ui/               # @design-system/ui — tokens, utilities, Storybook
 ├── docs/
@@ -43,10 +44,10 @@ Workspace packages extend the root config and only override what they need (DOM 
 
 Add a new app the same way under `apps/*/tsconfig.json`.
 
-| Workspace | Path          | Package                              |
-| --------- | ------------- | ------------------------------------ |
-| Packages  | `packages/ui` | [`@design-system/ui`](./packages/ui) |
-| Apps      | `apps/*`      | _(add app packages here)_            |
+| Workspace | Path          | Package                                                  |
+| --------- | ------------- | -------------------------------------------------------- |
+| Packages  | `packages/ui` | [`@design-system/ui`](./packages/ui)                     |
+| Apps      | `apps/web`    | [`@design-system/web`](./apps/web) — JIT consumer (Vite) |
 
 ## Requirements
 
@@ -71,20 +72,21 @@ The design system ships **raw TypeScript** (ADR-001). Apps import subpaths like 
 
 Orchestrated tasks (`dev`, `build`, `test`, `typecheck`) run via **Turborepo**. Package-local scripts (Storybook, token/export codegen) still use `pnpm --filter`.
 
-| Command                             | Description                                                 |
-| ----------------------------------- | ----------------------------------------------------------- |
-| `pnpm install`                      | Install dependencies for all workspaces                     |
-| `pnpm tokens:generate`              | Generate token CSS from TypeScript (single source of truth) |
-| `pnpm tokens:check`                 | Fail if generated token CSS is stale                        |
-| `pnpm exports:generate`             | Regenerate `@design-system/ui` package `exports` map        |
-| `pnpm exports:check`                | Fail if package `exports` are stale                         |
-| `pnpm test`                         | `turbo run test` — Vitest across packages                   |
-| `pnpm lint` / `pnpm lint:fix`       | ESLint (flat config at repo root; monorepo-wide)            |
-| `pnpm format` / `pnpm format:check` | Prettier write / check                                      |
-| `pnpm build`                        | `turbo run build` — **app** builds only (DS has no build)   |
-| `pnpm storybook` / `pnpm dev`       | Storybook dev server (`dev` via turbo)                      |
-| `pnpm typecheck`                    | `turbo run typecheck` across packages                       |
-| `pnpm build-storybook`              | Static Storybook build                                      |
+| Command                             | Description                                                           |
+| ----------------------------------- | --------------------------------------------------------------------- |
+| `pnpm install`                      | Install dependencies for all workspaces                               |
+| `pnpm tokens:generate`              | Generate token CSS from TypeScript (single source of truth)           |
+| `pnpm tokens:check`                 | Fail if generated token CSS is stale                                  |
+| `pnpm exports:generate`             | Regenerate `@design-system/ui` package `exports` map                  |
+| `pnpm exports:check`                | Fail if package `exports` are stale                                   |
+| `pnpm test`                         | `turbo run test` — Vitest across packages                             |
+| `pnpm lint` / `pnpm lint:fix`       | ESLint (flat config at repo root; monorepo-wide)                      |
+| `pnpm format` / `pnpm format:check` | Prettier write / check                                                |
+| `pnpm build`                        | `turbo run build` — **apps only**; runs DS token/export codegen first |
+| `pnpm dev`                          | `turbo run dev` — **app** dev servers only (e.g. Vite); not Storybook |
+| `pnpm storybook`                    | Storybook for `@design-system/ui` (explicit; not part of `dev`)       |
+| `pnpm typecheck`                    | `turbo run typecheck` across packages                                 |
+| `pnpm build-storybook`              | Static Storybook build                                                |
 
 Shared runtime peers (`react`, `react-dom`, `class-variance-authority`) are pinned in `pnpm-workspace.yaml` under `catalog:` and referenced as `"catalog:"` in package manifests so every workspace resolves the same version.
 

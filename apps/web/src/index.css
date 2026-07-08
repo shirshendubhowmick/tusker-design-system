@@ -1,0 +1,6 @@
+/* App CSS entry — DS styles are source (Tailwind v4 + tokens). */
+@import "@design-system/ui/styles.css";
+
+/* Detect class names in the app and in DS components (JIT). */
+@source "./**/*.{ts,tsx}";
+@source "../../../packages/ui/src/**/*.{ts,tsx}";

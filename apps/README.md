@@ -2,9 +2,37 @@
 
 Consuming applications for `@design-system/ui`. Workspace glob: `apps/*` (see root `pnpm-workspace.yaml`).
 
-The design system is **JIT** (ADR-001): apps import package **source** via subpath `exports`. Read the full contract:
+The design system is **JIT** (ADR-001): apps import package **source** via subpath `exports`. Full contract:
 
 → **[docs/consuming-design-system.md](../docs/consuming-design-system.md)**
+
+---
+
+## Packages
+
+| App             | Package              | Role                                                |
+| --------------- | -------------------- | --------------------------------------------------- |
+| [`web/`](./web) | `@design-system/web` | Minimal Vite + React consumer proving JIT (Phase 5) |
+
+```bash
+# from monorepo root
+pnpm --filter @design-system/web dev      # http://localhost:5173
+pnpm --filter @design-system/web build
+pnpm --filter @design-system/web test
+pnpm --filter @design-system/web typecheck
+```
+
+Or via Turbo (packages that define the script):
+
+```bash
+pnpm dev          # app dev servers only (Storybook is NOT included)
+pnpm storybook    # explicit: @design-system/ui Storybook
+pnpm build        # apps only (DS has no build); runs token/export codegen first
+pnpm typecheck
+pnpm test
+```
+
+`turbo` `dev` / `build` for apps depend on the design system’s `tokens:generate` and `exports:generate` (via `dependsOn: ["^…"]`), so generated CSS and package `exports` are fresh before the app starts or ships.
 
 ---
 
@@ -95,11 +123,14 @@ pnpm --filter @design-system/<name> test
 
 ```
 apps/
-  README.md          ← this file
-  <name>/
+  README.md
+  web/                 # @design-system/web — reference JIT consumer
     package.json
-    tsconfig.json    ← extends ../../tsconfig.json
+    tsconfig.json      # extends ../../tsconfig.json
+    vite.config.ts
+    vitest.config.ts
+    index.html
     src/
 ```
 
-No apps are checked in yet; Storybook in `packages/ui` is the interactive DS surface until the first consumer lands (Phase 5 sample app optional).
+Reference implementation: **`apps/web`** (Vite + React 19 + Tailwind v4).

@@ -269,4 +269,14 @@ After wiring an app:
 - [ ] App test file importing `@design-system/ui/Button` passes in CI
 - [ ] `pnpm tokens:check` and `pnpm exports:check` still green at repo root
 
-See also: [ADR-001](./adr/adr_2026-07-08_001.md), [`packages/ui/README.md`](../packages/ui/README.md).
+## Reference app
+
+[`apps/web`](../apps/web) (`@design-system/web`) is a minimal Vite + React + Tailwind v4 consumer that implements this contract end-to-end:
+
+```bash
+pnpm --filter @design-system/web dev
+pnpm --filter @design-system/web build
+pnpm --filter @design-system/web test
+```
+
+See also: [ADR-001](./adr/adr_2026-07-08_001.md), [`packages/ui/README.md`](../packages/ui/README.md), [`apps/README.md`](../apps/README.md).

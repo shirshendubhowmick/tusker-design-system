@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Repository
 
 pnpm + Turborepo monorepo (Node ≥ 24, pnpm ≥ 11) for a design system targeting a Dev tool SaaS.
-The only package so far is `packages/ui` (**`@design-system/ui`** — React 19 via `catalog:`, Tailwind v4, Radix Colors, Storybook 10). `apps/` is reserved for consuming applications (none yet).
+Packages: `packages/ui` (**`@design-system/ui`** — React 19 via `catalog:`, Tailwind v4, Radix Colors, Storybook 10). Reference consumer: `apps/web` (**`@design-system/web`** — Vite JIT app proving ADR-001).
 
 Shared peers (`react`, `react-dom`, `class-variance-authority`) are pinned in `pnpm-workspace.yaml` `catalog:` — bump there, not per package.
 
@@ -17,7 +17,8 @@ Orchestrated tasks go through **Turborepo** (`turbo.json`). Package-local script
 
 ```bash
 pnpm install               # install workspace deps
-pnpm dev                   # turbo run dev → Storybook on :6006
+pnpm dev                   # turbo run dev → app dev servers only (e.g. apps/web)
+pnpm storybook             # Storybook for @design-system/ui (explicit; not via dev)
 pnpm build                 # turbo run build — apps only (DS is JIT, no lib build)
 pnpm test                  # turbo run test
 pnpm typecheck             # turbo run typecheck

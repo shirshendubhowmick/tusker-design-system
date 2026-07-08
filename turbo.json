@@ -7,6 +7,12 @@
     ".prettierrc.json"
   ],
   "tasks": {
+    "tokens:generate": {
+      "cache": false
+    },
+    "exports:generate": {
+      "cache": false
+    },
     "typecheck": {
       "dependsOn": ["^typecheck"]
     },
@@ -20,10 +26,17 @@
       "outputs": ["coverage/**"]
     },
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "storybook-static/**"]
+      // Apps only (DS is JIT — no package build). Pull DS codegen from workspace deps.
+      "dependsOn": ["^tokens:generate", "^exports:generate"],
+      "outputs": [
+        "dist/**",
+        ".next/**",
+        "!.next/cache/**",
+        "storybook-static/**"
+      ]
     },
     "dev": {
+      "dependsOn": ["^tokens:generate", "^exports:generate"],
       "cache": false,
       "persistent": true
     }
