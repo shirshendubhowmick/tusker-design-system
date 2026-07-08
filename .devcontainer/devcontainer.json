@@ -1,0 +1,43 @@
+{
+  "name": "Design system",
+  "image": "mcr.microsoft.com/devcontainers/base:jammy",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
+    "ghcr.io/devcontainers/features/node:2.0.0": {
+      "version": "lts",
+      "pnpm": true,
+      "typescript": true
+    },
+    "ghcr.io/devcontainers/features/go:1": {
+      "version": "latest"
+    }
+  },
+  "runArgs": [
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges",
+    "--group-add=0"
+  ],
+  "remoteEnv": {
+    "DOCKER_HOST": "unix:///var/run/docker-host.sock"
+  },
+  "remoteUser": "vscode",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+  "workspaceFolder": "/workspace",
+  "mounts": [
+    "source=${localEnv:HOME}/coding-agents/claude/design-system,target=/home/vscode/.claude,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/coding-agents/gemini/design-system,target=/home/vscode/.gemini,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.ssh/github_sign.pub,target=/home/vscode/.ssh/github_sign.pub,type=bind,readonly",
+    "source=${localEnv:HOME}/.ssh/known_hosts,target=/home/vscode/.ssh/known_hosts,type=bind,readonly"
+  ],
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "go.toolsManagement.checkForUpdates": "local",
+        "go.useLanguageServer": true,
+        "go.gopath": "/home/vscode/go"
+      },
+      "extensions": ["golang.go", "dbaeumer.vscode-eslint"]
+    }
+  },
+  "postCreateCommand": "curl -fsSL https://claude.ai/install.sh | bash && npm install -g @google/gemini-cli && go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest && go install golang.org/x/tools/cmd/goimports@latest"
+}
