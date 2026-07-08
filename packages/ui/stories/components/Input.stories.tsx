@@ -1,4 +1,12 @@
+import {
+  CheckIcon,
+  CrossCircledIcon,
+  EnvelopeClosedIcon,
+  LockClosedIcon,
+  MagnifyingGlassIcon,
+} from "@radix-ui/react-icons";
 import type { Decorator, Meta, StoryObj } from "@storybook/react";
+import type { ComponentProps } from "react";
 
 import { Input } from "../../src/components/Input";
 
@@ -12,6 +20,12 @@ const PlaygroundFrame: Decorator = function PlaygroundFrame(Story) {
       <Story />
     </div>
   );
+};
+
+/** Story-only toggles mapped to Radix icons in Playground. */
+type InputStoryArgs = ComponentProps<typeof Input> & {
+  showStartIcon?: boolean;
+  showEndIcon?: boolean;
 };
 
 const meta = {
@@ -42,6 +56,19 @@ const meta = {
     disabled: { control: "boolean" },
     readOnly: { control: "boolean" },
     placeholder: { control: "text" },
+    showStartIcon: {
+      name: "startIcon",
+      control: "boolean",
+      description:
+        "Leading icon (demo: MagnifyingGlassIcon from @radix-ui/react-icons)",
+    },
+    showEndIcon: {
+      name: "endIcon",
+      control: "boolean",
+      description: "Trailing icon (demo: CheckIcon from @radix-ui/react-icons)",
+    },
+    startIcon: { table: { disable: true }, control: false },
+    endIcon: { table: { disable: true }, control: false },
   },
   args: {
     placeholder: "Enter value…",
@@ -51,21 +78,36 @@ const meta = {
     disabled: false,
     readOnly: false,
     type: "text",
+    showStartIcon: false,
+    showEndIcon: false,
   },
-} satisfies Meta<typeof Input>;
+} satisfies Meta<InputStoryArgs>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<InputStoryArgs>;
 
-/** Interactive playground — use Controls for color, size, type, etc. */
+/** Interactive playground — Controls include icon toggles. */
 export const Playground: Story = {
   decorators: [PlaygroundFrame],
+  render: function PlaygroundStory({
+    showStartIcon,
+    showEndIcon,
+    ...args
+  }: InputStoryArgs) {
+    return (
+      <Input
+        {...args}
+        startIcon={showStartIcon ? <MagnifyingGlassIcon /> : undefined}
+        endIcon={showEndIcon ? <CheckIcon /> : undefined}
+      />
+    );
+  },
 };
 
 const COLORS = ["default", "success", "danger", "warning"] as const;
 const SIZES = ["sm", "md", "lg"] as const;
 
-/** color × size matrix for visual QA */
+/** color × size matrix for visual QA (plain fields — icons in Docs / Playground) */
 export const Matrix: Story = {
   argTypes: {
     color: { table: { disable: true } },
@@ -73,6 +115,8 @@ export const Matrix: Story = {
     fullWidth: { table: { disable: true } },
     disabled: { table: { disable: true } },
     placeholder: { table: { disable: true } },
+    showStartIcon: { table: { disable: true } },
+    showEndIcon: { table: { disable: true } },
   },
   parameters: {
     controls: { disable: true },
@@ -137,6 +181,7 @@ export const Validation: Story = {
             color="default"
             placeholder="you@company.com"
             defaultValue="you@company.com"
+            startIcon={<EnvelopeClosedIcon />}
           />
         </div>
         <div className="flex flex-col gap-1.5">
@@ -151,6 +196,7 @@ export const Validation: Story = {
             color="success"
             defaultValue="ada-lovelace"
             aria-describedby="username-ok"
+            endIcon={<CheckIcon />}
           />
           <span id="username-ok" className="text-body-sm text-success-text">
             Available
@@ -169,6 +215,8 @@ export const Validation: Story = {
             color="danger"
             defaultValue="123"
             aria-describedby="password-err"
+            startIcon={<LockClosedIcon />}
+            endIcon={<CrossCircledIcon />}
           />
           <span id="password-err" className="text-body-sm text-danger-text">
             Must be at least 8 characters

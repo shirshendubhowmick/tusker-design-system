@@ -1,6 +1,7 @@
 export {
   Input,
-  inputVariants,
+  inputControlVariants,
+  inputFieldVariants,
   type InputProps,
   type InputVariantProps,
 } from "./Input";
