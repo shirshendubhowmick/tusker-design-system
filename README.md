@@ -7,7 +7,7 @@ pnpm workspace monorepo for the design system and consuming applications.
 ```
 .
 ├── apps/                 # Applications (consumers of the design system)
-├── libraries/            # Shared libraries
+├── packages/             # Shared packages
 │   └── ui/               # @design-system/ui — tokens, utilities, Storybook
 ├── package.json          # Root workspace scripts
 ├── pnpm-workspace.yaml
@@ -20,7 +20,7 @@ pnpm workspace monorepo for the design system and consuming applications.
 Shared options live in **`tsconfig.base.json`**. Workspace packages extend it and only override what they need (DOM libs, `rootDir`, includes, etc.):
 
 ```json
-// libraries/ui/tsconfig.json
+// packages/ui/tsconfig.json
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": { "lib": ["ES2022", "DOM", "DOM.Iterable"] },
@@ -30,10 +30,10 @@ Shared options live in **`tsconfig.base.json`**. Workspace packages extend it an
 
 Add a new app the same way under `apps/*/tsconfig.json`.
 
-| Workspace | Path           | Package                               |
-| --------- | -------------- | ------------------------------------- |
-| Libraries | `libraries/ui` | [`@design-system/ui`](./libraries/ui) |
-| Apps      | `apps/*`       | _(add app packages here)_             |
+| Workspace | Path          | Package                              |
+| --------- | ------------- | ------------------------------------ |
+| Packages  | `packages/ui` | [`@design-system/ui`](./packages/ui) |
+| Apps      | `apps/*`      | _(add app packages here)_            |
 
 ## Requirements
 
@@ -115,4 +115,4 @@ In the app `package.json`:
 }
 ```
 
-See [`libraries/ui/README.md`](./libraries/ui/README.md) for usage, tokens, and the JS API.
+See [`packages/ui/README.md`](./packages/ui/README.md) for usage, tokens, and the JS API.

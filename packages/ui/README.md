@@ -415,7 +415,7 @@ Hand-written CSS that is **not** generated:
 ### Project layout
 
 ```
-libraries/ui/
+packages/ui/
   scripts/
     generate-tokens.mts      # TS → CSS codegen
   src/

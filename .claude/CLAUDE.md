@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Repository
 
 pnpm workspace monorepo (Node ≥ 24, pnpm ≥ 11) for a design system targeting a Dev tool SaaS.
-The only package so far is `libraries/ui` (**`@design-system/ui`** — React 18/19, Tailwind v4, Radix Colors, Storybook 10). `apps/` is reserved for consuming applications (none yet).
+The only package so far is `packages/ui` (**`@design-system/ui`** — React 18/19, Tailwind v4, Radix Colors, Storybook 10). `apps/` is reserved for consuming applications (none yet).
 
 ## Commands
 
@@ -22,7 +22,7 @@ pnpm tokens:generate       # regenerate CSS token files from TS sources
 pnpm tokens:check          # verify generated CSS matches TS (CI-style drift check)
 ```
 
-Single test (run from `libraries/ui/`):
+Single test (run from `packages/ui/`):
 
 ```bash
 pnpm vitest run src/lib/cn.test.ts        # one file
@@ -32,11 +32,11 @@ pnpm test:watch                            # watch mode
 
 Scripts run TypeScript directly with `node --experimental-strip-types` (no build step for `scripts/*.mts`).
 
-Husky + lint-staged run prettier/eslint on commit and **auto-regenerate token CSS** when files under `libraries/ui/src/tokens/**` or the generator script change.
+Husky + lint-staged run prettier/eslint on commit and **auto-regenerate token CSS** when files under `packages/ui/src/tokens/**` or the generator script change.
 
 ## Architecture: token pipeline (the core thing to understand)
 
-TypeScript modules under `libraries/ui/src/tokens/**` are the **single source of truth**. `scripts/generate-tokens.mts` generates all `*.css` files under `src/tokens/` (they carry an `AUTO-GENERATED` banner — never hand-edit; run `pnpm tokens:generate` after editing token TS).
+TypeScript modules under `packages/ui/src/tokens/**` are the **single source of truth**. `scripts/generate-tokens.mts` generates all `*.css` files under `src/tokens/` (they carry an `AUTO-GENERATED` banner — never hand-edit; run `pnpm tokens:generate` after editing token TS).
 
 **Exception:** `src/tokens/colors/blue.css` is hand-authored (see below). `scripts/generate-tokens.test.ts` enforces that every CSS file under `src/tokens/` is either a declared codegen output (`GENERATED_CSS`) or a declared hand-authored file (`HAND_AUTHORED_CSS`) — new files must be added to one of those lists.
 

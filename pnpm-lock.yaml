@@ -54,7 +54,7 @@ importers:
         specifier: ^8.62.1
         version: 8.62.1(eslint@10.6.0(jiti@2.7.0))(typescript@6.0.3)
 
-  libraries/ui:
+  packages/ui:
     dependencies:
       tailwind-merge:
         specifier: ^3.6.0

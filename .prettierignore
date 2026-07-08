@@ -11,4 +11,4 @@ pnpm-lock.yaml
 **/*.tsbuildinfo
 
 # token CSS is generated from TypeScript — format sources, not output
-libraries/ui/src/tokens/**/*.css
+packages/ui/src/tokens/**/*.css

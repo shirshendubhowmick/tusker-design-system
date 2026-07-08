@@ -23,5 +23,5 @@
   "editor.quickSuggestions": {
     "strings": "on"
   },
-  "tailwindCSS.experimental.configFile": "libraries/ui/src/styles/index.css"
+  "tailwindCSS.experimental.configFile": "packages/ui/src/styles/index.css"
 }

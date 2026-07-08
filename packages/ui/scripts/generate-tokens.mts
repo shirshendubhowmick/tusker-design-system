@@ -1,7 +1,7 @@
 /**
  * Generate token CSS from TypeScript sources (single source of truth).
  *
- * Usage (from libraries/ui):
+ * Usage (from packages/ui):
  *   pnpm tokens:generate
  *
  * Do not hand-edit the generated *.css files under src/tokens/.

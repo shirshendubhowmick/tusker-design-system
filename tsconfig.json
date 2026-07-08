@@ -6,5 +6,5 @@
   },
   "files": [],
   "include": [],
-  "exclude": ["node_modules", "dist", "apps", "libraries"]
+  "exclude": ["node_modules", "dist", "apps", "packages"]
 }

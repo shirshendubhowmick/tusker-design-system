@@ -44,6 +44,6 @@
   "lint-staged": {
     "*": "prettier --write --ignore-unknown",
     "*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}": "eslint --max-warnings=0",
-    "{libraries/ui/src/tokens/**/*.{ts,tsx},libraries/ui/scripts/generate-tokens.mts}": "bash -c 'pnpm tokens:generate && git add libraries/ui/src/tokens'"
+    "{packages/ui/src/tokens/**/*.{ts,tsx},packages/ui/scripts/generate-tokens.mts}": "bash -c 'pnpm tokens:generate && git add packages/ui/src/tokens'"
   }
 }
