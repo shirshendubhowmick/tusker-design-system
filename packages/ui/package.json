@@ -9,6 +9,7 @@
   ],
   "exports": {
     "./Button": "./src/components/Button/index.ts",
+    "./Input": "./src/components/Input/index.ts",
     "./tokens": "./src/tokens/index.ts",
     "./cn": "./src/utils/cn.ts",
     "./styles.css": "./src/styles/index.css",
