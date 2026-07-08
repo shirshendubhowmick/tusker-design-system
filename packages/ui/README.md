@@ -1,13 +1,14 @@
 # @design-system/ui
 
-React + TypeScript design system for a **Dev tool SaaS** — tokens, utilities, and helpers built with **Tailwind CSS v4** and **Radix Colors**.
+React + TypeScript design system for a **Dev tool SaaS** — tokens, utilities, and components built with **Tailwind CSS v4** and **Radix Colors**.
 
-- **ESM-first**, tree-shakeable JS API
-- **Compiled stylesheet** with semantic tokens (color, type, shadow, z-index, breakpoints)
+- **JIT source** — apps import raw `.ts`/`.tsx` (no package `dist` build)
+- **Per-component `exports`** — no root barrel (`@design-system/ui/Button`, not `@design-system/ui`)
+- **Semantic token CSS** (color, type, shadow, z-index, breakpoints)
 - **Light / dark** via `.dark` / `data-theme`
 - **Storybook** for foundations documentation
 
-Package name: `@design-system/ui`
+Package name: `@design-system/ui` (private workspace package)
 
 ---
 
@@ -17,39 +18,43 @@ This package is consumed only via the monorepo workspace. From the repo root:
 
 ```bash
 pnpm install
-pnpm build
 ```
 
-In an app under `apps/`, depend on it with:
-
-```json
-{
-  "dependencies": {
-    "@design-system/ui": "workspace:*"
-  }
-}
-```
-
-The app must also provide these **peer dependencies** (same idea as React — one shared install for app + design system):
-
-| Peer                       | Version    |
-| -------------------------- | ---------- |
-| `react` / `react-dom`      | ^18 or ^19 |
-| `class-variance-authority` | ^0.7       |
+No design-system library build step. In an app under `apps/`:
 
 ```json
 // apps/web/package.json (example)
 {
   "dependencies": {
     "@design-system/ui": "workspace:*",
-    "class-variance-authority": "^0.7.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "class-variance-authority": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
   }
 }
 ```
 
-Use `cn` from this package for class merging. For variants, import `cva` / `VariantProps` from the app’s `class-variance-authority` peer (same pattern as importing `react` directly).
+| Peer                       | Source     |
+| -------------------------- | ---------- |
+| `react` / `react-dom`      | `catalog:` |
+| `class-variance-authority` | `catalog:` |
+
+### Public subpaths
+
+| Import                         | Path                                                    |
+| ------------------------------ | ------------------------------------------------------- |
+| `@design-system/ui/Button`     | Component public API (`src/components/Button/index.ts`) |
+| `@design-system/ui/tokens`     | Token metadata + helpers                                |
+| `@design-system/ui/cn`         | Classname merger                                        |
+| `@design-system/ui/styles.css` | Tailwind entry + token CSS (source)                     |
+
+Deep imports into component internals are blocked by `exports` (and eslint inside the package).
+
+### Consumer bundler obligations (ADR-001)
+
+- **Transpile the package** — e.g. Next.js `transpilePackages: ["@design-system/ui"]`
+- **Test runner** — whitelist the package (Vitest `server.deps.inline` / Jest transform)
+- **Typecheck** runs against DS **source** (`moduleResolution: "bundler"` via root `tsconfig.json`)
 
 ---
 
@@ -57,7 +62,7 @@ Use `cn` from this package for class merging. For variants, import `cva` / `Vari
 
 ### 1. Import styles once at the app root
 
-Styles are **opt-in** and separate from JS so unused modules can be tree-shaken.
+Styles are **opt-in** and separate from JS. `styles.css` is **source** (not a prebuilt bundle) — process it with Tailwind v4 in the app (Vite plugin / PostCSS).
 
 **Vite + React**
 
@@ -94,25 +99,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 }
 ```
 
-**Next.js (Pages Router)**
-
-```tsx
-// pages/_app.tsx
-import "@design-system/ui/styles.css";
-import type { AppProps } from "next/app";
-
-export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
-}
-```
-
-### 2. Use tokens in UI
-
-The stylesheet ships **ready-to-use utility classes** (semantic colors, type styles, shadows, z-index, breakpoints). You do **not** need to reconfigure Tailwind in the app just to use these classes—importing `styles.css` is enough.
+### 2. Import components and utilities by subpath
 
 ```tsx
 // src/App.tsx
-import { breakpoints, cn, resolveBreakpoint } from "@design-system/ui";
+import { Button } from "@design-system/ui/Button";
+import { cn } from "@design-system/ui/cn";
+import { breakpoints, resolveBreakpoint } from "@design-system/ui/tokens";
 
 export function App() {
   return (
@@ -120,17 +113,9 @@ export function App() {
       <header className="z-sticky border-border-default bg-bg-surface/95 sticky top-0 border-b shadow-sm backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <h1 className="text-heading-sm text-fg-default">Deployments</h1>
-          <button
-            type="button"
-            className={cn(
-              "bg-accent-solid rounded-md px-3 py-1.5",
-              "text-label-lg text-fg-on-accent shadow-sm",
-              "hover:bg-accent-solid-hover",
-              "focus-visible:shadow-focus",
-            )}
-          >
+          <Button color="primary" size="md">
             New deploy
-          </button>
+          </Button>
         </div>
       </header>
 
@@ -138,8 +123,8 @@ export function App() {
         <article className="border-border-default bg-bg-surface rounded-lg border p-4 shadow-sm">
           <p className="text-label-md text-fg-muted">Production</p>
           <p className="text-metric-sm text-fg-default mt-1">99.98%</p>
-          <p className="text-body-sm text-success-text mt-2">
-            All systems healthy
+          <p className={cn("text-body-sm text-success-text mt-2")}>
+            All systems healthy ({breakpoints.tablet}px+)
           </p>
         </article>
       </main>
@@ -190,101 +175,65 @@ Nested islands are supported: a `.light` region can sit inside a dark app and re
 
 ### Do I need Tailwind in the consuming app?
 
-| Goal                                                                                 | What to do                                                                                                  |
-| ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
-| Use design-system utilities only (`bg-bg-canvas`, `text-heading-lg`, `shadow-md`, …) | Import `@design-system/ui/styles.css` — **no app Tailwind required**                                        |
-| Also write custom Tailwind in the app                                                | Install Tailwind in the app as usual; **still import** the design-system stylesheet for DS tokens/utilities |
+| Goal                                  | What to do                                                                                       |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Use DS components + token utilities   | Import `@design-system/ui/styles.css` **and** process it with **Tailwind v4** in the app bundler |
+| Also write custom Tailwind in the app | Same Tailwind pipeline; still import the DS stylesheet for tokens/utilities                      |
 
-The package ships a **precompiled** CSS bundle. App-level Tailwind does not need to scan this package for those utilities to work.
+`styles.css` is the package Tailwind entry (source). There is no prebuilt `dist/design-system.css`.
 
 ### TypeScript
 
-Types ship with the package (`dist/index.d.ts`). Ensure the app uses a modern `moduleResolution` (e.g. `bundler` or `node16`+):
-
-```json
-// tsconfig.json (app)
-{
-  "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "jsx": "react-jsx",
-    "strict": true
-  }
-}
-```
-
-### Vite (consuming app)
-
-No special `optimizeDeps` is required for the CSS path. For linked workspace packages you may want:
-
-```ts
-// vite.config.ts (app)
-import react from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
-
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    fs: {
-      // allow importing a linked local package outside app root if needed
-      allow: [".."],
-    },
-  },
-});
-```
+Extend the monorepo root `tsconfig.json` (`moduleResolution: "bundler"`, `module: "preserve"`, `verbatimModuleSyntax: true`) so package `exports` are enforced at typecheck time.
 
 ### Next.js
 
-- Import CSS only from the root layout / `_app` (not inside client components repeatedly).
-- Use `suppressHydrationWarning` on `<html>` if you set `class="dark"` from a client script before paint.
+- `transpilePackages: ["@design-system/ui"]`
+- Import CSS only from the root layout / `_app`
+- Use `suppressHydrationWarning` on `<html>` if you set `class="dark"` from a client script before paint
 
-### Tree-shaking
+### Tree-shaking / import style
 
 ```tsx
-// ✅ Named imports — unused token modules can be dropped by the app bundler
-import { breakpoints, cn } from "@design-system/ui";
-// ❌ Don't rely on the root JS entry to inject CSS (it won't)
-import "@design-system/ui";
-// ✅ Styles only when you need them
+// ✅ Per-component / fixed subpaths
+import { Button } from "@design-system/ui/Button";
+import { cn } from "@design-system/ui/cn";
+import { breakpoints } from "@design-system/ui/tokens";
 import "@design-system/ui/styles.css";
+
+// ❌ No root barrel
+import { Button } from "@design-system/ui";
+// ❌ No deep internals
+import { Button } from "@design-system/ui/src/components/Button/Button";
 ```
 
-- Package is **ESM-first** with `preserveModules` output.
-- `sideEffects` lists **CSS only** so pure JS can be eliminated.
-- Prefer `import` over CJS `require` for best shaking.
+`sideEffects` is `["**/*.css"]` so pure JS can be eliminated by the consumer bundler.
 
 ---
 
 ## Using the JS API
 
 ```tsx
+import { cn } from "@design-system/ui/cn";
 import {
-  // layout
   breakpoints,
-  cn,
   fontFamilies,
   palette,
   resolveBreakpoint,
-  // color system metadata
   semanticColorTokens,
-  // elevation / stacking (token metadata)
   shadowTokens,
-  // typography metadata
   textStyles,
   zIndexTokens,
-} from "@design-system/ui";
+} from "@design-system/ui/tokens";
 
-// Classnames
 const className = cn(
   "rounded-md bg-bg-surface p-4",
   "tablet:p-6",
   condition && "shadow-md",
 );
 
-// Runtime breakpoint helper (e.g. analytics / layout logic)
 const tier = resolveBreakpoint(window.innerWidth); // 'mobile' | 'tablet' | 'desktop'
 
-// Inspect token metadata (docs, theme tooling, Storybook-style UIs)
 console.log(shadowTokens.sm.utility); // "shadow-sm"
 console.log(zIndexTokens.modal.value); // 400
 ```
@@ -374,8 +323,8 @@ From the **monorepo root**:
 ```bash
 pnpm install
 pnpm storybook    # http://localhost:6006 — foundations docs
-pnpm build        # tokens → JS (tree-shakeable) + design-system.css
 pnpm typecheck
+pnpm test
 pnpm build-storybook
 ```
 
@@ -383,19 +332,20 @@ Or scoped to this package:
 
 ```bash
 pnpm --filter @design-system/ui storybook
-pnpm --filter @design-system/ui build
+pnpm --filter @design-system/ui test
 ```
 
-| Command                       | Description                                  |
-| ----------------------------- | -------------------------------------------- |
-| `pnpm tokens:generate`        | Generate token CSS from TypeScript sources   |
-| `pnpm tokens:check`           | Fail if generated CSS is stale (CI-friendly) |
-| `pnpm test`                   | Run Vitest (token catalog + codegen)         |
-| `pnpm test:watch`             | Vitest watch mode                            |
-| `pnpm dev` / `pnpm storybook` | Generate tokens + Storybook dev server       |
-| `pnpm build`                  | Generate tokens + `tsc` + Vite lib + styles  |
-| `pnpm build-storybook`        | Generate tokens + static Storybook           |
-| `pnpm typecheck`              | TypeScript only                              |
+| Command                       | Description                                         |
+| ----------------------------- | --------------------------------------------------- |
+| `pnpm tokens:generate`        | Generate token CSS from TypeScript sources          |
+| `pnpm tokens:check`           | Fail if generated CSS is stale (CI-friendly)        |
+| `pnpm exports:generate`       | Regenerate `package.json` `exports` from components |
+| `pnpm exports:check`          | Fail if `exports` are stale                         |
+| `pnpm test`                   | Run Vitest (tokens, exports, components)            |
+| `pnpm test:watch`             | Vitest watch mode                                   |
+| `pnpm dev` / `pnpm storybook` | Generate tokens + Storybook dev server              |
+| `pnpm build-storybook`        | Generate tokens + static Storybook                  |
+| `pnpm typecheck`              | TypeScript only (no emit / no lib build)            |
 
 ### Tokens (TypeScript is the source of truth)
 
@@ -406,11 +356,11 @@ Edit **only** the `.ts` modules under `src/tokens/`. CSS under those folders is 
 pnpm tokens:generate
 ```
 
-`build`, `storybook`, and `dev` run `tokens:generate` automatically.
+`storybook` and `dev` run `tokens:generate` automatically.
 
-Hand-written CSS that is **not** generated:
+### Public exports
 
-- `src/styles/index.css` — Tailwind entry, Radix imports, base layer, radius
+Adding a component is deliberate: create `src/components/<Name>/index.ts`, then run `pnpm exports:generate` (pre-commit does this when `index.ts` changes). Do not hand-edit the `exports` field.
 
 ### Project layout
 
@@ -418,19 +368,16 @@ Hand-written CSS that is **not** generated:
 packages/ui/
   scripts/
     generate-tokens.mts      # TS → CSS codegen
+    gen-exports.mts          # components → package.json exports
   src/
-    tokens/colors/           # palette / modes / semantic (*.ts source, *.css generated)
-    tokens/typography/       # families / scales / text styles
-    tokens/breakpoints/      # mobile / tablet / desktop
-    tokens/z-index/          # semantic stacking layers
-    tokens/shadows/          # elevation + top shadows
+    components/Button/       # index.ts public; Button.tsx internal
+    tokens/                  # index.ts public; categories underneath
     styles/                  # Tailwind entry (hand-written) + token CSS imports
-    lib/                     # cn helper
-    index.ts                 # public JS API (no CSS side effects)
+    utils/cn.ts              # public via @design-system/ui/cn
   stories/
     foundations/             # Storybook stories
   .storybook/
-  vite.config.ts             # lib | styles | storybook modes
+  vite.config.ts             # Storybook only (no lib dist build)
 ```
 
 ### TypeScript (package)

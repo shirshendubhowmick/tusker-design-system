@@ -1,7 +1,7 @@
 import { type VariantProps, cva } from "class-variance-authority";
 import type { ButtonHTMLAttributes, Ref } from "react";
 
-import { cn } from "../../lib/cn";
+import { cn } from "../../utils/cn";
 
 /**
  * Button styles — product variants on design-system semantic tokens.

@@ -9,3 +9,4 @@ catalog:
   class-variance-authority: 0.7.1
 allowBuilds:
   esbuild: true
+  unrs-resolver: true

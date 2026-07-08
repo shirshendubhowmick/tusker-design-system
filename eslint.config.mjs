@@ -1,6 +1,7 @@
 import eslintReact from "@eslint-react/eslint-plugin";
 import eslint from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
+import { importX } from "eslint-plugin-import-x";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 import reactHooks from "eslint-plugin-react-hooks";
 import { defineConfig } from "eslint/config";
@@ -130,6 +131,43 @@ export default defineConfig(
       "@eslint-react/set-state-in-effect": "off",
       // Foundation stories often use index keys for static token grids.
       "@eslint-react/no-array-index-key": "off",
+    },
+  },
+
+  // ADR-001 Decision C — component encapsulation backstop.
+  // package.json `exports` blocks external deep imports; this blocks
+  // one component reaching into another's internals inside the package.
+  {
+    name: "design-system/no-internal-modules",
+    files: ["packages/ui/src/**/*.{ts,tsx}"],
+    ignores: [
+      "packages/ui/src/**/*.{test,spec}.{ts,tsx}",
+      "packages/ui/src/test/**",
+    ],
+    plugins: {
+      "import-x": importX,
+    },
+    rules: {
+      "import-x/no-internal-modules": [
+        "error",
+        {
+          allow: [
+            // Same-folder modules (e.g. index.ts → ./Button)
+            "./*",
+            // Token + util graphs (public via ./tokens and ./cn)
+            "**/tokens/**",
+            "**/utils/*",
+            "**/styles/*",
+            // Peer / runtime deps with subpath exports
+            "react",
+            "react-dom",
+            "react/*",
+            "react-dom/*",
+            "class-variance-authority",
+            "tailwind-merge",
+          ],
+        },
+      ],
     },
   },
 

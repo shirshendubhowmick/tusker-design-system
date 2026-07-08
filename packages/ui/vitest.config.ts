@@ -19,7 +19,7 @@ export default defineConfig({
       // Token catalog + helpers. Codegen script is exercised via subprocess in
       // tests (not instrumented by v8), so it is omitted from coverage include.
       include: [
-        "src/lib/**/*.{ts,tsx}",
+        "src/utils/**/*.{ts,tsx}",
         "src/tokens/**/*.{ts,tsx}",
         "src/components/**/*.{ts,tsx}",
       ],

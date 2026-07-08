@@ -58,26 +58,27 @@ Add a new app the same way under `apps/*/tsconfig.json`.
 # Install all workspace dependencies
 pnpm install
 
-# Build the design system library
-pnpm build
-
-# Run Storybook for foundations docs
+# Run Storybook for foundations docs (no design-system lib build — JIT source)
 pnpm storybook
 ```
 
+The design system ships **raw TypeScript** (ADR-001). Apps import subpaths like `@design-system/ui/Button`; only **apps** define a `build` task.
+
 ### Useful root scripts
 
-Orchestrated tasks (`dev`, `build`, `test`, `typecheck`) run via **Turborepo**. Package-local scripts (Storybook, token codegen) still use `pnpm --filter`.
+Orchestrated tasks (`dev`, `build`, `test`, `typecheck`) run via **Turborepo**. Package-local scripts (Storybook, token/export codegen) still use `pnpm --filter`.
 
 | Command                             | Description                                                 |
 | ----------------------------------- | ----------------------------------------------------------- |
 | `pnpm install`                      | Install dependencies for all workspaces                     |
 | `pnpm tokens:generate`              | Generate token CSS from TypeScript (single source of truth) |
 | `pnpm tokens:check`                 | Fail if generated token CSS is stale                        |
+| `pnpm exports:generate`             | Regenerate `@design-system/ui` package `exports` map        |
+| `pnpm exports:check`                | Fail if package `exports` are stale                         |
 | `pnpm test`                         | `turbo run test` — Vitest across packages                   |
 | `pnpm lint` / `pnpm lint:fix`       | ESLint (flat config at repo root; monorepo-wide)            |
 | `pnpm format` / `pnpm format:check` | Prettier write / check                                      |
-| `pnpm build`                        | `turbo run build` — package builds (graph + cache)          |
+| `pnpm build`                        | `turbo run build` — **app** builds only (DS has no build)   |
 | `pnpm storybook` / `pnpm dev`       | Storybook dev server (`dev` via turbo)                      |
 | `pnpm typecheck`                    | `turbo run typecheck` across packages                       |
 | `pnpm build-storybook`              | Static Storybook build                                      |
@@ -101,14 +102,16 @@ Configured at the monorepo root (packages share these configs):
 1. **Prettier** — format staged files
 2. **ESLint** — check staged JS/TS (no autofix; fails on errors/warnings)
 3. **Token CSS** — if token sources or the generator change, run `pnpm tokens:generate` and stage the updated CSS
+4. **Package exports** — if a component `index.ts` or `gen-exports` changes, regenerate `package.json` `exports`
 
 Skip hooks only when necessary: `git commit --no-verify` (avoid for normal work).
 
 ### Working with a single package
 
 ```bash
-pnpm --filter @design-system/ui build
 pnpm --filter @design-system/ui storybook
+pnpm --filter @design-system/ui test
+pnpm --filter @design-system/ui exports:generate
 ```
 
 ### Adding an app
