@@ -435,12 +435,12 @@ packages/ui/
 
 ### TypeScript (package)
 
-This package extends the monorepo base config:
+This package extends the monorepo root config (`moduleResolution: "bundler"`, `module: "preserve"`, `verbatimModuleSyntax: true` — ADR-001):
 
-| File                       | Role                                                                    |
-| -------------------------- | ----------------------------------------------------------------------- |
-| `../../tsconfig.base.json` | Shared strict compiler options                                          |
-| `tsconfig.json`            | Single project config: `src/`, stories, Storybook, Vite/Vitest, scripts |
+| File                  | Role                                                                    |
+| --------------------- | ----------------------------------------------------------------------- |
+| `../../tsconfig.json` | Shared strict options + exports-aware resolution (empty root project)   |
+| `tsconfig.json`       | Single project config: `src/`, stories, Storybook, Vite/Vitest, scripts |
 
 ```bash
 pnpm typecheck   # tsc --noEmit -p tsconfig.json

@@ -9,6 +9,8 @@ The only package so far is `packages/ui` (**`@design-system/ui`** — React 19 v
 
 Shared peers (`react`, `react-dom`, `class-variance-authority`) are pinned in `pnpm-workspace.yaml` `catalog:` — bump there, not per package.
 
+Shared TS config (root `tsconfig.json`, ADR-001 Decision D): `moduleResolution: "bundler"`, `module: "preserve"`, `verbatimModuleSyntax: true`. Root file is an empty IDE project; packages/apps extend it and add their own `include`. Use `import type` / `export type` for type-only symbols.
+
 ## Commands
 
 Orchestrated tasks go through **Turborepo** (`turbo.json`). Package-local scripts use `pnpm --filter`:

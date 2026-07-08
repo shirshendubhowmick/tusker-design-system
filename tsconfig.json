@@ -1,9 +1,30 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "./tsconfig.base.json",
   "compilerOptions": {
+    // ADR-001 Decision D — type-level enforcement of package `exports`
+    // (moduleResolution: bundler) + consumer-owned emit (module: preserve).
+    // Packages/apps extend this file and add their own include/libs.
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
     "noEmit": true
   },
+  // Root is an IDE / empty project only — real typecheck runs per package.
   "files": [],
   "include": [],
   "exclude": ["node_modules", "dist", "apps", "packages"]

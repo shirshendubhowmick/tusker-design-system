@@ -12,19 +12,28 @@ pnpm + Turborepo monorepo for the design system and consuming applications.
 ├── package.json          # Root workspace scripts (proxy through turbo)
 ├── pnpm-workspace.yaml   # workspaces + catalog: pins (react, react-dom, …)
 ├── turbo.json            # Task graph, caching, dependency ordering
-├── tsconfig.base.json    # Shared TypeScript compiler options
-└── tsconfig.json         # Root TS entry (extends base; packages extend base too)
+└── tsconfig.json         # Shared TS options + empty root project (IDE)
 ```
 
 ### TypeScript
 
-Shared options live in **`tsconfig.base.json`**. Workspace packages extend it and only override what they need (DOM libs, `rootDir`, includes, etc.):
+Shared options live in root **`tsconfig.json`** (ADR-001 Decision D). The root file includes no sources (IDE / empty project only). Every package and app must **extend** it so deep imports fail at `tsc`, not only at the bundler:
+
+| Option                 | Value         | Why                                                        |
+| ---------------------- | ------------- | ---------------------------------------------------------- |
+| `moduleResolution`     | `"bundler"`   | Honors package `exports` at typecheck time                 |
+| `module`               | `"preserve"`  | Consumer bundler owns emit/transform                       |
+| `verbatimModuleSyntax` | `true`        | Forces `import type` / `export type` for type-only symbols |
+| `jsx`                  | `"react-jsx"` | Automatic JSX runtime                                      |
+| `strict`               | `true`        | Baseline strictness                                        |
+
+Workspace packages extend the root config and only override what they need (DOM libs, includes, etc.):
 
 ```json
 // packages/ui/tsconfig.json
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": { "lib": ["ES2022", "DOM", "DOM.Iterable"] },
+  "extends": "../../tsconfig.json",
+  "compilerOptions": { "lib": ["ES2023", "DOM", "DOM.Iterable"] },
   "include": ["src"]
 }
 ```
