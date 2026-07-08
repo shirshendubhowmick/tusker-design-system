@@ -10,9 +10,8 @@ pnpm + Turborepo monorepo for the design system and consuming applications.
 │   └── web/              # @design-system/web — Vite JIT consumer (Phase 5)
 ├── packages/             # Shared packages
 │   └── ui/               # @design-system/ui — tokens, utilities, Storybook
-├── docs/
-│   ├── adr/              # Architecture decision records
-│   └── consuming-design-system.md  # JIT consumer contract (ADR-001)
+├── docs/                 # ADRs + consumer contract (see docs/README.md)
+├── .github/workflows/    # CI (GitHub Actions)
 ├── package.json          # Root workspace scripts (proxy through turbo)
 ├── pnpm-workspace.yaml   # workspaces + catalog: pins (react, react-dom, …)
 ├── turbo.json            # Task graph, caching, dependency ordering
@@ -59,14 +58,12 @@ Add a new app the same way under `apps/*/tsconfig.json`.
 ## Getting started
 
 ```bash
-# Install all workspace dependencies
-pnpm install
-
-# Run Storybook for foundations docs (no design-system lib build — JIT source)
-pnpm storybook
+pnpm install                 # workspace deps
+pnpm dev                     # apps only (e.g. Vite @design-system/web on :5173)
+pnpm storybook               # DS Storybook on :6006 (explicit; not part of dev)
 ```
 
-The design system ships **raw TypeScript** (ADR-001). Apps import subpaths like `@design-system/ui/Button`; only **apps** define a `build` task.
+The design system ships **raw TypeScript** (ADR-001 JIT). Apps import subpaths like `@design-system/ui/Button`. There is **no** design-system library `dist` build — only apps define `build`.
 
 ### Useful root scripts
 
@@ -87,6 +84,16 @@ Orchestrated tasks (`dev`, `build`, `test`, `typecheck`) run via **Turborepo**. 
 | `pnpm storybook`                    | Storybook for `@design-system/ui` (explicit; not part of `dev`)       |
 | `pnpm typecheck`                    | `turbo run typecheck` across packages                                 |
 | `pnpm build-storybook`              | Static Storybook build                                                |
+
+### CI
+
+GitHub Actions: [`.github/workflows/ci.yml`](./.github/workflows/ci.yml) on `push`/`pull_request` to `main`:
+
+1. `pnpm install --frozen-lockfile`
+2. `tokens:check` · `exports:check` (codegen drift)
+3. `format:check` · `lint`
+4. `typecheck` · `test`
+5. `build` (apps only)
 
 Shared runtime peers (`react`, `react-dom`, `class-variance-authority`) are pinned in `pnpm-workspace.yaml` under `catalog:` and referenced as `"catalog:"` in package manifests so every workspace resolves the same version.
 

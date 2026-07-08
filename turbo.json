@@ -18,15 +18,13 @@
     },
     "lint": {},
     "test": {
-      "dependsOn": ["^typecheck"],
-      "outputs": ["coverage/**"]
+      "dependsOn": ["^typecheck"]
     },
     "test:coverage": {
       "dependsOn": ["^typecheck"],
       "outputs": ["coverage/**"]
     },
     "build": {
-      // Apps only (DS is JIT — no package build). Pull DS codegen from workspace deps.
       "dependsOn": ["^tokens:generate", "^exports:generate"],
       "outputs": [
         "dist/**",

@@ -29,6 +29,8 @@ pnpm exports:generate      # regenerate @design-system/ui package.json exports
 pnpm exports:check         # verify exports map matches components/*/index.ts
 ```
 
+CI (`.github/workflows/ci.yml`): frozen install → `tokens:check` → `exports:check` → format → lint → typecheck → test → app `build`. No DS lib build.
+
 **Public API (ADR-001 JIT):** no root barrel. Consumers import subpaths only:
 
 - `@design-system/ui/Button` → `src/components/Button/index.ts` (per-component)
