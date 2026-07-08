@@ -145,7 +145,7 @@ function SemanticStyleCard({
     { label: "Tracking", value: describeTracking(style.tracking) },
   ];
 
-  if (style.transform === "uppercase") {
+  if ("transform" in style && style.transform === "uppercase") {
     rows.push({ label: "Transform", value: "uppercase" });
   }
   if (style.group === "metric") {

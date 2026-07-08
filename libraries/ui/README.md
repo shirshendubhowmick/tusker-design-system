@@ -437,14 +437,13 @@ libraries/ui/
 
 This package extends the monorepo base config:
 
-| File                       | Role                                   |
-| -------------------------- | -------------------------------------- |
-| `../../tsconfig.base.json` | Shared strict compiler options         |
-| `tsconfig.json`            | Library sources under `src/`           |
-| `tsconfig.node.json`       | Vite, Vitest, Storybook, token scripts |
+| File                       | Role                                                                    |
+| -------------------------- | ----------------------------------------------------------------------- |
+| `../../tsconfig.base.json` | Shared strict compiler options                                          |
+| `tsconfig.json`            | Single project config: `src/`, stories, Storybook, Vite/Vitest, scripts |
 
 ```bash
-pnpm typecheck   # both tsconfig.json and tsconfig.node.json
+pnpm typecheck   # tsc --noEmit -p tsconfig.json
 ```
 
 ### Stack (maintainers)

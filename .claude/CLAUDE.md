@@ -16,7 +16,7 @@ pnpm install               # install workspace deps
 pnpm dev                   # tokens:generate + Storybook on :6006 (same as pnpm storybook)
 pnpm build                 # tokens:generate + tsc --noEmit + vite build (lib + styles css)
 pnpm test                  # vitest run across workspace
-pnpm typecheck             # tsc -p tsconfig.json && tsc -p tsconfig.node.json per package
+pnpm typecheck             # tsc -p tsconfig.json per package
 pnpm lint / lint:fix       # eslint from root
 pnpm tokens:generate       # regenerate CSS token files from TS sources
 pnpm tokens:check          # verify generated CSS matches TS (CI-style drift check)
