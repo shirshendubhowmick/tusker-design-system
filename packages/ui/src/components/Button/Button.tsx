@@ -2,7 +2,7 @@ import { type VariantProps, cva } from "class-variance-authority";
 import type { ButtonHTMLAttributes, ReactNode, Ref } from "react";
 
 import { cn } from "../../utils/cn";
-import { Spinner, SpinnerSize } from "../Spinner";
+import { Spinner } from "../Spinner";
 
 /**
  * Button styles — product variants on design-system semantic tokens.
@@ -361,15 +361,7 @@ export function Button(props: ButtonProps) {
       )}
       data-loading={loading ? "true" : undefined}
     >
-      {loading ? (
-        <Spinner
-          size={
-            props.size === "sm" || props.size === "lg"
-              ? props.size
-              : SpinnerSize.md
-          }
-        />
-      ) : null}
+      {loading ? <Spinner size={props.size} /> : null}
       {label}
     </button>
   );

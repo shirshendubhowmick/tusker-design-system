@@ -2,20 +2,17 @@ import type { Ref, SVGAttributes } from "react";
 
 import { cn } from "../../utils/cn";
 
-/** Visual size steps — aligned with Button control heights. */
+/**
+ * Size token → Tailwind size utility.
+ * Keys (`sm` / `md` / `lg`) are the public size API; values are the glyph classes.
+ */
 export const SpinnerSize = {
-  sm: "sm",
-  md: "md",
-  lg: "lg",
-} as const;
-
-export type SpinnerSize = (typeof SpinnerSize)[keyof typeof SpinnerSize];
-
-const spinnerSizeClass: Record<SpinnerSize, string> = {
   sm: "size-3.5",
   md: "size-4",
   lg: "size-4.5",
-};
+} as const;
+
+export type SpinnerSize = keyof typeof SpinnerSize;
 
 export interface SpinnerProps extends Omit<
   SVGAttributes<SVGSVGElement>,
@@ -23,16 +20,23 @@ export interface SpinnerProps extends Omit<
 > {
   ref?: Ref<SVGSVGElement>;
   /**
-   * Glyph size.
+   * Glyph size (`sm` | `md` | `lg`).
    * @default "md"
    */
-  size?: SpinnerSize;
+  size?: SpinnerSize | null;
   /**
    * Accessible name when the spinner is the sole loading indicator.
    * When omitted, treated as decorative (`aria-hidden`).
    */
   label?: string;
   className?: string;
+}
+
+function resolveSpinnerSize(size: SpinnerProps["size"]): SpinnerSize {
+  if (size != null && size in SpinnerSize) {
+    return size;
+  }
+  return "md";
 }
 
 /**
@@ -44,22 +48,22 @@ export interface SpinnerProps extends Omit<
  *
  * @example
  * ```tsx
- * import { Spinner, SpinnerSize } from "@design-system/ui/Spinner";
+ * import { Spinner } from "@design-system/ui/Spinner";
  *
- * <Spinner size={SpinnerSize.sm} />
+ * <Spinner size="sm" />
  * <Spinner label="Loading results" className="text-accent-text" />
  * ```
  */
 export function Spinner(props: SpinnerProps) {
-  const { size = SpinnerSize.md, label, className, ref, ...svgProps } = props;
-  const dim = spinnerSizeClass[size] ?? spinnerSizeClass.md;
+  const { size, label, className, ref, ...svgProps } = props;
+  const sizeKey = resolveSpinnerSize(size);
   const decorative = label == null || label === "";
 
   return (
     <svg
       {...svgProps}
       ref={ref}
-      className={cn("shrink-0 animate-spin", dim, className)}
+      className={cn("shrink-0 animate-spin", SpinnerSize[sizeKey], className)}
       viewBox="0 0 24 24"
       fill="none"
       role={decorative ? undefined : "status"}

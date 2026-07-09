@@ -2,7 +2,11 @@
 import { render, screen } from "@testing-library/react";
 import { createRef } from "react";
 
-import { Spinner, SpinnerSize } from "./Spinner";
+import {
+  Spinner,
+  SpinnerSize,
+  type SpinnerSize as SpinnerSizeKey,
+} from "./Spinner";
 
 /** Split a className into exact tokens (avoids false positives from toContain). */
 function classTokens(className: string | null | undefined): Set<string> {
@@ -21,6 +25,8 @@ function expectHasClasses(
   }
 }
 
+const SIZES = Object.keys(SpinnerSize) as SpinnerSizeKey[];
+
 describe("Spinner", () => {
   it("renders a decorative spinner by default", () => {
     render(<Spinner data-testid="spin" />);
@@ -32,27 +38,26 @@ describe("Spinner", () => {
     expect(el).toHaveAttribute("data-slot", "spinner");
     expectHasClasses(el.getAttribute("class"), [
       "animate-spin",
-      "size-4",
+      SpinnerSize.md,
       "shrink-0",
     ]);
   });
 
-  it("supports sm, md, and lg sizes", () => {
-    const { rerender } = render(
-      <Spinner size={SpinnerSize.sm} data-testid="spin" />,
-    );
-    expectHasClasses(screen.getByTestId("spin").getAttribute("class"), [
-      "size-3.5",
-    ]);
+  it("supports every size in SpinnerSize", () => {
+    const { rerender } = render(<Spinner size="sm" data-testid="spin" />);
 
-    rerender(<Spinner size={SpinnerSize.md} data-testid="spin" />);
-    expectHasClasses(screen.getByTestId("spin").getAttribute("class"), [
-      "size-4",
-    ]);
+    for (const size of SIZES) {
+      rerender(<Spinner size={size} data-testid="spin" />);
+      expectHasClasses(screen.getByTestId("spin").getAttribute("class"), [
+        SpinnerSize[size],
+      ]);
+    }
+  });
 
-    rerender(<Spinner size={SpinnerSize.lg} data-testid="spin" />);
+  it("falls back to md for null / unknown size", () => {
+    render(<Spinner size={null} data-testid="spin" />);
     expectHasClasses(screen.getByTestId("spin").getAttribute("class"), [
-      "size-4.5",
+      SpinnerSize.md,
     ]);
   });
 

@@ -1,6 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { Spinner, SpinnerSize } from "../../src/components/Spinner";
+import {
+  Spinner,
+  SpinnerSize,
+  type SpinnerSize as SpinnerSizeKey,
+} from "../../src/components/Spinner";
 import {
   Text,
   TextColor,
@@ -10,7 +14,7 @@ import {
 import { cn } from "../../src/utils/cn";
 import { docsDefault } from "../utils/docs";
 
-const SIZES = Object.values(SpinnerSize);
+const SIZES = Object.keys(SpinnerSize) as SpinnerSizeKey[];
 
 const meta = {
   title: "Components/Spinner",
@@ -23,7 +27,7 @@ const meta = {
     size: {
       control: "select",
       options: SIZES,
-      description: "Glyph size (`SpinnerSize.*`).",
+      description: "Glyph size — keys of `SpinnerSize`.",
       ...docsDefault("md", { type: "SpinnerSize" }),
     },
     label: {
@@ -38,7 +42,7 @@ const meta = {
     },
   },
   args: {
-    size: SpinnerSize.md,
+    size: "md",
     className: "text-fg-default",
   },
 } satisfies Meta<typeof Spinner>;
