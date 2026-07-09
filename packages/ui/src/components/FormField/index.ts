@@ -1,5 +1,1 @@
-export {
-  FormField,
-  type FormFieldMessageColor,
-  type FormFieldProps,
-} from "./FormField";
+export { FormField, type FormFieldProps } from "./FormField";

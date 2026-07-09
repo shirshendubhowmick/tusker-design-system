@@ -1,6 +1,12 @@
 import type { Decorator, Meta, StoryObj } from "@storybook/react";
 
 import { Button } from "../../src/components/Button";
+import {
+  Text,
+  TextColor,
+  TextSize,
+  TextVariant,
+} from "../../src/components/Text";
 import { docsDefault } from "../utils/docs";
 
 /**
@@ -106,9 +112,14 @@ export const Matrix: Story = {
         {VARIANTS.map(function renderVariantSection(variant) {
           return (
             <div key={variant} className="flex flex-col gap-3">
-              <p className="text-heading-xs text-fg-default capitalize">
+              <Text
+                as="p"
+                variant={TextVariant.heading}
+                size={TextSize.xs}
+                className="capitalize"
+              >
                 {variant}
-              </p>
+              </Text>
               <div className="flex flex-col gap-2">
                 {COLORS.map(function renderColorRow(color) {
                   return (
@@ -116,9 +127,15 @@ export const Matrix: Story = {
                       key={color}
                       className="flex flex-wrap items-center gap-3"
                     >
-                      <span className="text-label-md text-fg-muted w-20 capitalize">
+                      <Text
+                        as="span"
+                        variant={TextVariant.label}
+                        size={TextSize.md}
+                        color={TextColor.muted}
+                        className="w-20 capitalize"
+                      >
                         {color}
-                      </span>
+                      </Text>
                       {SIZES.map(function renderSizeButton(size) {
                         return (
                           <Button

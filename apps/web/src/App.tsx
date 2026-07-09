@@ -1,4 +1,5 @@
 import { Button } from "@design-system/ui/Button";
+import { Text, TextColor, TextSize, TextVariant } from "@design-system/ui/Text";
 import { cn } from "@design-system/ui/cn";
 import { breakpoints, resolveBreakpoint } from "@design-system/ui/tokens";
 import { useEffect, useState } from "react";
@@ -25,10 +26,17 @@ export function App() {
       <header className="border-border-default bg-bg-surface/95 z-sticky sticky top-0 border-b shadow-sm backdrop-blur">
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-3">
           <div>
-            <p className="text-label-md text-fg-muted">JIT consumer</p>
-            <h1 className="text-heading-sm text-fg-default">
+            <Text
+              as="p"
+              variant={TextVariant.label}
+              size={TextSize.md}
+              color={TextColor.muted}
+            >
+              JIT consumer
+            </Text>
+            <Text as="h1" variant={TextVariant.heading} size={TextSize.sm}>
               @design-system/web
-            </h1>
+            </Text>
           </div>
           <Button color="primary" size="md">
             Primary action
@@ -42,33 +50,64 @@ export function App() {
             "border-border-default bg-bg-surface rounded-lg border p-4 shadow-sm",
           )}
         >
-          <h2 className="text-heading-xs text-fg-default">Imports</h2>
-          <ul className="text-body-md text-fg-muted mt-2 list-inside list-disc">
+          <Text as="h2" variant={TextVariant.heading} size={TextSize.xs}>
+            Imports
+          </Text>
+          <ul className="mt-2 list-inside list-disc">
             <li>
-              <code className="text-code-sm">@design-system/ui/Button</code>
+              <Text as="code" variant={TextVariant.code} size={TextSize.sm}>
+                @design-system/ui/Button
+              </Text>
             </li>
             <li>
-              <code className="text-code-sm">@design-system/ui/cn</code>
+              <Text as="code" variant={TextVariant.code} size={TextSize.sm}>
+                @design-system/ui/cn
+              </Text>
             </li>
             <li>
-              <code className="text-code-sm">@design-system/ui/tokens</code>
+              <Text as="code" variant={TextVariant.code} size={TextSize.sm}>
+                @design-system/ui/tokens
+              </Text>
             </li>
             <li>
-              <code className="text-code-sm">@design-system/ui/styles.css</code>
+              <Text as="code" variant={TextVariant.code} size={TextSize.sm}>
+                @design-system/ui/styles.css
+              </Text>
+            </li>
+            <li>
+              <Text as="code" variant={TextVariant.code} size={TextSize.sm}>
+                @design-system/ui/Text
+              </Text>
             </li>
           </ul>
         </section>
 
         <section className="border-border-default bg-bg-surface rounded-lg border p-4 shadow-sm">
-          <h2 className="text-heading-xs text-fg-default">Tokens</h2>
-          <p className="text-body-md text-fg-muted mt-2">
+          <Text as="h2" variant={TextVariant.heading} size={TextSize.xs}>
+            Tokens
+          </Text>
+          <Text
+            as="p"
+            variant={TextVariant.body}
+            size={TextSize.md}
+            color={TextColor.muted}
+            className="mt-2"
+          >
             Viewport tier:{" "}
-            <span className="text-fg-default font-medium">{tier}</span>
-          </p>
-          <p className="text-body-sm text-fg-muted mt-1">
+            <Text as="span" color={TextColor.default} className="font-medium">
+              {tier}
+            </Text>
+          </Text>
+          <Text
+            as="p"
+            variant={TextVariant.body}
+            size={TextSize.sm}
+            color={TextColor.muted}
+            className="mt-1"
+          >
             tablet ≥ {breakpoints.tablet.minWidthPx}px · desktop ≥{" "}
             {breakpoints.desktop.minWidthPx}px
-          </p>
+          </Text>
           <div className="mt-4 flex flex-wrap gap-2">
             <Button variant="primary" color="primary" size="sm">
               Primary

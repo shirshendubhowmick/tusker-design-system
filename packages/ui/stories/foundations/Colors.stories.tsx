@@ -9,6 +9,12 @@ import {
 } from "react";
 
 import {
+  Text,
+  TextColor,
+  TextSize,
+  TextVariant,
+} from "../../src/components/Text";
+import {
   type ColorMode,
   type PaletteName,
   RADIX_STEPS,
@@ -289,13 +295,17 @@ function CopyChip({
       className="border-border-default bg-bg-canvas text-fg-default hover:border-border-strong hover:bg-bg-surface-hover focus-visible:ring-focus-ring inline-flex max-w-full items-center gap-1 rounded-md border px-1.5 py-0.5 font-mono text-[11px] font-medium shadow-sm transition-colors focus-visible:ring-2 focus-visible:outline-none"
     >
       {label ? (
-        <span className="text-fg-muted shrink-0 font-semibold tracking-wide uppercase">
+        <Text
+          as="span"
+          color={TextColor.muted}
+          className="shrink-0 font-semibold tracking-wide uppercase"
+        >
           {label}
-        </span>
+        </Text>
       ) : null}
-      <span className="text-fg-default truncate">
+      <Text as="span" className="truncate">
         {state === "copied" ? "Copied!" : state === "error" ? "Failed" : value}
-      </span>
+      </Text>
     </button>
   );
 }
@@ -335,16 +345,21 @@ function ColorSwatchCard({
       <div className="bg-bg-canvas space-y-2.5 p-3">
         <div className="flex flex-wrap items-start justify-between gap-2">
           <div className="min-w-0">
-            <p
+            <Text
+              as="p"
               id={labelId}
-              className="text-fg-default truncate font-mono text-sm font-semibold tracking-tight"
+              className="truncate font-mono text-sm font-semibold tracking-tight"
             >
               {tokenName}
-            </p>
+            </Text>
             {description ? (
-              <p className="text-fg-muted mt-1 text-xs leading-snug">
+              <Text
+                as="p"
+                color={TextColor.muted}
+                className="mt-1 text-xs leading-snug"
+              >
                 {description}
-              </p>
+              </Text>
             ) : null}
           </div>
           {meta}
@@ -361,9 +376,13 @@ function ColorSwatchCard({
           {hex ? (
             <CopyChip label="hex" value={hex} title="Copy hex color" />
           ) : (
-            <span className="border-border-default text-fg-muted rounded-md border border-dashed px-1.5 py-0.5 font-mono text-[11px]">
+            <Text
+              as="span"
+              color={TextColor.muted}
+              className="border-border-default rounded-md border border-dashed px-1.5 py-0.5 font-mono text-[11px]"
+            >
               hex …
-            </span>
+            </Text>
           )}
           {rgb ? (
             <CopyChip label="css" value={rgb} title="Copy computed CSS color" />
@@ -387,17 +406,21 @@ function PaletteScale({
   return (
     <div className="mb-6">
       <div className="mb-2 flex flex-wrap items-baseline gap-x-2 gap-y-1">
-        <h3 className="text-fg-default text-sm font-semibold capitalize">
+        <Text as="h3" className="text-sm font-semibold capitalize">
           {name}
-        </h3>
+        </Text>
         <CopyChip
           label="radix"
           value={meta.radix}
           title="Copy Radix scale name"
         />
-        <span className="text-fg-muted text-xs font-medium">{meta.role}</span>
+        <Text as="span" color={TextColor.muted} className="text-xs font-medium">
+          {meta.role}
+        </Text>
       </div>
-      <p className="text-fg-muted mb-3 text-xs">{meta.description}</p>
+      <Text as="p" color={TextColor.muted} className="mb-3 text-xs">
+        {meta.description}
+      </Text>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
         {RADIX_STEPS.map((step) => {
           const tokenName = `${name}-${step}`;
@@ -432,9 +455,9 @@ function SemanticGroup({
 
   return (
     <div className="mb-6">
-      <h3 className="text-fg-default mb-2 text-sm font-semibold capitalize">
+      <Text as="h3" className="mb-2 text-sm font-semibold capitalize">
         {group}
-      </h3>
+      </Text>
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
         {tokens.map((token) => {
           const override = hasModeOverride(token);
@@ -452,9 +475,13 @@ function SemanticGroup({
               themeKey={themeKey}
               meta={
                 override ? (
-                  <span className="border-accent-border bg-accent-subtle text-accent-text rounded-md border px-1.5 py-0.5 font-mono text-[10px] font-semibold">
+                  <Text
+                    as="span"
+                    color={TextColor.accent}
+                    className="border-accent-border bg-accent-subtle rounded-md border px-1.5 py-0.5 font-mono text-[10px] font-semibold"
+                  >
                     mode override
-                  </span>
+                  </Text>
                 ) : null
               }
             >
@@ -485,36 +512,53 @@ function ColorsDoc({ theme }: { theme: ColorMode }) {
   return (
     <div className="mx-auto max-w-5xl p-6 text-left">
       <header className="border-border-default mb-8 border-b pb-6">
-        <p className="text-accent-text mb-1 text-xs font-semibold tracking-wide uppercase">
+        <Text
+          as="p"
+          variant={TextVariant.label}
+          size={TextSize.overline}
+          color={TextColor.accent}
+          className="mb-1"
+        >
           Foundations
-        </p>
+        </Text>
         <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h1 className="text-fg-default text-2xl font-semibold">
+          <Text as="h1" variant={TextVariant.heading} size={TextSize.xl}>
             Color tokens
-          </h1>
-          <span className="border-border-default bg-bg-subtle text-fg-default rounded-md border px-2 py-0.5 font-mono text-xs font-medium capitalize">
+          </Text>
+          <Text
+            as="span"
+            className="border-border-default bg-bg-subtle rounded-md border px-2 py-0.5 font-mono text-xs font-medium capitalize"
+          >
             {theme} · .{meta.className}
-          </span>
+          </Text>
         </div>
-        <p className="text-fg-muted mt-2 max-w-3xl text-sm">
+        <Text as="p" color={TextColor.muted} className="mt-2 max-w-3xl text-sm">
           Use the{" "}
-          <strong className="text-fg-default font-semibold">Theme</strong>{" "}
+          <Text as="strong" className="font-semibold">
+            Theme
+          </Text>{" "}
           control in the Storybook toolbar (sun / moon) to switch light and
           dark. Click any chip to copy token, CSS variable, class, or live hex
           for the active mode.
-        </p>
+        </Text>
         {overrides.length > 0 ? (
-          <p className="text-fg-muted mt-3 text-xs">
+          <Text as="p" color={TextColor.muted} className="mt-3 text-xs">
             Tokens with different light/dark mappings:{" "}
             {overrides.map((t) => t.name).join(", ")}.
-          </p>
+          </Text>
         ) : null}
       </header>
 
       <section className="mb-8">
-        <h2 className="text-fg-muted mb-3 text-sm font-semibold tracking-wide uppercase">
+        <Text
+          as="h2"
+          variant={TextVariant.label}
+          size={TextSize.overline}
+          color={TextColor.muted}
+          className="mb-3"
+        >
           Canvas &amp; foreground
-        </h2>
+        </Text>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           <ColorSwatchCard
             tokenName="bg-canvas"
@@ -533,50 +577,83 @@ function ColorsDoc({ theme }: { theme: ColorMode }) {
             themeKey={theme}
           />
         </div>
-        <p className="text-fg-default mt-3 text-sm">
+        <Text as="p" className="mt-3 text-sm">
           The quick deploy jumped over the flaky test — body on canvas.
-        </p>
+        </Text>
       </section>
 
       <section className="mb-8">
-        <h2 className="text-fg-muted mb-3 text-sm font-semibold tracking-wide uppercase">
+        <Text
+          as="h2"
+          variant={TextVariant.label}
+          size={TextSize.overline}
+          color={TextColor.muted}
+          className="mb-3"
+        >
           Palette
-        </h2>
+        </Text>
         {(Object.keys(palette) as PaletteName[]).map((name) => (
           <PaletteScale key={name} name={name} themeKey={theme} />
         ))}
       </section>
 
       <section className="mb-8">
-        <h2 className="text-fg-muted mb-3 text-sm font-semibold tracking-wide uppercase">
+        <Text
+          as="h2"
+          variant={TextVariant.label}
+          size={TextSize.overline}
+          color={TextColor.muted}
+          className="mb-3"
+        >
           Semantic
-        </h2>
+        </Text>
         {semanticColorGroups.map((group) => (
           <SemanticGroup key={group} group={group} themeKey={theme} />
         ))}
       </section>
 
       <section className="border-border-default bg-bg-surface space-y-3 rounded-lg border p-4">
-        <p className="text-fg-default text-sm font-semibold">Sample chrome</p>
-        <p className="text-fg-muted text-xs">
+        <Text as="p" className="text-sm font-semibold">
+          Sample chrome
+        </Text>
+        <Text as="p" color={TextColor.muted} className="text-xs">
           Secondary copy on a raised surface.
-        </p>
+        </Text>
         <div className="flex flex-wrap gap-2">
-          <span className="bg-accent-solid text-fg-on-accent rounded-md px-2.5 py-1 text-xs font-semibold">
+          <Text
+            as="span"
+            color={TextColor.onAccent}
+            className="bg-accent-solid rounded-md px-2.5 py-1 text-xs font-semibold"
+          >
             Primary
-          </span>
-          <span className="border-border-default bg-bg-subtle text-fg-default rounded-md border px-2.5 py-1 text-xs font-semibold">
+          </Text>
+          <Text
+            as="span"
+            className="border-border-default bg-bg-subtle rounded-md border px-2.5 py-1 text-xs font-semibold"
+          >
             Secondary
-          </span>
-          <span className="bg-danger-solid text-fg-on-danger rounded-md px-2.5 py-1 text-xs font-semibold">
+          </Text>
+          <Text
+            as="span"
+            color={TextColor.onDanger}
+            className="bg-danger-solid rounded-md px-2.5 py-1 text-xs font-semibold"
+          >
             Danger
-          </span>
-          <span className="bg-warning-solid text-fg-on-warning rounded-md px-2.5 py-1 text-xs font-semibold">
+          </Text>
+          <Text
+            as="span"
+            color={TextColor.onWarning}
+            className="bg-warning-solid rounded-md px-2.5 py-1 text-xs font-semibold"
+          >
             Warning
-          </span>
-          <span className="bg-success-subtle text-success-text rounded-md px-2.5 py-1 text-xs font-medium">
+          </Text>
+          <Text
+            as="span"
+            color={TextColor.success}
+            className="bg-success-subtle rounded-md px-2.5 py-1 text-xs font-medium"
+          >
             Healthy
-          </span>
+          </Text>
         </div>
       </section>
     </div>

@@ -2,6 +2,12 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { useEffect, useState } from "react";
 
 import {
+  Text,
+  TextColor,
+  TextSize,
+  TextVariant,
+} from "../../src/components/Text";
+import {
   type BreakpointName,
   breakpointOrder,
   breakpoints,
@@ -46,57 +52,99 @@ function BreakpointCard({
       }
     >
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-        <h3 className="text-heading-sm text-fg-default capitalize">{name}</h3>
+        <Text
+          as="h3"
+          variant={TextVariant.heading}
+          size={TextSize.sm}
+          className="capitalize"
+        >
+          {name}
+        </Text>
         {active ? (
-          <span className="bg-accent-solid text-fg-on-accent rounded-md px-2 py-0.5 text-xs font-semibold">
+          <Text
+            as="span"
+            color={TextColor.onAccent}
+            className="bg-accent-solid rounded-md px-2 py-0.5 text-xs font-semibold"
+          >
             Active viewport
-          </span>
+          </Text>
         ) : (
-          <span className="border-border-default bg-bg-subtle text-fg-muted rounded-md border px-2 py-0.5 text-xs font-medium">
+          <Text
+            as="span"
+            color={TextColor.muted}
+            className="border-border-default bg-bg-subtle rounded-md border px-2 py-0.5 text-xs font-medium"
+          >
             Inactive
-          </span>
+          </Text>
         )}
       </div>
 
-      <p className="text-body-sm text-fg-muted">{bp.description}</p>
+      <Text
+        as="p"
+        variant={TextVariant.body}
+        size={TextSize.sm}
+        color={TextColor.muted}
+      >
+        {bp.description}
+      </Text>
 
       <dl className="border-border-default bg-bg-subtle mt-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 rounded-md border px-3 py-2.5">
-        <dt className="text-fg-muted text-xs font-semibold tracking-wide uppercase">
+        <Text
+          as="dt"
+          color={TextColor.muted}
+          className="text-xs font-semibold tracking-wide uppercase"
+        >
           Range
-        </dt>
-        <dd className="text-fg-default font-mono text-xs font-medium">
+        </Text>
+        <Text as="dd" className="font-mono text-xs font-medium">
           {formatBreakpointRange(name)}
-        </dd>
+        </Text>
 
-        <dt className="text-fg-muted text-xs font-semibold tracking-wide uppercase">
+        <Text
+          as="dt"
+          color={TextColor.muted}
+          className="text-xs font-semibold tracking-wide uppercase"
+        >
           Min width
-        </dt>
-        <dd className="text-fg-default font-mono text-xs font-medium">
+        </Text>
+        <Text as="dd" className="font-mono text-xs font-medium">
           {bp.minWidthPx}px · {bp.minWidthRem}
-        </dd>
+        </Text>
 
-        <dt className="text-fg-muted text-xs font-semibold tracking-wide uppercase">
+        <Text
+          as="dt"
+          color={TextColor.muted}
+          className="text-xs font-semibold tracking-wide uppercase"
+        >
           CSS var
-        </dt>
-        <dd className="text-fg-default font-mono text-xs font-medium">
+        </Text>
+        <Text as="dd" className="font-mono text-xs font-medium">
           {bp.cssVar}
-        </dd>
+        </Text>
 
-        <dt className="text-fg-muted text-xs font-semibold tracking-wide uppercase">
+        <Text
+          as="dt"
+          color={TextColor.muted}
+          className="text-xs font-semibold tracking-wide uppercase"
+        >
           Variant
-        </dt>
-        <dd className="text-fg-default font-mono text-xs font-medium">
+        </Text>
+        <Text as="dd" className="font-mono text-xs font-medium">
           {variant ? `${variant}:` : "base (no prefix)"}
-        </dd>
+        </Text>
 
-        <dt className="text-fg-muted text-xs font-semibold tracking-wide uppercase">
+        <Text
+          as="dt"
+          color={TextColor.muted}
+          className="text-xs font-semibold tracking-wide uppercase"
+        >
           Media
-        </dt>
-        <dd className="text-fg-default font-mono text-xs font-medium">
+        </Text>
+        <Text as="dd" className="font-mono text-xs font-medium">
           {bp.minWidthPx === 0
             ? "default styles (always applied)"
             : `@media (min-width: ${bp.minWidthRem})`}
-        </dd>
+        </Text>
       </dl>
     </div>
   );
@@ -105,16 +153,33 @@ function BreakpointCard({
 function ResponsiveDemo() {
   return (
     <div className="space-y-4">
-      <p className="text-body-sm text-fg-muted">
+      <Text
+        as="p"
+        variant={TextVariant.body}
+        size={TextSize.sm}
+        color={TextColor.muted}
+      >
         Resize the Storybook viewport (or browser window). Layout and labels
         update with the active tier.
-      </p>
+      </Text>
 
       {/* Stack on mobile → row from tablet */}
       <div className="tablet:flex-row tablet:items-stretch flex flex-col gap-3">
         <div className="border-border-default bg-bg-subtle flex-1 rounded-lg border p-4">
-          <p className="text-label-md text-fg-muted">Layout</p>
-          <p className="text-body-md text-fg-default mt-1 font-semibold">
+          <Text
+            as="p"
+            variant={TextVariant.label}
+            size={TextSize.md}
+            color={TextColor.muted}
+          >
+            Layout
+          </Text>
+          <Text
+            as="p"
+            variant={TextVariant.body}
+            size={TextSize.md}
+            className="mt-1 font-semibold"
+          >
             <span className="tablet:hidden">Column stack (mobile)</span>
             <span className="tablet:inline desktop:hidden hidden">
               Row · two columns (tablet)
@@ -122,44 +187,87 @@ function ResponsiveDemo() {
             <span className="desktop:inline hidden">
               Row · three columns (desktop)
             </span>
-          </p>
+          </Text>
         </div>
         <div className="border-border-default bg-bg-subtle tablet:max-w-none flex-1 rounded-lg border p-4">
-          <p className="text-label-md text-fg-muted">Nav chrome</p>
-          <p className="text-body-md text-fg-default desktop:hidden mt-1 font-semibold">
+          <Text
+            as="p"
+            variant={TextVariant.label}
+            size={TextSize.md}
+            color={TextColor.muted}
+          >
+            Nav chrome
+          </Text>
+          <Text
+            as="p"
+            variant={TextVariant.body}
+            size={TextSize.md}
+            className="desktop:hidden mt-1 font-semibold"
+          >
             Compact / drawer pattern
-          </p>
-          <p className="text-body-md text-fg-default desktop:block mt-1 hidden font-semibold">
+          </Text>
+          <Text
+            as="p"
+            variant={TextVariant.body}
+            size={TextSize.md}
+            className="desktop:block mt-1 hidden font-semibold"
+          >
             Persistent sidebar + top bar
-          </p>
+          </Text>
         </div>
         <div className="border-border-default bg-bg-subtle desktop:block hidden flex-1 rounded-lg border p-4">
-          <p className="text-label-md text-fg-muted">Desktop only</p>
-          <p className="text-body-md text-fg-default mt-1 font-semibold">
+          <Text
+            as="p"
+            variant={TextVariant.label}
+            size={TextSize.md}
+            color={TextColor.muted}
+          >
+            Desktop only
+          </Text>
+          <Text
+            as="p"
+            variant={TextVariant.body}
+            size={TextSize.md}
+            className="mt-1 font-semibold"
+          >
             Extra panel (hidden below desktop)
-          </p>
+          </Text>
         </div>
       </div>
 
       {/* Visibility legend */}
       <div className="tablet:grid-cols-3 grid gap-2">
-        <div className="border-border-default bg-bg-canvas text-fg-default rounded-md border px-3 py-2 text-center text-xs font-medium">
+        <Text
+          as="div"
+          className="border-border-default bg-bg-canvas rounded-md border px-3 py-2 text-center text-xs font-medium"
+        >
           Always visible
-        </div>
-        <div className="border-border-default bg-bg-canvas text-fg-default tablet:block hidden rounded-md border px-3 py-2 text-center text-xs font-medium">
+        </Text>
+        <Text
+          as="div"
+          className="border-border-default bg-bg-canvas tablet:block hidden rounded-md border px-3 py-2 text-center text-xs font-medium"
+        >
           tablet:block and up
-        </div>
-        <div className="border-border-default bg-bg-canvas text-fg-default desktop:block hidden rounded-md border px-3 py-2 text-center text-xs font-medium">
+        </Text>
+        <Text
+          as="div"
+          className="border-border-default bg-bg-canvas desktop:block hidden rounded-md border px-3 py-2 text-center text-xs font-medium"
+        >
           desktop:block and up
-        </div>
+        </Text>
       </div>
 
-      <pre className="border-border-default bg-bg-subtle text-code-sm text-fg-default overflow-x-auto rounded-lg border p-3">
+      <Text
+        as="pre"
+        variant={TextVariant.code}
+        size={TextSize.sm}
+        className="border-border-default bg-bg-subtle overflow-x-auto rounded-lg border p-3"
+      >
         {`<div className="flex flex-col gap-3 tablet:flex-row desktop:gap-8">
   <aside className="hidden desktop:block">Sidebar</aside>
   <main className="flex-1">…</main>
 </div>`}
-      </pre>
+      </Text>
     </div>
   );
 }
@@ -172,61 +280,116 @@ function BreakpointsDoc({ theme }: { theme: ColorMode }) {
   return (
     <div className="mx-auto max-w-3xl p-6 text-left">
       <header className="border-border-default mb-8 border-b pb-6">
-        <p className="text-label-overline text-accent-text mb-1">Foundations</p>
+        <Text
+          as="p"
+          variant={TextVariant.label}
+          size={TextSize.overline}
+          color={TextColor.accent}
+          className="mb-1"
+        >
+          Foundations
+        </Text>
         <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h1 className="text-heading-xl text-fg-default">Breakpoints</h1>
-          <span className="border-border-default bg-bg-subtle text-fg-default rounded-md border px-2 py-0.5 font-mono text-xs font-medium capitalize">
+          <Text as="h1" variant={TextVariant.heading} size={TextSize.xl}>
+            Breakpoints
+          </Text>
+          <Text
+            as="span"
+            className="border-border-default bg-bg-subtle rounded-md border px-2 py-0.5 font-mono text-xs font-medium capitalize"
+          >
             {theme} · .{modeMeta.className}
-          </span>
+          </Text>
         </div>
-        <p className="text-body-md text-fg-muted mt-2">
+        <Text
+          as="p"
+          variant={TextVariant.body}
+          size={TextSize.md}
+          color={TextColor.muted}
+          className="mt-2"
+        >
           Three mobile-first tiers for a Dev tool SaaS layout. Base styles are{" "}
-          <strong className="text-fg-default font-semibold">mobile</strong>
+          <Text as="strong" className="font-semibold">
+            mobile
+          </Text>
           layer up with{" "}
-          <code className="bg-bg-surface-active text-code-sm text-fg-default rounded px-1">
+          <Text
+            as="code"
+            variant={TextVariant.code}
+            size={TextSize.sm}
+            className="bg-bg-surface-active rounded px-1"
+          >
             tablet:
-          </code>{" "}
+          </Text>{" "}
           and{" "}
-          <code className="bg-bg-surface-active text-code-sm text-fg-default rounded px-1">
+          <Text
+            as="code"
+            variant={TextVariant.code}
+            size={TextSize.sm}
+            className="bg-bg-surface-active rounded px-1"
+          >
             desktop:
-          </code>
+          </Text>
           . Switch sizes with the Storybook{" "}
-          <strong className="text-fg-default font-semibold">viewport</strong>{" "}
+          <Text as="strong" className="font-semibold">
+            viewport
+          </Text>{" "}
           toolbar (Mobile / Tablet / Desktop) — the same tokens as the design
           system.
-        </p>
+        </Text>
 
         <div className="border-border-default bg-bg-subtle mt-4 rounded-lg border px-4 py-3">
-          <p className="text-label-md text-fg-muted">Current viewport</p>
-          <p className="text-fg-default mt-1 font-mono text-lg font-semibold">
+          <Text
+            as="p"
+            variant={TextVariant.label}
+            size={TextSize.md}
+            color={TextColor.muted}
+          >
+            Current viewport
+          </Text>
+          <Text as="p" className="mt-1 font-mono text-lg font-semibold">
             {width}px →{" "}
-            <span className="text-accent-text capitalize">{active}</span>
-          </p>
+            <Text as="span" color={TextColor.accent} className="capitalize">
+              {active}
+            </Text>
+          </Text>
         </div>
       </header>
 
       <section className="mb-10 space-y-3">
-        <h2 className="text-heading-md text-fg-default">Tiers</h2>
+        <Text as="h2" variant={TextVariant.heading} size={TextSize.md}>
+          Tiers
+        </Text>
         {breakpointOrder.map((name) => (
           <BreakpointCard key={name} name={name} active={name === active} />
         ))}
       </section>
 
       <section className="mb-10">
-        <h2 className="text-heading-md text-fg-default mb-2">
+        <Text
+          as="h2"
+          variant={TextVariant.heading}
+          size={TextSize.md}
+          className="mb-2"
+        >
           Storybook viewport toolbar
-        </h2>
-        <p className="text-body-sm text-fg-muted mb-4">
+        </Text>
+        <Text
+          as="p"
+          variant={TextVariant.body}
+          size={TextSize.sm}
+          color={TextColor.muted}
+          className="mb-4"
+        >
           The toolbar lists only these three options (configured in{" "}
-          <code className="text-code-sm text-fg-default">
+          <Text as="code" variant={TextVariant.code} size={TextSize.sm}>
             .storybook/preview.tsx
-          </code>{" "}
+          </Text>{" "}
           from{" "}
-          <code className="text-code-sm text-fg-default">
+          <Text as="code" variant={TextVariant.code} size={TextSize.sm}>
             designSystemViewports
-          </code>
+          </Text>
           ).
-        </p>
+        </Text>
         <div className="border-border-default overflow-hidden rounded-lg border">
           <table className="w-full text-left text-sm">
             <thead className="bg-bg-subtle text-fg-muted text-xs font-semibold tracking-wide uppercase">
@@ -262,32 +425,73 @@ function BreakpointsDoc({ theme }: { theme: ColorMode }) {
       </section>
 
       <section className="mb-10">
-        <h2 className="text-heading-md text-fg-default mb-3">
+        <Text
+          as="h2"
+          variant={TextVariant.heading}
+          size={TextSize.md}
+          className="mb-3"
+        >
           Responsive demo
-        </h2>
+        </Text>
         <ResponsiveDemo />
       </section>
 
       <section>
-        <h2 className="text-heading-md text-fg-default mb-3">Usage</h2>
-        <ul className="text-body-sm text-fg-muted list-disc space-y-2 pl-5">
-          <li>
-            <strong className="text-fg-default">Mobile-first:</strong> write
-            mobile styles with no prefix, then override at larger tiers.
-          </li>
-          <li>
+        <Text
+          as="h2"
+          variant={TextVariant.heading}
+          size={TextSize.md}
+          className="mb-3"
+        >
+          Usage
+        </Text>
+        <ul className="list-disc space-y-2 pl-5">
+          <Text
+            as="li"
+            variant={TextVariant.body}
+            size={TextSize.sm}
+            color={TextColor.muted}
+          >
+            <Text as="strong">Mobile-first:</Text> write mobile styles with no
+            prefix, then override at larger tiers.
+          </Text>
+          <Text
+            as="li"
+            variant={TextVariant.body}
+            size={TextSize.sm}
+            color={TextColor.muted}
+          >
             Default Tailwind{" "}
-            <code className="text-code-sm text-fg-default">sm:</code> /{" "}
-            <code className="text-code-sm text-fg-default">md:</code> /{" "}
-            <code className="text-code-sm text-fg-default">lg:</code> variants
-            are <strong className="text-fg-default">removed</strong> — use{" "}
-            <code className="text-code-sm text-fg-default">tablet:</code> and{" "}
-            <code className="text-code-sm text-fg-default">desktop:</code> only.
-          </li>
-          <li>
+            <Text as="code" variant={TextVariant.code} size={TextSize.sm}>
+              sm:
+            </Text>{" "}
+            /{" "}
+            <Text as="code" variant={TextVariant.code} size={TextSize.sm}>
+              md:
+            </Text>{" "}
+            /{" "}
+            <Text as="code" variant={TextVariant.code} size={TextSize.sm}>
+              lg:
+            </Text>{" "}
+            variants are <Text as="strong">removed</Text> — use{" "}
+            <Text as="code" variant={TextVariant.code} size={TextSize.sm}>
+              tablet:
+            </Text>{" "}
+            and{" "}
+            <Text as="code" variant={TextVariant.code} size={TextSize.sm}>
+              desktop:
+            </Text>{" "}
+            only.
+          </Text>
+          <Text
+            as="li"
+            variant={TextVariant.body}
+            size={TextSize.sm}
+            color={TextColor.muted}
+          >
             Prefer layout changes (stack → row, hide sidebar) over unrelated
             visual rewrites per breakpoint.
-          </li>
+          </Text>
         </ul>
       </section>
     </div>

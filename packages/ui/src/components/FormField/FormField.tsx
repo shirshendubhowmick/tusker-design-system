@@ -1,32 +1,23 @@
-import { type VariantProps, cva } from "class-variance-authority";
 import { type ReactNode, type Ref, useId } from "react";
 
 import { cn } from "../../utils/cn";
 import { Input, type InputProps } from "../Input";
+import { Text, TextColor } from "../Text";
 
 /**
  * Form field — label + {@link Input} + optional message.
  *
- * Combines the layout used across product forms (see Storybook Validation).
+ * Combines the layout used across product forms.
  * Forwards all Input props (`color`, `size`, icons, native attributes, `ref`).
+ * Label and message render via {@link Text}.
  */
-const messageVariants = cva("text-body-sm", {
-  variants: {
-    color: {
-      default: "text-fg-muted",
-      success: "text-success-text",
-      danger: "text-danger-text",
-      warning: "text-warning-text",
-    },
-  },
-  defaultVariants: {
-    color: "default",
-  },
-});
 
-export type FormFieldMessageColor = NonNullable<
-  VariantProps<typeof messageVariants>["color"]
->;
+const MESSAGE_COLOR = {
+  default: TextColor.muted,
+  success: TextColor.success,
+  danger: TextColor.danger,
+  warning: TextColor.warning,
+} as const;
 
 export interface FormFieldProps extends Omit<InputProps, "className"> {
   /**
@@ -78,6 +69,9 @@ export function FormField(props: FormFieldProps) {
       .filter(Boolean)
       .join(" ") || undefined;
 
+  const messageColor =
+    MESSAGE_COLOR[color as keyof typeof MESSAGE_COLOR] ?? TextColor.muted;
+
   return (
     <div
       className={cn(
@@ -87,13 +81,17 @@ export function FormField(props: FormFieldProps) {
       )}
       data-slot="form-field"
     >
-      <label
+      <Text
+        as="label"
         htmlFor={inputId}
-        className={cn("text-label-md text-fg-default", labelClassName)}
+        variant="label"
+        size="md"
+        color={TextColor.default}
+        className={labelClassName}
         data-slot="form-field-label"
       >
         {label}
-      </label>
+      </Text>
       <Input
         {...inputProps}
         id={inputId}
@@ -103,15 +101,19 @@ export function FormField(props: FormFieldProps) {
         aria-describedby={ariaDescribedBy}
       />
       {hasMessage ? (
-        <p
+        <Text
+          as="p"
           id={messageId}
-          className={cn(messageVariants({ color }), messageClassName)}
+          variant="body"
+          size="sm"
+          color={messageColor}
+          className={messageClassName}
           data-slot="form-field-message"
           // Announce validation errors to assistive tech.
           role={color === "danger" ? "alert" : undefined}
         >
           {message}
-        </p>
+        </Text>
       ) : null}
     </div>
   );

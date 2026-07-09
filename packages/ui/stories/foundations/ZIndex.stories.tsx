@@ -1,5 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
+import {
+  Text,
+  TextColor,
+  TextSize,
+  TextVariant,
+} from "../../src/components/Text";
 import { type ColorMode, colorModeMeta } from "../../src/tokens/colors";
 import {
   type ZIndexName,
@@ -49,32 +55,67 @@ function ZIndexDoc({ theme }: { theme: ColorMode }) {
   return (
     <div className="mx-auto max-w-3xl p-6 text-left">
       <header className="border-border-default mb-8 border-b pb-6">
-        <p className="text-label-overline text-accent-text mb-1">Foundations</p>
+        <Text
+          as="p"
+          variant={TextVariant.label}
+          size={TextSize.overline}
+          color={TextColor.accent}
+          className="mb-1"
+        >
+          Foundations
+        </Text>
         <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h1 className="text-heading-xl text-fg-default">Z-index</h1>
-          <span className="border-border-default bg-bg-subtle text-fg-default rounded-md border px-2 py-0.5 font-mono text-xs font-medium capitalize">
+          <Text as="h1" variant={TextVariant.heading} size={TextSize.xl}>
+            Z-index
+          </Text>
+          <Text
+            as="span"
+            className="border-border-default bg-bg-subtle rounded-md border px-2 py-0.5 font-mono text-xs font-medium capitalize"
+          >
             {theme} · .{modeMeta.className}
-          </span>
+          </Text>
         </div>
-        <p className="text-body-md text-fg-muted mt-2">
+        <Text
+          as="p"
+          variant={TextVariant.body}
+          size={TextSize.md}
+          color={TextColor.muted}
+          className="mt-2"
+        >
           Semantic stacking layers for modals, menus, sticky chrome, and toasts.
           Prefer{" "}
-          <code className="bg-bg-surface-active text-code-sm text-fg-default rounded px-1">
+          <Text
+            as="code"
+            variant={TextVariant.code}
+            size={TextSize.sm}
+            className="bg-bg-surface-active rounded px-1"
+          >
             z-modal
-          </code>{" "}
+          </Text>{" "}
           over arbitrary numbers. Theme still switches via the toolbar.
-        </p>
+        </Text>
       </header>
 
       {/* Live stacking demo */}
       <section className="mb-10">
-        <h2 className="text-heading-md text-fg-default mb-2">
+        <Text
+          as="h2"
+          variant={TextVariant.heading}
+          size={TextSize.md}
+          className="mb-2"
+        >
           Stacking preview
-        </h2>
-        <p className="text-body-sm text-fg-muted mb-4">
+        </Text>
+        <Text
+          as="p"
+          variant={TextVariant.body}
+          size={TextSize.sm}
+          color={TextColor.muted}
+          className="mb-4"
+        >
           Cards share one positioning context and use each semantic layer.
           Higher layers paint on top (offset so every card stays visible).
-        </p>
+        </Text>
         <div className="border-border-default bg-bg-subtle relative h-112 overflow-hidden rounded-xl border">
           {zIndexOrder.map((name, index) => {
             const token = zIndexTokens[name];
@@ -100,9 +141,14 @@ function ZIndexDoc({ theme }: { theme: ColorMode }) {
 
       {/* Scale table */}
       <section className="mb-10">
-        <h2 className="text-heading-md text-fg-default mb-3">
+        <Text
+          as="h2"
+          variant={TextVariant.heading}
+          size={TextSize.md}
+          className="mb-3"
+        >
           Scale (low → high)
-        </h2>
+        </Text>
         <div className="border-border-default overflow-hidden rounded-lg border">
           <table className="w-full text-left text-sm">
             <thead className="bg-bg-subtle text-fg-muted text-xs font-semibold tracking-wide uppercase">
@@ -147,8 +193,20 @@ function ZIndexDoc({ theme }: { theme: ColorMode }) {
 
       {/* Usage */}
       <section>
-        <h2 className="text-heading-md text-fg-default mb-3">Usage</h2>
-        <pre className="border-border-default bg-bg-subtle text-code-sm text-fg-default overflow-x-auto rounded-lg border p-3">
+        <Text
+          as="h2"
+          variant={TextVariant.heading}
+          size={TextSize.md}
+          className="mb-3"
+        >
+          Usage
+        </Text>
+        <Text
+          as="pre"
+          variant={TextVariant.code}
+          size={TextSize.sm}
+          className="border-border-default bg-bg-subtle overflow-x-auto rounded-lg border p-3"
+        >
           {`{/* Backdrop under the dialog */}
 <div className="fixed inset-0 z-overlay bg-overlay-scrim" />
 
@@ -165,21 +223,44 @@ function ZIndexDoc({ theme }: { theme: ColorMode }) {
 
 {/* Sticky table header */}
 <th className="sticky top-0 z-sticky bg-bg-subtle">Name</th>`}
-        </pre>
-        <ul className="text-body-sm text-fg-muted mt-4 list-disc space-y-2 pl-5">
-          <li>
+        </Text>
+        <ul className="mt-4 list-disc space-y-2 pl-5">
+          <Text
+            as="li"
+            variant={TextVariant.body}
+            size={TextSize.sm}
+            color={TextColor.muted}
+          >
             Parent stacking contexts (
-            <code className="text-code-sm text-fg-default">transform</code>,{" "}
-            <code className="text-code-sm text-fg-default">opacity &lt; 1</code>
-            , <code className="text-code-sm text-fg-default">filter</code>) can
-            trap children — prefer portaling modals/toasts to{" "}
-            <code className="text-code-sm text-fg-default">document.body</code>.
-          </li>
-          <li>
+            <Text as="code" variant={TextVariant.code} size={TextSize.sm}>
+              transform
+            </Text>
+            ,{" "}
+            <Text as="code" variant={TextVariant.code} size={TextSize.sm}>
+              opacity &lt; 1
+            </Text>
+            ,{" "}
+            <Text as="code" variant={TextVariant.code} size={TextSize.sm}>
+              filter
+            </Text>
+            ) can trap children — prefer portaling modals/toasts to{" "}
+            <Text as="code" variant={TextVariant.code} size={TextSize.sm}>
+              document.body
+            </Text>
+            .
+          </Text>
+          <Text
+            as="li"
+            variant={TextVariant.body}
+            size={TextSize.sm}
+            color={TextColor.muted}
+          >
             Need a new layer? Add it to{" "}
-            <code className="text-code-sm text-fg-default">zIndexTokens</code>{" "}
+            <Text as="code" variant={TextVariant.code} size={TextSize.sm}>
+              zIndexTokens
+            </Text>{" "}
             between neighbors — don’t invent one-off values in components.
-          </li>
+          </Text>
         </ul>
       </section>
     </div>

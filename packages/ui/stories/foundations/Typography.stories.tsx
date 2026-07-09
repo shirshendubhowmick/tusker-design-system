@@ -1,5 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
+import {
+  Text,
+  TextColor,
+  TextSize,
+  TextVariant,
+} from "../../src/components/Text";
 import { type ColorMode, colorModeMeta } from "../../src/tokens/colors";
 import {
   type FontFamilyName,
@@ -17,30 +23,6 @@ import {
   textStyleGroups,
   textStyles,
 } from "../../src/tokens/typography";
-
-const textStyleClass: Record<TextStyleName, string> = {
-  "display-lg": "text-display-lg",
-  "display-md": "text-display-md",
-  "heading-xl": "text-heading-xl",
-  "heading-lg": "text-heading-lg",
-  "heading-md": "text-heading-md",
-  "heading-sm": "text-heading-sm",
-  "heading-xs": "text-heading-xs",
-  "body-lg": "text-body-lg",
-  "body-md": "text-body-md",
-  "body-sm": "text-body-sm",
-  "body-md-medium": "text-body-md-medium",
-  "label-lg": "text-label-lg",
-  "label-md": "text-label-md",
-  "label-sm": "text-label-sm",
-  "label-overline": "text-label-overline",
-  "code-md": "text-code-md",
-  "code-sm": "text-code-sm",
-  "code-block": "text-code-block",
-  "metric-lg": "text-metric-lg",
-  "metric-md": "text-metric-md",
-  "metric-sm": "text-metric-sm",
-};
 
 const sampleByGroup: Record<TextStyleGroup, string> = {
   display: "Ship faster with confidence",
@@ -92,6 +74,11 @@ function describeTracking(tracking: LetterSpacingName): string {
   return `${tracking} · ${letterSpacings[tracking].value}`;
 }
 
+/** Derive Text size step from a semantic style name + group (e.g. body-md-medium → md-medium). */
+function textStyleSize(name: TextStyleName, group: TextStyleGroup): TextSize {
+  return name.slice(group.length + 1) as TextSize;
+}
+
 interface SpecRow {
   label: string;
   value: string;
@@ -102,12 +89,16 @@ function TypeSpecList({ rows }: { rows: SpecRow[] }) {
     <dl className="border-border-default bg-bg-subtle mt-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 rounded-md border px-3 py-2.5">
       {rows.map((row) => (
         <div key={row.label} className="contents">
-          <dt className="text-fg-muted text-xs font-semibold tracking-wide uppercase">
+          <Text
+            as="dt"
+            color={TextColor.muted}
+            className="text-xs font-semibold tracking-wide uppercase"
+          >
             {row.label}
-          </dt>
-          <dd className="text-fg-default font-mono text-xs font-medium">
+          </Text>
+          <Text as="dd" className="font-mono text-xs font-medium">
             {row.value}
-          </dd>
+          </Text>
         </div>
       ))}
     </dl>
@@ -152,23 +143,48 @@ function SemanticStyleCard({
     rows.push({ label: "Numeric", value: "tabular-nums" });
   }
 
+  const specimenAs =
+    group === "code"
+      ? "code"
+      : group === "heading" || group === "display"
+        ? "h3"
+        : "p";
+
   return (
     <div className="border-border-default bg-bg-canvas rounded-lg border p-4 shadow-sm">
       <div className="mb-1 flex flex-wrap items-baseline justify-between gap-2">
-        <code className="text-code-sm text-accent-text font-semibold">
+        <Text
+          as="code"
+          variant={TextVariant.code}
+          size={TextSize.sm}
+          color={TextColor.accent}
+          className="font-semibold"
+        >
           text-{style.name}
-        </code>
-        <span className="border-border-default bg-bg-subtle text-fg-default rounded-md border px-1.5 py-0.5 text-xs font-medium capitalize">
+        </Text>
+        <Text
+          as="span"
+          className="border-border-default bg-bg-subtle rounded-md border px-1.5 py-0.5 text-xs font-medium capitalize"
+        >
           {group}
-        </span>
+        </Text>
       </div>
 
-      <p className="text-fg-default text-sm font-medium">{summary}</p>
-      <p className="text-fg-muted mt-0.5 text-xs">{style.description}</p>
+      <Text as="p" className="text-sm font-medium">
+        {summary}
+      </Text>
+      <Text as="p" color={TextColor.muted} className="mt-0.5 text-xs">
+        {style.description}
+      </Text>
 
-      <p className={`mt-4 ${textStyleClass[style.name]} text-fg-default`}>
+      <Text
+        as={specimenAs}
+        variant={group as TextVariant}
+        size={textStyleSize(style.name, group)}
+        className="mt-4"
+      >
         {sampleByGroup[group]}
-      </p>
+      </Text>
 
       <TypeSpecList rows={rows} />
     </div>
@@ -181,34 +197,77 @@ function TypographyDoc({ theme }: { theme: ColorMode }) {
   return (
     <div className="mx-auto max-w-3xl p-6 text-left">
       <header className="border-border-default mb-10 border-b pb-6">
-        <p className="text-label-overline text-accent-text mb-1">Foundations</p>
+        <Text
+          as="p"
+          variant={TextVariant.label}
+          size={TextSize.overline}
+          color={TextColor.accent}
+          className="mb-1"
+        >
+          Foundations
+        </Text>
         <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h1 className="text-heading-xl text-fg-default">Typography</h1>
-          <span className="border-border-default bg-bg-subtle text-fg-default rounded-md border px-2 py-0.5 font-mono text-xs font-medium capitalize">
+          <Text as="h1" variant={TextVariant.heading} size={TextSize.xl}>
+            Typography
+          </Text>
+          <Text
+            as="span"
+            className="border-border-default bg-bg-subtle rounded-md border px-2 py-0.5 font-mono text-xs font-medium capitalize"
+          >
             {theme} · .{meta.className}
-          </span>
+          </Text>
         </div>
-        <p className="text-body-md text-fg-muted mt-2 max-w-2xl">
+        <Text
+          as="p"
+          variant={TextVariant.body}
+          size={TextSize.md}
+          color={TextColor.muted}
+          className="mt-2 max-w-2xl"
+        >
           Use the{" "}
-          <strong className="text-fg-default font-semibold">Theme</strong>{" "}
+          <Text as="strong" className="font-semibold">
+            Theme
+          </Text>{" "}
           control in the Storybook toolbar (sun / moon) to switch light and
           dark. Each specimen lists family, weight, and size in plain language.
-        </p>
-        <p className="text-body-md text-fg-default mt-4">
+        </Text>
+        <Text
+          as="p"
+          variant={TextVariant.body}
+          size={TextSize.md}
+          className="mt-4"
+        >
           The quick deploy jumped over the flaky test — default body on canvas.
-        </p>
-        <p className="text-fg-muted mt-1 text-sm font-medium">
+        </Text>
+        <Text
+          as="p"
+          color={TextColor.muted}
+          className="mt-1 text-sm font-medium"
+        >
           Inter · regular (400) · 14px · text-body-md + text-fg-default
-        </p>
+        </Text>
       </header>
 
       <div className="space-y-10">
         {/* Families */}
         <section>
-          <h2 className="text-heading-md text-fg-default mb-2">1. Families</h2>
-          <p className="text-body-sm text-fg-muted mb-4">
+          <Text
+            as="h2"
+            variant={TextVariant.heading}
+            size={TextSize.md}
+            className="mb-2"
+          >
+            1. Families
+          </Text>
+          <Text
+            as="p"
+            variant={TextVariant.body}
+            size={TextSize.sm}
+            color={TextColor.muted}
+            className="mb-4"
+          >
             Product typefaces. Specs list the primary face and CSS token.
-          </p>
+          </Text>
           <div className="grid gap-4">
             {Object.values(fontFamilies).map((family) => (
               <div
@@ -216,29 +275,46 @@ function TypographyDoc({ theme }: { theme: ColorMode }) {
                 className="border-border-default bg-bg-canvas rounded-lg border p-4 shadow-sm"
               >
                 <div className="mb-1 flex flex-wrap items-baseline gap-2">
-                  <span className="text-label-lg text-fg-default">
+                  <Text
+                    as="span"
+                    variant={TextVariant.label}
+                    size={TextSize.lg}
+                  >
                     font-{family.name}
-                  </span>
-                  <span className="text-body-sm text-fg-muted font-medium">
+                  </Text>
+                  <Text
+                    as="span"
+                    variant={TextVariant.body}
+                    size={TextSize.sm}
+                    color={TextColor.muted}
+                    className="font-medium"
+                  >
                     {family.role}
-                  </span>
+                  </Text>
                 </div>
-                <p className="text-fg-default text-sm font-medium">
+                <Text as="p" className="text-sm font-medium">
                   Primary face: {family.stack[0]}
-                </p>
-                <p className="text-body-sm text-fg-muted mt-0.5">
+                </Text>
+                <Text
+                  as="p"
+                  variant={TextVariant.body}
+                  size={TextSize.sm}
+                  color={TextColor.muted}
+                  className="mt-0.5"
+                >
                   {family.description}
-                </p>
+                </Text>
 
-                <p
-                  className={
-                    family.name === "mono"
-                      ? "text-code-md text-fg-default mt-4"
-                      : "text-body-lg text-fg-default mt-4"
+                <Text
+                  as="p"
+                  variant={
+                    family.name === "mono" ? TextVariant.code : TextVariant.body
                   }
+                  size={family.name === "mono" ? TextSize.md : TextSize.lg}
+                  className="mt-4"
                 >
                   The quick deploy jumped over the flaky test.
-                </p>
+                </Text>
 
                 <TypeSpecList
                   rows={[
@@ -260,13 +336,24 @@ function TypographyDoc({ theme }: { theme: ColorMode }) {
 
         {/* Size scale */}
         <section>
-          <h2 className="text-heading-md text-fg-default mb-2">
+          <Text
+            as="h2"
+            variant={TextVariant.heading}
+            size={TextSize.md}
+            className="mb-2"
+          >
             2. Size scale
-          </h2>
-          <p className="text-body-sm text-fg-muted mb-4">
+          </Text>
+          <Text
+            as="p"
+            variant={TextVariant.body}
+            size={TextSize.sm}
+            color={TextColor.muted}
+            className="mb-4"
+          >
             Size tokens change font-size (and default line-height). Family stays
             Inter / font-sans unless paired with a semantic style or font-mono.
-          </p>
+          </Text>
           <div className="border-border-default bg-bg-canvas overflow-hidden rounded-lg border shadow-sm">
             {(Object.keys(fontSizes) as FontSizeName[]).map((name) => {
               const token = fontSizes[name];
@@ -280,18 +367,19 @@ function TypographyDoc({ theme }: { theme: ColorMode }) {
                       text-{name}
                     </div>
                     <div className="min-w-0 flex-1">
+                      {/* Primitive size specimen — raw utility, not Text semantic style */}
                       <p
                         className={`${sizeClass[name]} text-fg-default truncate`}
                       >
                         Deploy pipeline status
                       </p>
-                      <p className="text-fg-default mt-1 text-sm font-medium">
+                      <Text as="p" className="mt-1 text-sm font-medium">
                         Inter (font-sans) · regular (400) · {token.px}px /{" "}
                         {token.rem}
-                      </p>
-                      <p className="text-fg-muted text-xs">
+                      </Text>
+                      <Text as="p" color={TextColor.muted} className="text-xs">
                         {token.description}
-                      </p>
+                      </Text>
                     </div>
                   </div>
                 </div>
@@ -303,84 +391,137 @@ function TypographyDoc({ theme }: { theme: ColorMode }) {
         {/* Weights / leading / tracking */}
         <section className="grid gap-4">
           <div className="border-border-default bg-bg-canvas rounded-lg border p-4 shadow-sm">
-            <h2 className="text-heading-sm text-fg-default mb-1">Weights</h2>
-            <p className="text-body-sm text-fg-muted mb-3">
+            <Text
+              as="h2"
+              variant={TextVariant.heading}
+              size={TextSize.sm}
+              className="mb-1"
+            >
+              Weights
+            </Text>
+            <Text
+              as="p"
+              variant={TextVariant.body}
+              size={TextSize.sm}
+              color={TextColor.muted}
+              className="mb-3"
+            >
               Numeric CSS font-weight. Pair with a family (usually Inter).
-            </p>
+            </Text>
             <ul className="space-y-3">
               {Object.entries(fontWeights).map(([name, token]) => (
                 <li
                   key={name}
                   className="border-border-muted border-b pb-3 last:border-b-0 last:pb-0"
                 >
-                  <p
-                    className="text-body-md text-fg-default"
+                  <Text
+                    as="p"
+                    variant={TextVariant.body}
+                    size={TextSize.md}
                     style={{ fontWeight: token.value }}
                   >
                     Inter · {name} ({token.value}) — The quick deploy jumped
                     over the flaky test.
-                  </p>
-                  <p className="text-fg-muted mt-1 font-mono text-xs">
+                  </Text>
+                  <Text
+                    as="p"
+                    color={TextColor.muted}
+                    className="mt-1 font-mono text-xs"
+                  >
                     font-{name} · weight {token.value} · {token.description}
-                  </p>
+                  </Text>
                 </li>
               ))}
             </ul>
           </div>
 
           <div className="border-border-default bg-bg-canvas rounded-lg border p-4 shadow-sm">
-            <h2 className="text-heading-sm text-fg-default mb-1">
+            <Text
+              as="h2"
+              variant={TextVariant.heading}
+              size={TextSize.sm}
+              className="mb-1"
+            >
               Line height
-            </h2>
-            <p className="text-body-sm text-fg-muted mb-3">
+            </Text>
+            <Text
+              as="p"
+              variant={TextVariant.body}
+              size={TextSize.sm}
+              color={TextColor.muted}
+              className="mb-3"
+            >
               Unitless multipliers on the font size. Each sample uses the same
               multi-line paragraph so you can compare vertical rhythm.
-            </p>
+            </Text>
             <ul className="space-y-5">
               {Object.entries(lineHeights).map(([name, token]) => (
                 <li
                   key={name}
                   className="border-border-muted border-b pb-5 last:border-b-0 last:pb-0"
                 >
-                  <p className="text-fg-default mb-2 font-mono text-xs font-semibold">
+                  <Text as="p" className="mb-2 font-mono text-xs font-semibold">
                     leading-{name}
-                    <span className="text-fg-muted font-medium">
+                    <Text
+                      as="span"
+                      color={TextColor.muted}
+                      className="font-medium"
+                    >
                       {" "}
                       · {token.value} · {token.description}
-                    </span>
-                  </p>
-                  <p
-                    className="text-body-md text-fg-default max-w-prose"
+                    </Text>
+                  </Text>
+                  <Text
+                    as="p"
+                    variant={TextVariant.body}
+                    size={TextSize.md}
+                    className="max-w-prose"
                     style={{ lineHeight: token.value }}
                   >
                     Monitor builds, previews, and production health from one
                     place. Rollback in a click when something goes wrong. Share
                     deploy links with your team and keep every environment in
                     sync without leaving the dashboard.
-                  </p>
+                  </Text>
                 </li>
               ))}
             </ul>
           </div>
 
           <div className="border-border-default bg-bg-canvas rounded-lg border p-4 shadow-sm">
-            <h2 className="text-heading-sm text-fg-default mb-1">
+            <Text
+              as="h2"
+              variant={TextVariant.heading}
+              size={TextSize.sm}
+              className="mb-1"
+            >
               Letter spacing
-            </h2>
-            <p className="text-body-sm text-fg-muted mb-3">
+            </Text>
+            <Text
+              as="p"
+              variant={TextVariant.body}
+              size={TextSize.sm}
+              color={TextColor.muted}
+              className="mb-3"
+            >
               Tracking in ems relative to font size.
-            </p>
+            </Text>
             <ul className="space-y-2">
               {Object.entries(letterSpacings).map(([name, token]) => (
-                <li key={name} className="text-body-sm text-fg-default">
-                  <span className="text-fg-default font-mono text-xs font-semibold">
+                <Text
+                  as="li"
+                  key={name}
+                  variant={TextVariant.body}
+                  size={TextSize.sm}
+                >
+                  <Text as="span" className="font-mono text-xs font-semibold">
                     tracking-{name}
-                  </span>
-                  <span className="text-fg-muted">
+                  </Text>
+                  <Text as="span" color={TextColor.muted}>
                     {" "}
                     · {token.value} · {token.description}
-                  </span>
-                </li>
+                  </Text>
+                </Text>
               ))}
             </ul>
           </div>
@@ -388,25 +529,47 @@ function TypographyDoc({ theme }: { theme: ColorMode }) {
 
         {/* Semantic styles */}
         <section>
-          <h2 className="text-heading-md text-fg-default mb-2">
+          <Text
+            as="h2"
+            variant={TextVariant.heading}
+            size={TextSize.md}
+            className="mb-2"
+          >
             3. Semantic text styles
-          </h2>
-          <p className="text-body-md text-fg-muted mb-6">
+          </Text>
+          <Text
+            as="p"
+            variant={TextVariant.body}
+            size={TextSize.md}
+            color={TextColor.muted}
+            className="mb-6"
+          >
             Full recipes: each card shows the live specimen plus family, weight,
             and size. Prefer{" "}
-            <code className="bg-bg-surface-active text-code-sm text-fg-default rounded px-1">
+            <Text
+              as="code"
+              variant={TextVariant.code}
+              size={TextSize.sm}
+              className="bg-bg-surface-active rounded px-1"
+            >
               text-heading-lg
-            </code>{" "}
+            </Text>{" "}
             over ad-hoc size/weight combos.
-          </p>
+          </Text>
 
           {textStyleGroups.map((group) => {
             const styles = textStyles.filter((s) => s.group === group);
             return (
               <div key={group} className="mb-8">
-                <h3 className="text-label-overline text-fg-muted mb-3">
+                <Text
+                  as="h3"
+                  variant={TextVariant.label}
+                  size={TextSize.overline}
+                  color={TextColor.muted}
+                  className="mb-3"
+                >
                   {group}
-                </h3>
+                </Text>
                 <div className="space-y-3">
                   {styles.map((style) => (
                     <SemanticStyleCard
@@ -423,88 +586,181 @@ function TypographyDoc({ theme }: { theme: ColorMode }) {
 
         {/* On-surface samples */}
         <section>
-          <h2 className="text-heading-md text-fg-default mb-2">
+          <Text
+            as="h2"
+            variant={TextVariant.heading}
+            size={TextSize.md}
+            className="mb-2"
+          >
             4. On-surface samples
-          </h2>
-          <p className="text-body-sm text-fg-muted mb-4">
+          </Text>
+          <Text
+            as="p"
+            variant={TextVariant.body}
+            size={TextSize.sm}
+            color={TextColor.muted}
+            className="mb-4"
+          >
             Common pairings of semantic type + foreground tokens. Specs call out
             face and weight.
-          </p>
+          </Text>
           <div className="space-y-3">
             <div className="border-border-default bg-bg-canvas rounded-lg border p-4">
-              <p className="text-heading-lg text-fg-default">
+              <Text as="p" variant={TextVariant.heading} size={TextSize.lg}>
                 Page title on canvas
-              </p>
-              <p className="text-fg-muted mt-1 text-sm font-medium">
+              </Text>
+              <Text
+                as="p"
+                color={TextColor.muted}
+                className="mt-1 text-sm font-medium"
+              >
                 Inter · semibold (600) · 20px · text-heading-lg +
                 text-fg-default
-              </p>
-              <p className="text-body-md text-fg-muted mt-2">
+              </Text>
+              <Text
+                as="p"
+                variant={TextVariant.body}
+                size={TextSize.md}
+                color={TextColor.muted}
+                className="mt-2"
+              >
                 Supporting copy — Inter · regular (400) · 14px · text-body-md +
                 text-fg-muted
-              </p>
+              </Text>
             </div>
             <div className="border-border-default bg-bg-surface rounded-lg border p-4">
-              <p className="text-heading-sm text-fg-default">
+              <Text as="p" variant={TextVariant.heading} size={TextSize.sm}>
                 Card title on surface
-              </p>
-              <p className="text-fg-muted mt-1 text-sm font-medium">
+              </Text>
+              <Text
+                as="p"
+                color={TextColor.muted}
+                className="mt-1 text-sm font-medium"
+              >
                 Inter · semibold (600) · 16px · text-heading-sm +
                 text-fg-default
-              </p>
-              <p className="text-body-sm text-fg-muted mt-2">
+              </Text>
+              <Text
+                as="p"
+                variant={TextVariant.body}
+                size={TextSize.sm}
+                color={TextColor.muted}
+                className="mt-2"
+              >
                 Meta — Inter · regular (400) · 12px · text-body-sm +
                 text-fg-muted
-              </p>
-              <code className="text-code-sm text-fg-default mt-2 block">
+              </Text>
+              <Text
+                as="code"
+                variant={TextVariant.code}
+                size={TextSize.sm}
+                className="mt-2 block"
+              >
                 src/pipelines/deploy.ts
-              </code>
-              <p className="text-fg-muted mt-1 text-sm font-medium">
+              </Text>
+              <Text
+                as="p"
+                color={TextColor.muted}
+                className="mt-1 text-sm font-medium"
+              >
                 JetBrains Mono · regular (400) · 14px · text-code-sm
-              </p>
+              </Text>
             </div>
             <div className="bg-bg-inverse rounded-lg p-4">
-              <p className="text-heading-sm text-fg-on-inverse">
+              <Text
+                as="p"
+                variant={TextVariant.heading}
+                size={TextSize.sm}
+                color={TextColor.onInverse}
+              >
                 Inverse surface
-              </p>
-              <p className="text-fg-on-inverse/90 mt-1 text-sm font-medium">
+              </Text>
+              <Text
+                as="p"
+                color={TextColor.onInverse}
+                className="text-fg-on-inverse/90 mt-1 text-sm font-medium"
+              >
                 Inter · semibold (600) · 16px · text-heading-sm +
                 text-fg-on-inverse
-              </p>
-              <p className="text-body-sm text-fg-on-inverse/80 mt-2">
+              </Text>
+              <Text
+                as="p"
+                variant={TextVariant.body}
+                size={TextSize.sm}
+                color={TextColor.onInverse}
+                className="text-fg-on-inverse/80 mt-2"
+              >
                 Tooltips and inverse chips use on-inverse text.
-              </p>
+              </Text>
             </div>
             <div className="flex flex-wrap gap-2">
               <div className="bg-accent-solid rounded-md px-3 py-2">
-                <span className="text-label-lg text-fg-on-accent">
+                <Text
+                  as="span"
+                  variant={TextVariant.label}
+                  size={TextSize.lg}
+                  color={TextColor.onAccent}
+                >
                   Primary action
-                </span>
-                <p className="text-fg-on-accent/90 mt-1 text-[11px] font-medium">
+                </Text>
+                <Text
+                  as="p"
+                  color={TextColor.onAccent}
+                  className="text-fg-on-accent/90 mt-1 text-[11px] font-medium"
+                >
                   Inter · medium (500) · 14px
-                </p>
+                </Text>
               </div>
               <div className="bg-danger-solid rounded-md px-3 py-2">
-                <span className="text-label-lg text-fg-on-danger">
+                <Text
+                  as="span"
+                  variant={TextVariant.label}
+                  size={TextSize.lg}
+                  color={TextColor.onDanger}
+                >
                   Destructive
-                </span>
-                <p className="text-fg-on-danger/90 mt-1 text-[11px] font-medium">
+                </Text>
+                <Text
+                  as="p"
+                  color={TextColor.onDanger}
+                  className="text-fg-on-danger/90 mt-1 text-[11px] font-medium"
+                >
                   Inter · medium (500) · 14px
-                </p>
+                </Text>
               </div>
               <div className="bg-warning-solid rounded-md px-3 py-2">
-                <span className="text-label-lg text-fg-on-warning">
+                <Text
+                  as="span"
+                  variant={TextVariant.label}
+                  size={TextSize.lg}
+                  color={TextColor.onWarning}
+                >
                   Warning
-                </span>
-                <p className="text-fg-on-warning/90 mt-1 text-[11px] font-medium">
+                </Text>
+                <Text
+                  as="p"
+                  color={TextColor.onWarning}
+                  className="text-fg-on-warning/90 mt-1 text-[11px] font-medium"
+                >
                   Inter · medium (500) · 14px
-                </p>
+                </Text>
               </div>
               <div className="bg-success-subtle rounded-md px-3 py-2">
-                <span className="text-label-md text-success-text">Healthy</span>
-                <p className="text-success-text mt-1 text-[11px] font-medium">
+                <Text
+                  as="span"
+                  variant={TextVariant.label}
+                  size={TextSize.md}
+                  color={TextColor.success}
+                >
+                  Healthy
+                </Text>
+                <Text
+                  as="p"
+                  color={TextColor.success}
+                  className="mt-1 text-[11px] font-medium"
+                >
                   Inter · medium (500) · 12px
-                </p>
+                </Text>
               </div>
             </div>
           </div>
