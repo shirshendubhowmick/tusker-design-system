@@ -1,10 +1,4 @@
-import {
-  CheckIcon,
-  CrossCircledIcon,
-  EnvelopeClosedIcon,
-  LockClosedIcon,
-  MagnifyingGlassIcon,
-} from "@radix-ui/react-icons";
+import { CheckIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import type { Decorator, Meta, StoryObj } from "@storybook/react";
 import type { ComponentProps } from "react";
 
@@ -155,73 +149,6 @@ export const Matrix: Story = {
             </div>
           );
         })}
-      </div>
-    );
-  },
-};
-
-export const Validation: Story = {
-  decorators: [PlaygroundFrame],
-  parameters: {
-    controls: { disable: true },
-  },
-  render: function ValidationStory() {
-    return (
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-1.5">
-          <label
-            htmlFor="input-email"
-            className="text-label-md text-fg-default"
-          >
-            Email
-          </label>
-          <Input
-            id="input-email"
-            type="email"
-            color="default"
-            placeholder="you@company.com"
-            defaultValue="you@company.com"
-            startIcon={<EnvelopeClosedIcon />}
-          />
-        </div>
-        <div className="flex flex-col gap-1.5">
-          <label
-            htmlFor="input-username"
-            className="text-label-md text-fg-default"
-          >
-            Username
-          </label>
-          <Input
-            id="input-username"
-            color="success"
-            defaultValue="ada-lovelace"
-            aria-describedby="username-ok"
-            endIcon={<CheckIcon />}
-          />
-          <span id="username-ok" className="text-body-sm text-success-text">
-            Available
-          </span>
-        </div>
-        <div className="flex flex-col gap-1.5">
-          <label
-            htmlFor="input-password"
-            className="text-label-md text-fg-default"
-          >
-            Password
-          </label>
-          <Input
-            id="input-password"
-            type="password"
-            color="danger"
-            defaultValue="123"
-            aria-describedby="password-err"
-            startIcon={<LockClosedIcon />}
-            endIcon={<CrossCircledIcon />}
-          />
-          <span id="password-err" className="text-body-sm text-danger-text">
-            Must be at least 8 characters
-          </span>
-        </div>
       </div>
     );
   },
