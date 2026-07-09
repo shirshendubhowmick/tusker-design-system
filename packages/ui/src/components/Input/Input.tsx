@@ -1,6 +1,11 @@
 import { type VariantProps, cva } from "class-variance-authority";
 import type { InputHTMLAttributes, ReactNode, Ref } from "react";
 
+import {
+  ControlSize,
+  controlGlyphSvgClass,
+  controlHeightClass,
+} from "../../tokens/control";
 import { cn } from "../../utils/cn";
 
 /**
@@ -8,7 +13,7 @@ import { cn } from "../../utils/cn";
  *
  * CVA dimensions:
  * - color — validation / intent: default, success, danger (error), warning
- * - size  — sm / md / lg (aligned with Button control heights)
+ * - size  — {@link ControlSize} (`sm` / `md` / `lg`, shared control scale)
  * - fullWidth — stretch to parent
  *
  * Icons: pass any `ReactNode` via `startIcon` / `endIcon`. Prefer
@@ -69,9 +74,9 @@ export const inputFieldVariants = cva(
         ],
       },
       size: {
-        sm: "h-8",
-        md: "h-9",
-        lg: "h-10",
+        [ControlSize.sm]: controlHeightClass.sm,
+        [ControlSize.md]: controlHeightClass.md,
+        [ControlSize.lg]: controlHeightClass.lg,
       },
       fullWidth: {
         true: "flex w-full",
@@ -80,7 +85,7 @@ export const inputFieldVariants = cva(
     },
     defaultVariants: {
       color: "default",
-      size: "md",
+      size: ControlSize.md,
       fullWidth: true,
     },
   },
@@ -98,9 +103,9 @@ export const inputControlVariants = cva(
   {
     variants: {
       size: {
-        sm: "h-full px-2.5 text-body-sm",
-        md: "h-full px-3 text-body-md",
-        lg: "h-full px-3.5 text-body-md",
+        [ControlSize.sm]: "h-full px-2.5 text-body-sm",
+        [ControlSize.md]: "h-full px-3 text-body-md",
+        [ControlSize.lg]: "h-full px-3.5 text-body-md",
       },
       hasStartIcon: {
         true: "",
@@ -112,15 +117,15 @@ export const inputControlVariants = cva(
       },
     },
     compoundVariants: [
-      { size: "sm", hasStartIcon: true, class: "pl-8" },
-      { size: "md", hasStartIcon: true, class: "pl-9" },
-      { size: "lg", hasStartIcon: true, class: "pl-10" },
-      { size: "sm", hasEndIcon: true, class: "pr-8" },
-      { size: "md", hasEndIcon: true, class: "pr-9" },
-      { size: "lg", hasEndIcon: true, class: "pr-10" },
+      { size: ControlSize.sm, hasStartIcon: true, class: "pl-8" },
+      { size: ControlSize.md, hasStartIcon: true, class: "pl-9" },
+      { size: ControlSize.lg, hasStartIcon: true, class: "pl-10" },
+      { size: ControlSize.sm, hasEndIcon: true, class: "pr-8" },
+      { size: ControlSize.md, hasEndIcon: true, class: "pr-9" },
+      { size: ControlSize.lg, hasEndIcon: true, class: "pr-10" },
     ],
     defaultVariants: {
-      size: "md",
+      size: ControlSize.md,
       hasStartIcon: false,
       hasEndIcon: false,
     },
@@ -139,9 +144,9 @@ const iconSlotVariants = cva(
         end: "right-0",
       },
       size: {
-        sm: "px-2.5 [&_svg]:size-3.5",
-        md: "px-3 [&_svg]:size-4",
-        lg: "px-3.5 [&_svg]:size-4",
+        [ControlSize.sm]: `px-2.5 ${controlGlyphSvgClass.sm}`,
+        [ControlSize.md]: `px-3 ${controlGlyphSvgClass.md}`,
+        [ControlSize.lg]: `px-3.5 ${controlGlyphSvgClass.lg}`,
       },
       color: {
         default: "text-fg-muted",
@@ -152,7 +157,7 @@ const iconSlotVariants = cva(
     },
     defaultVariants: {
       side: "start",
-      size: "md",
+      size: ControlSize.md,
       color: "default",
     },
   },

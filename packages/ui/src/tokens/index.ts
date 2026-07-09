@@ -76,3 +76,15 @@ export {
   type ShadowGroup,
   type ShadowModeValues,
 } from "./shadows";
+
+export {
+  ControlSize,
+  controlSizeOrder,
+  controlHeightClass,
+  controlBoxClass,
+  controlBoxLockClass,
+  controlGlyphClass,
+  controlGlyphSvgClass,
+  controlIconOnlyGlyphSvgClass,
+  resolveControlSize,
+} from "./control";

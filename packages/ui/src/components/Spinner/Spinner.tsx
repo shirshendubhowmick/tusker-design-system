@@ -1,18 +1,18 @@
 import type { Ref, SVGAttributes } from "react";
 
+import {
+  ControlSize,
+  type ControlSize as ControlSizeToken,
+  controlGlyphClass,
+  resolveControlSize,
+} from "../../tokens/control";
 import { cn } from "../../utils/cn";
 
-/**
- * Size token → Tailwind size utility.
- * Keys (`sm` / `md` / `lg`) are the public size API; values are the glyph classes.
- */
-export const SpinnerSize = {
-  sm: "size-3.5",
-  md: "size-4",
-  lg: "size-4.5",
-} as const;
+/** @deprecated Prefer {@link ControlSize} — alias kept for call-site stability. */
+export type SpinnerSize = ControlSizeToken;
 
-export type SpinnerSize = keyof typeof SpinnerSize;
+/** @deprecated Prefer {@link ControlSize} */
+export const SpinnerSize = ControlSize;
 
 export interface SpinnerProps extends Omit<
   SVGAttributes<SVGSVGElement>,
@@ -20,23 +20,16 @@ export interface SpinnerProps extends Omit<
 > {
   ref?: Ref<SVGSVGElement>;
   /**
-   * Glyph size (`sm` | `md` | `lg`).
+   * Glyph size ({@link ControlSize}).
    * @default "md"
    */
-  size?: SpinnerSize | null;
+  size?: ControlSizeToken | null;
   /**
    * Accessible name when the spinner is the sole loading indicator.
    * When omitted, treated as decorative (`aria-hidden`).
    */
   label?: string;
   className?: string;
-}
-
-function resolveSpinnerSize(size: SpinnerProps["size"]): SpinnerSize {
-  if (size != null && size in SpinnerSize) {
-    return size;
-  }
-  return "md";
 }
 
 /**
@@ -49,21 +42,26 @@ function resolveSpinnerSize(size: SpinnerProps["size"]): SpinnerSize {
  * @example
  * ```tsx
  * import { Spinner } from "@design-system/ui/Spinner";
+ * import { ControlSize } from "@design-system/ui/tokens";
  *
- * <Spinner size="sm" />
+ * <Spinner size={ControlSize.sm} />
  * <Spinner label="Loading results" className="text-accent-text" />
  * ```
  */
 export function Spinner(props: SpinnerProps) {
   const { size, label, className, ref, ...svgProps } = props;
-  const sizeKey = resolveSpinnerSize(size);
+  const sizeKey = resolveControlSize(size);
   const decorative = label == null || label === "";
 
   return (
     <svg
       {...svgProps}
       ref={ref}
-      className={cn("shrink-0 animate-spin", SpinnerSize[sizeKey], className)}
+      className={cn(
+        "shrink-0 animate-spin",
+        controlGlyphClass[sizeKey],
+        className,
+      )}
       viewBox="0 0 24 24"
       fill="none"
       role={decorative ? undefined : "status"}

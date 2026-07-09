@@ -1,5 +1,11 @@
 import type { ReactNode, Ref } from "react";
 
+import {
+  ControlSize,
+  type ControlSize as ControlSizeToken,
+  controlBoxLockClass,
+  controlIconOnlyGlyphSvgClass,
+} from "../../tokens/control";
 import { cn } from "../../utils/cn";
 import { Button, type ButtonProps } from "../Button";
 
@@ -19,36 +25,9 @@ import { Button, type ButtonProps } from "../Button";
  * </IconButton>
  * ```
  */
-/**
- * Square geometry with `!` so we win over Button size padding (`h-*`/`px-*`)
- * and tertiary bare height collapse (`!h-auto !px-0 !py-0`).
- * Without this, tertiary often ends up tall (fixed height) and tight horizontally.
- */
-const iconButtonSizeClass = {
-  /** Matches Button sm height (32px) */
-  sm: [
-    "inline-flex shrink-0 items-center justify-center",
-    "!size-8 !min-h-8 !min-w-8 !max-h-8 !max-w-8",
-    "!gap-0 !p-0",
-    "[&_svg]:size-3.5",
-  ].join(" "),
-  /** Matches Button md height (36px) */
-  md: [
-    "inline-flex shrink-0 items-center justify-center",
-    "!size-9 !min-h-9 !min-w-9 !max-h-9 !max-w-9",
-    "!gap-0 !p-0",
-    "[&_svg]:size-4",
-  ].join(" "),
-  /** Matches Button lg height (40px) */
-  lg: [
-    "inline-flex shrink-0 items-center justify-center",
-    "!size-10 !min-h-10 !min-w-10 !max-h-10 !max-w-10",
-    "!gap-0 !p-0",
-    "[&_svg]:size-5",
-  ].join(" "),
-} as const;
 
-export type IconButtonSize = keyof typeof iconButtonSizeClass;
+/** @deprecated Prefer {@link ControlSize} — alias kept for call-site stability. */
+export type IconButtonSize = ControlSizeToken;
 
 export type IconButtonProps = Omit<
   ButtonProps,
@@ -62,15 +41,21 @@ export type IconButtonProps = Omit<
    */
   "aria-label": string;
   /**
-   * Square control size (matches Button heights).
+   * Square control size ({@link ControlSize} — matches shared control heights).
    * @default "md"
    */
-  "size"?: IconButtonSize;
+  "size"?: ControlSizeToken;
   "ref"?: Ref<HTMLButtonElement>;
 };
 
 export function IconButton(props: IconButtonProps) {
-  const { children, className, size = "md", loading, ...buttonProps } = props;
+  const {
+    children,
+    className,
+    size = ControlSize.md,
+    loading,
+    ...buttonProps
+  } = props;
 
   return (
     <Button
@@ -78,7 +63,12 @@ export function IconButton(props: IconButtonProps) {
       loading={loading}
       fullWidth={false}
       size={size}
-      className={cn(iconButtonSizeClass[size], className)}
+      className={cn(
+        "inline-flex shrink-0 items-center justify-center gap-0! p-0!",
+        controlBoxLockClass[size],
+        controlIconOnlyGlyphSvgClass[size],
+        className,
+      )}
       data-slot="icon-button"
     >
       {/* Icon-only: swap glyph for spinner — do not stack both. */}

@@ -1,6 +1,11 @@
 import { type VariantProps, cva } from "class-variance-authority";
 import type { ButtonHTMLAttributes, ReactNode, Ref } from "react";
 
+import {
+  ControlSize,
+  controlHeightClass,
+  resolveControlSize,
+} from "../../tokens/control";
 import { cn } from "../../utils/cn";
 import { Spinner } from "../Spinner";
 
@@ -10,7 +15,7 @@ import { Spinner } from "../Spinner";
  * CVA dimensions:
  * - variant   — visual treatment: primary (solid), secondary (outline), tertiary (ghost)
  * - color     — semantic intent: primary (brand), danger, success, warning, info
- * - size      — sm / md / lg
+ * - size      — {@link ControlSize} (`sm` / `md` / `lg`)
  * - fullWidth — stretch to container (not applied for tertiary)
  * - bare      — tertiary only: no padding / fixed height (text-only control)
  *
@@ -46,11 +51,11 @@ export const buttonVariants = cva(
       },
       size: {
         /** Dense controls, table rows, compact toolbars */
-        sm: "h-8 px-2.5 text-label-md",
+        [ControlSize.sm]: `${controlHeightClass.sm} px-2.5 text-label-md`,
         /** Default product control */
-        md: "h-9 px-3 text-label-lg",
+        [ControlSize.md]: `${controlHeightClass.md} px-3 text-label-lg`,
         /** Page-level CTAs, empty states */
-        lg: "h-10 px-4 text-label-lg",
+        [ControlSize.lg]: `${controlHeightClass.lg} px-4 text-label-lg`,
       },
       /**
        * fullWidth needs a block-level flex box so `w-full` fills the parent.
@@ -281,7 +286,7 @@ export const buttonVariants = cva(
     defaultVariants: {
       variant: "primary",
       color: "primary",
-      size: "md",
+      size: ControlSize.md,
       fullWidth: false,
       bare: false,
     },
@@ -361,7 +366,7 @@ export function Button(props: ButtonProps) {
       )}
       data-loading={loading ? "true" : undefined}
     >
-      {loading ? <Spinner size={props.size} /> : null}
+      {loading ? <Spinner size={resolveControlSize(props.size)} /> : null}
       {label}
     </button>
   );

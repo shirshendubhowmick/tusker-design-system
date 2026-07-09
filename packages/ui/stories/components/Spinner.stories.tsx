@@ -1,20 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import {
-  Spinner,
-  SpinnerSize,
-  type SpinnerSize as SpinnerSizeKey,
-} from "../../src/components/Spinner";
+import { Spinner } from "../../src/components/Spinner";
 import {
   Text,
   TextColor,
   TextSize,
   TextVariant,
 } from "../../src/components/Text";
+import { ControlSize, controlSizeOrder } from "../../src/tokens/control";
 import { cn } from "../../src/utils/cn";
 import { docsDefault } from "../utils/docs";
-
-const SIZES = Object.keys(SpinnerSize) as SpinnerSizeKey[];
 
 const meta = {
   title: "Components/Spinner",
@@ -26,9 +21,9 @@ const meta = {
   argTypes: {
     size: {
       control: "select",
-      options: SIZES,
-      description: "Glyph size — keys of `SpinnerSize`.",
-      ...docsDefault("md", { type: "SpinnerSize" }),
+      options: [...controlSizeOrder],
+      description: "Glyph size (`ControlSize` / shared control scale).",
+      ...docsDefault("md", { type: "ControlSize" }),
     },
     label: {
       control: "text",
@@ -42,7 +37,7 @@ const meta = {
     },
   },
   args: {
-    size: "md",
+    size: ControlSize.md,
     className: "text-fg-default",
   },
 } satisfies Meta<typeof Spinner>;
@@ -90,7 +85,7 @@ export const Matrix: Story = {
           >
             size →
           </Text>
-          {SIZES.map(function renderSizeHeader(size) {
+          {controlSizeOrder.map(function renderSizeHeader(size) {
             return (
               <Text
                 key={size}
@@ -120,7 +115,7 @@ export const Matrix: Story = {
               >
                 {swatch.label}
               </Text>
-              {SIZES.map(function renderSizeCell(size) {
+              {controlSizeOrder.map(function renderSizeCell(size) {
                 return (
                   <div
                     key={size}
