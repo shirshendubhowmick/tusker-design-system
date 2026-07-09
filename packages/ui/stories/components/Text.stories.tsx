@@ -6,6 +6,7 @@ import {
   TextSize,
   TextVariant,
 } from "../../src/components/Text";
+import { docsDefault } from "../utils/docs";
 
 const VARIANTS = Object.values(TextVariant);
 const SIZES = Object.values(TextSize);
@@ -46,25 +47,25 @@ const meta = {
       control: "select",
       options: VARIANTS,
       description: "Semantic typography group (`TextVariant.*`).",
-      table: { type: { summary: "TextVariant" } },
+      ...docsDefault("body", { type: "TextVariant" }),
     },
     size: {
       control: "select",
       options: SIZES,
       description:
         "Step within the variant (`TextSize.*`, e.g. heading + lg → text-heading-lg).",
-      table: { type: { summary: "TextSize" } },
+      ...docsDefault("md", { type: "TextSize" }),
     },
     color: {
       control: "select",
       options: COLORS,
       description: "Semantic foreground color (`TextColor.*`).",
-      table: { type: { summary: "TextColor" } },
+      ...docsDefault("default", { type: "TextColor" }),
     },
     children: {
       control: "text",
       description: "Text content (`ReactNode`).",
-      table: { type: { summary: "ReactNode" } },
+      ...docsDefault("—", { type: "ReactNode" }),
     },
   },
   args: {

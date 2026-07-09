@@ -9,6 +9,7 @@ import type { Decorator, Meta, StoryObj } from "@storybook/react";
 import type { ComponentProps } from "react";
 
 import { FormField } from "../../src/components/FormField";
+import { docsDefault } from "../utils/docs";
 
 const PlaygroundFrame: Decorator = function PlaygroundFrame(Story) {
   return (
@@ -36,45 +37,63 @@ const meta = {
       options: ["default", "success", "danger", "warning"],
       description:
         "Shared by the input chrome and message text. Use `danger` for errors.",
+      ...docsDefault("default"),
     },
     size: {
       control: "select",
       options: ["sm", "md", "lg"],
+      ...docsDefault("md"),
     },
-    fullWidth: { control: "boolean" },
+    fullWidth: {
+      control: "boolean",
+      ...docsDefault("true"),
+    },
     type: {
       control: "select",
       options: ["text", "email", "password", "search", "url", "tel", "number"],
+      ...docsDefault("text"),
     },
-    disabled: { control: "boolean" },
-    readOnly: { control: "boolean" },
-    // Playground uses a text control for convenience; the real prop type is ReactNode
-    // (icons, emphasis, links, etc.). Force the Args table to show ReactNode, not string.
+    disabled: {
+      control: "boolean",
+      ...docsDefault("false"),
+    },
+    readOnly: {
+      control: "boolean",
+      ...docsDefault("false"),
+    },
     label: {
       control: "text",
       description:
         "Field label. Type is `ReactNode` (string is fine; also supports markup, badges, required markers).",
-      table: { type: { summary: "ReactNode" } },
+      ...docsDefault("—", { type: "ReactNode" }),
     },
     message: {
       control: "text",
       description:
         "Helper or validation content under the control. Type is `ReactNode` (string or rich content).",
-      table: { type: { summary: "ReactNode" } },
+      ...docsDefault("undefined", { type: "ReactNode" }),
     },
     placeholder: { control: "text" },
     showStartIcon: {
       name: "startIcon",
       control: "boolean",
       description: "Leading MagnifyingGlassIcon (demo)",
+      ...docsDefault("false"),
     },
     showEndIcon: {
       name: "endIcon",
       control: "boolean",
       description: "Trailing CheckIcon (demo)",
+      ...docsDefault("false"),
     },
-    startIcon: { table: { disable: true }, control: false },
-    endIcon: { table: { disable: true }, control: false },
+    startIcon: {
+      table: { disable: true, type: { summary: "ReactNode" } },
+      control: false,
+    },
+    endIcon: {
+      table: { disable: true, type: { summary: "ReactNode" } },
+      control: false,
+    },
   },
   args: {
     label: "Email",

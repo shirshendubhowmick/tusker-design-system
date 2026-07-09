@@ -122,17 +122,17 @@ interface TextOwnProps {
   as: ElementType;
   /**
    * Semantic style group.
-   * @default TextVariant.body
+   * @default "body"
    */
   variant?: TextVariant;
   /**
    * Step within `variant` (e.g. `TextVariant.heading` + `TextSize.lg` → `text-heading-lg`).
-   * @default TextSize.md (invalid pairs fall back to that variant’s md)
+   * @default "md"
    */
   size?: TextSize;
   /**
    * Semantic text color.
-   * @default TextColor.default (`text-fg-default`)
+   * @default "default"
    */
   color?: TextColor;
   children?: ReactNode;

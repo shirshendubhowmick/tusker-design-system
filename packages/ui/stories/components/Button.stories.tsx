@@ -1,6 +1,7 @@
 import type { Decorator, Meta, StoryObj } from "@storybook/react";
 
 import { Button } from "../../src/components/Button";
+import { docsDefault } from "../utils/docs";
 
 /**
  * Fixed-width frame so `fullWidth` has a real parent width to fill.
@@ -25,26 +26,41 @@ const meta = {
     variant: {
       control: "select",
       options: ["primary", "secondary", "tertiary"],
+      ...docsDefault("primary"),
     },
     color: {
       control: "select",
       options: ["primary", "danger", "success", "warning", "info"],
+      ...docsDefault("primary"),
     },
     size: {
       control: "select",
       options: ["sm", "md", "lg"],
+      ...docsDefault("md"),
     },
     fullWidth: {
       control: "boolean",
       description: "Stretch to parent width (not used for tertiary)",
+      ...docsDefault("false"),
     },
     bare: {
       control: "boolean",
       description: "Tertiary only: no padding — text-only control",
+      ...docsDefault("false"),
     },
-
-    disabled: { control: "boolean" },
-    children: { control: "text" },
+    type: {
+      control: "select",
+      options: ["button", "submit", "reset"],
+      ...docsDefault("button"),
+    },
+    disabled: {
+      control: "boolean",
+      ...docsDefault("false"),
+    },
+    children: {
+      control: "text",
+      ...docsDefault("—", { type: "ReactNode" }),
+    },
   },
   args: {
     children: "Button",
@@ -54,6 +70,7 @@ const meta = {
     fullWidth: false,
     bare: false,
     disabled: false,
+    type: "button",
   },
 } satisfies Meta<typeof Button>;
 

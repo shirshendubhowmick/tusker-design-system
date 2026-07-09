@@ -3,6 +3,7 @@ import type { Decorator, Meta, StoryObj } from "@storybook/react";
 import type { ComponentProps } from "react";
 
 import { Input } from "../../src/components/Input";
+import { docsDefault } from "../utils/docs";
 
 /**
  * Fixed-width frame so fullWidth inputs have a real parent width.
@@ -35,34 +36,61 @@ const meta = {
       options: ["default", "success", "danger", "warning"],
       description:
         "Validation / intent. Use `danger` for error states (shares danger semantic tokens).",
+      ...docsDefault("default"),
     },
     size: {
       control: "select",
       options: ["sm", "md", "lg"],
+      ...docsDefault("md"),
     },
     fullWidth: {
       control: "boolean",
+      ...docsDefault("true"),
     },
     type: {
       control: "select",
       options: ["text", "email", "password", "search", "url", "tel", "number"],
+      ...docsDefault("text"),
     },
-    disabled: { control: "boolean" },
-    readOnly: { control: "boolean" },
-    placeholder: { control: "text" },
+    disabled: {
+      control: "boolean",
+      ...docsDefault("false"),
+    },
+    readOnly: {
+      control: "boolean",
+      ...docsDefault("false"),
+    },
+    placeholder: {
+      control: "text",
+      ...docsDefault("undefined", { type: "string" }),
+    },
     showStartIcon: {
       name: "startIcon",
       control: "boolean",
       description:
         "Leading icon (demo: MagnifyingGlassIcon from @radix-ui/react-icons)",
+      ...docsDefault("false"),
     },
     showEndIcon: {
       name: "endIcon",
       control: "boolean",
       description: "Trailing icon (demo: CheckIcon from @radix-ui/react-icons)",
+      ...docsDefault("false"),
     },
-    startIcon: { table: { disable: true }, control: false },
-    endIcon: { table: { disable: true }, control: false },
+    startIcon: {
+      table: {
+        disable: true,
+        type: { summary: "ReactNode" },
+      },
+      control: false,
+    },
+    endIcon: {
+      table: {
+        disable: true,
+        type: { summary: "ReactNode" },
+      },
+      control: false,
+    },
   },
   args: {
     placeholder: "Enter value…",
