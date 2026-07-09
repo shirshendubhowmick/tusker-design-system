@@ -90,9 +90,7 @@ describe("IconButton", () => {
 
     expect(button).toBeDisabled();
     expect(button).toHaveAttribute("aria-busy", "true");
-    expect(
-      button.querySelector('[data-slot="button-spinner"]'),
-    ).toBeInTheDocument();
+    expect(button.querySelector('[data-slot="spinner"]')).toBeInTheDocument();
     expect(screen.queryByTestId("icon")).not.toBeInTheDocument();
   });
 

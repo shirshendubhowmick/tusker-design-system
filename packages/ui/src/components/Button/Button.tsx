@@ -2,45 +2,7 @@ import { type VariantProps, cva } from "class-variance-authority";
 import type { ButtonHTMLAttributes, ReactNode, Ref } from "react";
 
 import { cn } from "../../utils/cn";
-
-const spinnerSizeClass = {
-  sm: "size-3.5",
-  md: "size-4",
-  lg: "size-4.5",
-} as const;
-
-/** Inline spinner — inherits `currentColor` from the button variant. */
-function ButtonSpinner({
-  size = "md",
-}: {
-  size?: NonNullable<ButtonVariantProps["size"]> | null;
-}) {
-  const dim = spinnerSizeClass[size ?? "md"] ?? spinnerSizeClass.md;
-
-  return (
-    <svg
-      className={cn("shrink-0 animate-spin", dim)}
-      viewBox="0 0 24 24"
-      fill="none"
-      aria-hidden
-      data-slot="button-spinner"
-    >
-      <circle
-        className="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        strokeWidth="4"
-      />
-      <path
-        className="opacity-75"
-        fill="currentColor"
-        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h2zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-      />
-    </svg>
-  );
-}
+import { Spinner, SpinnerSize } from "../Spinner";
 
 /**
  * Button styles — product variants on design-system semantic tokens.
@@ -399,7 +361,15 @@ export function Button(props: ButtonProps) {
       )}
       data-loading={loading ? "true" : undefined}
     >
-      {loading ? <ButtonSpinner size={props.size} /> : null}
+      {loading ? (
+        <Spinner
+          size={
+            props.size === "sm" || props.size === "lg"
+              ? props.size
+              : SpinnerSize.md
+          }
+        />
+      ) : null}
       {label}
     </button>
   );

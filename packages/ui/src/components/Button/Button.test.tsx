@@ -347,9 +347,7 @@ describe("Button", () => {
     expect(button).toBeDisabled();
     expect(button).toHaveAttribute("aria-busy", "true");
     expect(button).toHaveAttribute("data-loading", "true");
-    expect(
-      button.querySelector('[data-slot="button-spinner"]'),
-    ).toBeInTheDocument();
+    expect(button.querySelector('[data-slot="spinner"]')).toBeInTheDocument();
     expect(button).toHaveTextContent("Save");
     expectHasClasses(button.className, ["pointer-events-none"]);
   });
