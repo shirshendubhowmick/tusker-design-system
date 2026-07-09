@@ -80,6 +80,22 @@ describe("IconButton", () => {
     ]);
   });
 
+  it("replaces the icon with a spinner when loading", () => {
+    render(
+      <IconButton aria-label="Refresh" loading>
+        <MagnifyingGlassIcon data-testid="icon" />
+      </IconButton>,
+    );
+    const button = screen.getByRole("button", { name: "Refresh" });
+
+    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute("aria-busy", "true");
+    expect(
+      button.querySelector('[data-slot="button-spinner"]'),
+    ).toBeInTheDocument();
+    expect(screen.queryByTestId("icon")).not.toBeInTheDocument();
+  });
+
   it("keeps tertiary (and bare) square — not tall/narrow", () => {
     const { rerender } = render(
       <IconButton aria-label="Ghost" variant="tertiary">

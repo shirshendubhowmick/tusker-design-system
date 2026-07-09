@@ -1,7 +1,46 @@
 import { type VariantProps, cva } from "class-variance-authority";
-import type { ButtonHTMLAttributes, Ref } from "react";
+import type { ButtonHTMLAttributes, ReactNode, Ref } from "react";
 
 import { cn } from "../../utils/cn";
+
+const spinnerSizeClass = {
+  sm: "size-3.5",
+  md: "size-4",
+  lg: "size-4.5",
+} as const;
+
+/** Inline spinner — inherits `currentColor` from the button variant. */
+function ButtonSpinner({
+  size = "md",
+}: {
+  size?: NonNullable<ButtonVariantProps["size"]> | null;
+}) {
+  const dim = spinnerSizeClass[size ?? "md"] ?? spinnerSizeClass.md;
+
+  return (
+    <svg
+      className={cn("shrink-0 animate-spin", dim)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      data-slot="button-spinner"
+    >
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="4"
+      />
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h2zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      />
+    </svg>
+  );
+}
 
 /**
  * Button styles — product variants on design-system semantic tokens.
@@ -294,9 +333,20 @@ export interface ButtonProps
     Omit<ButtonHTMLAttributes<HTMLButtonElement>, "color">,
     ButtonVariantProps {
   ref?: Ref<HTMLButtonElement>;
+  /**
+   * Shows a spinner, sets `aria-busy`, and disables interaction.
+   * Label children stay mounted so the control width does not jump.
+   * @default false
+   */
+  loading?: boolean;
+  /**
+   * Optional content when `loading` is true.
+   * Defaults to existing `children` (spinner is prepended either way).
+   */
+  loadingText?: ReactNode;
 }
 
-/** Strip CVA-only props so they are not forwarded to the DOM. */
+/** Strip CVA-only / component props so they are not forwarded to the DOM. */
 function getButtonDomProps(
   props: ButtonProps,
 ): ButtonHTMLAttributes<HTMLButtonElement> {
@@ -307,6 +357,10 @@ function getButtonDomProps(
     fullWidth: _fullWidth,
     bare: _bare,
     className: _className,
+    children: _children,
+    loading: _loading,
+    loadingText: _loadingText,
+    ref: _ref,
     ...domProps
   } = props;
 
@@ -319,11 +373,18 @@ export function Button(props: ButtonProps) {
   const bare = props.bare === true;
   const isTertiary = props.variant === "tertiary";
   const fullWidth = isTertiary || bare ? false : props.fullWidth;
+  const loading = props.loading === true;
+  const disabled = loading || props.disabled === true;
+  const label =
+    loading && props.loadingText != null ? props.loadingText : props.children;
 
   return (
     <button
       {...domProps}
+      ref={props.ref}
       type={props.type ?? "button"}
+      disabled={disabled}
+      aria-busy={loading || undefined}
       className={cn(
         buttonVariants({
           variant: props.variant,
@@ -332,10 +393,14 @@ export function Button(props: ButtonProps) {
           fullWidth,
           bare,
         }),
+        // Loading uses disabled styles; block pointer events while busy.
+        loading && "pointer-events-none",
         props.className,
       )}
+      data-loading={loading ? "true" : undefined}
     >
-      {props.children}
+      {loading ? <ButtonSpinner size={props.size} /> : null}
+      {label}
     </button>
   );
 }

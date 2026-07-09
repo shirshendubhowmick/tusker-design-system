@@ -63,6 +63,17 @@ const meta = {
       control: "boolean",
       ...docsDefault("false"),
     },
+    loading: {
+      control: "boolean",
+      description:
+        "Shows a spinner, sets aria-busy, and disables the control. Label stays mounted to avoid width jump.",
+      ...docsDefault("false"),
+    },
+    loadingText: {
+      control: "text",
+      description: "Optional label while loading (defaults to children).",
+      ...docsDefault("—", { type: "ReactNode" }),
+    },
     children: {
       control: "text",
       ...docsDefault("—", { type: "ReactNode" }),
@@ -76,6 +87,7 @@ const meta = {
     fullWidth: false,
     bare: false,
     disabled: false,
+    loading: false,
     type: "button",
   },
 } satisfies Meta<typeof Button>;
@@ -100,6 +112,8 @@ export const Matrix: Story = {
     size: { table: { disable: true } },
     fullWidth: { table: { disable: true } },
     disabled: { table: { disable: true } },
+    loading: { table: { disable: true } },
+    loadingText: { table: { disable: true } },
     children: { table: { disable: true } },
   },
   parameters: {
@@ -151,6 +165,9 @@ export const Matrix: Story = {
                       <Button variant={variant} color={color} disabled>
                         disabled
                       </Button>
+                      <Button variant={variant} color={color} loading>
+                        loading
+                      </Button>
                     </div>
                   );
                 })}
@@ -158,6 +175,58 @@ export const Matrix: Story = {
             </div>
           );
         })}
+      </div>
+    );
+  },
+};
+
+/**
+ * Loading always shows a spinner.
+ * - Default: keep `children` so width stays stable ("Save changes").
+ * - `loadingText`: swap the label while busy ("Saving…").
+ */
+export const Loading: Story = {
+  argTypes: {
+    loading: { table: { disable: true } },
+    loadingText: { table: { disable: true } },
+    children: { table: { disable: true } },
+  },
+  parameters: {
+    controls: { disable: true },
+  },
+  render: function LoadingStory() {
+    return (
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <Text
+            as="p"
+            variant={TextVariant.label}
+            size={TextSize.sm}
+            color={TextColor.muted}
+          >
+            loading only — same label as idle (stable width)
+          </Text>
+          <div className="flex flex-wrap items-center gap-3">
+            <Button>Save changes</Button>
+            <Button loading>Save changes</Button>
+          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Text
+            as="p"
+            variant={TextVariant.label}
+            size={TextSize.sm}
+            color={TextColor.muted}
+          >
+            loading + loadingText — replace label while busy
+          </Text>
+          <div className="flex flex-wrap items-center gap-3">
+            <Button>Save changes</Button>
+            <Button loading loadingText="Saving…">
+              Save changes
+            </Button>
+          </div>
+        </div>
       </div>
     );
   },

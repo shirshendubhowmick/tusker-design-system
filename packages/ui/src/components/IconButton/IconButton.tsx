@@ -70,17 +70,19 @@ export type IconButtonProps = Omit<
 };
 
 export function IconButton(props: IconButtonProps) {
-  const { children, className, size = "md", ...buttonProps } = props;
+  const { children, className, size = "md", loading, ...buttonProps } = props;
 
   return (
     <Button
       {...buttonProps}
+      loading={loading}
       fullWidth={false}
       size={size}
       className={cn(iconButtonSizeClass[size], className)}
       data-slot="icon-button"
     >
-      {children}
+      {/* Icon-only: swap glyph for spinner — do not stack both. */}
+      {loading ? null : children}
     </Button>
   );
 }

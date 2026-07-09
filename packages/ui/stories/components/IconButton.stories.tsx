@@ -61,6 +61,11 @@ const meta = {
       control: "boolean",
       ...docsDefault("false"),
     },
+    "loading": {
+      control: "boolean",
+      description: "Replaces the icon with a spinner and disables the control.",
+      ...docsDefault("false"),
+    },
     "aria-label": {
       control: "text",
       description: "Required accessible name for the icon-only control.",
@@ -84,6 +89,7 @@ const meta = {
     "size": "md",
     "bare": false,
     "disabled": false,
+    "loading": false,
     "icon": "search",
   },
 } satisfies Meta<IconButtonStoryArgs>;
@@ -173,6 +179,96 @@ export const Matrix: Story = {
             </div>
           );
         })}
+      </div>
+    );
+  },
+};
+
+/**
+ * Loading replaces the icon with a spinner (square hit target stays the same).
+ * Idle vs busy across sizes and a few variants.
+ */
+export const Loading: Story = {
+  parameters: {
+    controls: { disable: true },
+  },
+  render: function LoadingStory() {
+    return (
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <Text
+            as="p"
+            variant={TextVariant.label}
+            size={TextSize.sm}
+            color={TextColor.muted}
+          >
+            idle vs loading (icon → spinner)
+          </Text>
+          <div className="flex flex-wrap items-center gap-3">
+            <IconButton aria-label="Refresh">
+              <MagnifyingGlassIcon />
+            </IconButton>
+            <IconButton aria-label="Refresh" loading>
+              <MagnifyingGlassIcon />
+            </IconButton>
+          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Text
+            as="p"
+            variant={TextVariant.label}
+            size={TextSize.sm}
+            color={TextColor.muted}
+          >
+            sizes
+          </Text>
+          <div className="flex flex-wrap items-center gap-3">
+            {SIZES.map(function renderSize(size) {
+              return (
+                <IconButton
+                  key={size}
+                  aria-label={`Loading ${size}`}
+                  size={size}
+                  loading
+                >
+                  <PlusIcon />
+                </IconButton>
+              );
+            })}
+          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Text
+            as="p"
+            variant={TextVariant.label}
+            size={TextSize.sm}
+            color={TextColor.muted}
+          >
+            variants
+          </Text>
+          <div className="flex flex-wrap items-center gap-3">
+            {VARIANTS.map(function renderVariant(variant) {
+              return (
+                <IconButton
+                  key={variant}
+                  aria-label={`Loading ${variant}`}
+                  variant={variant}
+                  loading
+                >
+                  <PlusIcon />
+                </IconButton>
+              );
+            })}
+            <IconButton
+              aria-label="Loading danger"
+              variant="secondary"
+              color="danger"
+              loading
+            >
+              <TrashIcon />
+            </IconButton>
+          </div>
+        </div>
       </div>
     );
   },

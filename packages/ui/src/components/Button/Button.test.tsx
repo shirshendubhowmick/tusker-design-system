@@ -211,6 +211,8 @@ describe("Button", () => {
         size="sm"
         fullWidth
         bare={false}
+        loading={false}
+        loadingText="Working…"
         data-testid="btn"
       >
         Label
@@ -223,6 +225,8 @@ describe("Button", () => {
     expect(button).not.toHaveAttribute("size");
     expect(button).not.toHaveAttribute("fullWidth");
     expect(button).not.toHaveAttribute("bare");
+    expect(button).not.toHaveAttribute("loading");
+    expect(button).not.toHaveAttribute("loadingText");
   });
 
   it("merges consumer className with variant classes", () => {
@@ -334,5 +338,45 @@ describe("Button", () => {
 
     expect(ref.current).toBeInstanceOf(HTMLButtonElement);
     expect(ref.current).toBe(screen.getByRole("button", { name: "With ref" }));
+  });
+
+  it("shows a spinner, keeps the label, and marks busy when loading", () => {
+    render(<Button loading>Save</Button>);
+    const button = screen.getByRole("button", { name: "Save" });
+
+    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute("aria-busy", "true");
+    expect(button).toHaveAttribute("data-loading", "true");
+    expect(
+      button.querySelector('[data-slot="button-spinner"]'),
+    ).toBeInTheDocument();
+    expect(button).toHaveTextContent("Save");
+    expectHasClasses(button.className, ["pointer-events-none"]);
+  });
+
+  it("uses loadingText when provided", () => {
+    render(
+      <Button loading loadingText="Saving…">
+        Save
+      </Button>,
+    );
+    const button = screen.getByRole("button", { name: "Saving…" });
+
+    expect(button).toHaveTextContent("Saving…");
+    expect(button).not.toHaveTextContent("Save");
+  });
+
+  it("does not invoke onClick when loading", async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+
+    render(
+      <Button loading onClick={onClick}>
+        Busy
+      </Button>,
+    );
+    await user.click(screen.getByRole("button", { name: "Busy" }));
+
+    expect(onClick).not.toHaveBeenCalled();
   });
 });
