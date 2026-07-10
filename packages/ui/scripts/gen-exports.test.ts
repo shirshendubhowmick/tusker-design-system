@@ -14,6 +14,9 @@ describe("gen-exports", () => {
     expect(exportsMap["./Input"]).toBe("./src/components/Input/index.ts");
     expect(exportsMap["./tokens"]).toBe("./src/tokens/index.ts");
     expect(exportsMap["./cn"]).toBe("./src/utils/cn.ts");
+    expect(exportsMap["./focus-ring"]).toBe("./src/utils/focus-ring.ts");
+    expect(exportsMap["./surface"]).toBe("./src/utils/surface.ts");
+    expect(exportsMap["./overlay"]).toBe("./src/utils/overlay.ts");
     expect(exportsMap["./styles.css"]).toBe("./src/styles/index.css");
     expect(exportsMap["./package.json"]).toBe("./package.json");
     // no root barrel

@@ -6,13 +6,14 @@ Living plan for what to build next. Context: the kit already has tokens, `Contro
 
 ## Already in place
 
-| Layer         | Notes                                                                           |
-| ------------- | ------------------------------------------------------------------------------- |
-| Foundations   | Colors (incl. brand blue), typography, shadows, breakpoints, z-index, dark mode |
-| Control scale | Shared `ControlSize` (`sm` / `md` / `lg`) — heights, box lock, glyphs           |
-| Focus ring    | `@design-system/ui/focus-ring` — self / within + intent tints                   |
-| Components    | `Button`, `IconButton`, `Input`, `FormField`, `Text`, `Spinner`                 |
-| Infra         | JIT exports, Storybook, sample `apps/web`, Vitest, Turbo, token codegen         |
+| Layer             | Notes                                                                           |
+| ----------------- | ------------------------------------------------------------------------------- |
+| Foundations       | Colors (incl. brand blue), typography, shadows, breakpoints, z-index, dark mode |
+| Control scale     | Shared `ControlSize` (`sm` / `md` / `lg`) — heights, box lock, glyphs           |
+| Focus ring        | `@design-system/ui/focus-ring` — self / within + intent tints                   |
+| Surface / overlay | `@design-system/ui/surface`, `@design-system/ui/overlay`                        |
+| Components        | `Button`, `IconButton`, `Input`, `FormField`, `Text`, `Spinner`                 |
+| Infra             | JIT exports, Storybook, sample `apps/web`, Vitest, Turbo, token codegen         |
 
 Z-index scale is ready for overlays:
 
@@ -47,24 +48,24 @@ Extracted as `@design-system/ui/focus-ring` (`src/utils/focus-ring.ts`):
 
 **Outcome:** Checkbox, Switch, Select trigger, Dialog close, etc. share one focus language.
 
-### 2. Surface / elevated panel styles
+### 2. Surface / elevated panel styles — **done**
 
-Not necessarily a product `Card` — a small, reusable recipe for floating content:
+`@design-system/ui/surface` (`src/utils/surface.ts`):
 
-- Background (surface / elevated)
-- Border, radius, shadow
-- Optional header / body padding
+- `surface()` / `surfaceClass` — bg, border, radius, elevation shadow, padding
+- Recipes: `card`, `popover`, `menu`, `dialog`, `inverse`
+- `surfaceSectionClass` — header / body / footer / menu region padding
 
 **Used by:** Select Content, Dropdown Menu, Dialog panel, Popover, command palette, etc.
 
-### 3. Overlay / scrim styles
+### 3. Overlay / scrim styles — **done**
 
-Backdrop for Dialog / Drawer:
+`@design-system/ui/overlay` (`src/utils/overlay.ts`):
 
-- Dimmed scrim
-- `z-overlay` (content sits at `z-modal` / peers)
+- `overlay()` / `overlayClass.scrim` — `fixed inset-0` + `z-overlay` + `bg-overlay-scrim`
+- `overlayClass.catch` — transparent outside-click layer (no dim)
 
-**Outcome:** one scrim class or tiny primitive; no one-off backdrops per feature.
+**Outcome:** one scrim recipe; dialog content uses `surfaceClass.dialog` + `z-modal`.
 
 ### 4. Form control layout for non-text fields
 
@@ -108,7 +109,7 @@ Capture in `packages/ui/README.md` (or a short ADR) so every new component looks
 
 ```
 1. Focus ring util ✅
-2. Surface + Overlay recipes
+2. Surface + Overlay recipes ✅
 3. Field layout (choice / horizontal)  ± Label
 4. Separator
 5. Badge / Link (optional but cheap)
@@ -117,7 +118,7 @@ Capture in `packages/ui/README.md` (or a short ADR) so every new component looks
 ```
 
 **Minimum before first Radix control:** focus ring ✅ + choice-field layout.  
-**Minimum before first overlay (Dialog / Drawer):** surface + scrim.
+**Minimum before first overlay (Dialog / Drawer):** surface + scrim ✅.
 
 ---
 
@@ -158,10 +159,11 @@ Optional later overlays: **Popover**, **Drawer**, **Combobox** (Select + search)
 1. **Semantic tokens only** in components (`bg-accent-solid`, `text-fg-muted`) — never raw palette steps.
 2. **ControlSize** for interactive hit targets (`sm` / `md` / `lg`); don’t re-encode `h-8` / `h-9` / `h-10`.
 3. **Focus rings** via `focusRing()` / `focusRingClass` — don’t invent per-component ring shadows.
-4. **Radix owns behavior** (keyboard, focus trap, a11y); DS owns look and product API.
-5. **Colocate** tests + Storybook matrix (variant × size × state) like Button / Spinner.
-6. **JIT export** — new public component = `src/components/<Name>/index.ts` + `pnpm exports:generate`.
-7. Prefer **thin wrappers**; push shared chrome into utils/recipes, not copy-paste CVA blocks.
+4. **Floating chrome** via `surface()` / `overlay()` — don’t invent per-component panel/scrim classes.
+5. **Radix owns behavior** (keyboard, focus trap, a11y); DS owns look and product API.
+6. **Colocate** tests + Storybook matrix (variant × size × state) like Button / Spinner.
+7. **JIT export** — new public component = `src/components/<Name>/index.ts` + `pnpm exports:generate`.
+8. Prefer **thin wrappers**; push shared chrome into utils/recipes, not copy-paste CVA blocks.
 
 ---
 
@@ -170,7 +172,7 @@ Optional later overlays: **Popover**, **Drawer**, **Combobox** (Select + search)
 | If you need…                | Build                                             |
 | --------------------------- | ------------------------------------------------- |
 | Consistent focus everywhere | Focus ring helper (§1) ✅                         |
-| Menus / dialogs / selects   | Surface + Overlay (§2–3)                          |
+| Menus / dialogs / selects   | Surface + Overlay (§2–3) ✅                       |
 | Checkbox / Switch soon      | Choice field layout + Label (§4–5), then Checkbox |
 | Dense option lists          | Select (after surface + focus)                    |
 | Confirm destructive actions | Dialog (after surface + scrim)                    |

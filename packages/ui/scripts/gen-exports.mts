@@ -45,6 +45,8 @@ export function fixedExports(): ExportsMap {
     "./tokens": "./src/tokens/index.ts",
     "./cn": "./src/utils/cn.ts",
     "./focus-ring": "./src/utils/focus-ring.ts",
+    "./surface": "./src/utils/surface.ts",
+    "./overlay": "./src/utils/overlay.ts",
     "./styles.css": "./src/styles/index.css",
     "./package.json": "./package.json",
   };
