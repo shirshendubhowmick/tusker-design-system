@@ -65,9 +65,7 @@ describe("FormField", () => {
 
   it("omits message slot when message is not provided", () => {
     const { container } = render(<FormField label="Name" />);
-    expect(
-      container.querySelector('[data-slot="form-field-message"]'),
-    ).toBeNull();
+    expect(container.querySelector('[data-slot="field-message"]')).toBeNull();
   });
 
   it("respects explicit id", () => {

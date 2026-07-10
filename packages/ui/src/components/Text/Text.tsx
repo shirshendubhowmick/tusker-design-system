@@ -155,13 +155,13 @@ export function Text<T extends ElementType = ElementType>(props: TextProps<T>) {
 
   return (
     <Component
+      data-slot="text"
       {...rest}
       className={cn(
         styleClassName(variant, size),
         COLOR_CLASS[color],
         className,
       )}
-      data-slot="text"
     >
       {children}
     </Component>

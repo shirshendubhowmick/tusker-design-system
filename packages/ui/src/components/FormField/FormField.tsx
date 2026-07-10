@@ -1,23 +1,14 @@
 import { type ReactNode, type Ref, useId } from "react";
 
-import { cn } from "../../utils/cn";
+import { Field, FieldMessageTone } from "../Field";
 import { Input, type InputProps } from "../Input";
-import { Text, TextColor } from "../Text";
 
 /**
  * Form field — label + {@link Input} + optional message.
  *
- * Combines the layout used across product forms.
- * Forwards all Input props (`color`, `size`, icons, native attributes, `ref`).
- * Label and message render via {@link Text}.
+ * Convenience wrapper around {@link Field} (vertical) + {@link Input}.
+ * For checkboxes / switches, use {@link Field} with `orientation="horizontal"`.
  */
-
-const MESSAGE_COLOR = {
-  default: TextColor.muted,
-  success: TextColor.success,
-  danger: TextColor.danger,
-  warning: TextColor.warning,
-} as const;
 
 export interface FormFieldProps extends Omit<InputProps, "className"> {
   /**
@@ -55,66 +46,55 @@ export function FormField(props: FormFieldProps) {
     "id": idProp,
     color = "default",
     fullWidth = true,
+    required,
+    disabled,
     "aria-describedby": ariaDescribedByProp,
+    ref,
     ...inputProps
   } = props;
 
   const reactId = useId();
   const inputId = idProp ?? reactId;
-  const messageId = `${inputId}-message`;
-  const hasMessage = message != null && message !== false && message !== "";
 
-  const ariaDescribedBy =
-    [hasMessage ? messageId : null, ariaDescribedByProp]
-      .filter(Boolean)
-      .join(" ") || undefined;
-
-  const messageColor =
-    MESSAGE_COLOR[color as keyof typeof MESSAGE_COLOR] ?? TextColor.muted;
+  const messageTone =
+    color === "success" || color === "danger" || color === "warning"
+      ? color
+      : FieldMessageTone.default;
 
   return (
-    <div
-      className={cn(
-        "flex flex-col gap-1.5",
-        fullWidth ? "w-full" : "w-auto",
-        className,
-      )}
+    <Field
+      label={label}
+      htmlFor={inputId}
+      message={message}
+      messageTone={messageTone}
+      required={Boolean(required)}
+      disabled={Boolean(disabled)}
+      fullWidth={fullWidth ?? true}
+      className={className}
+      labelClassName={labelClassName}
+      messageClassName={messageClassName}
       data-slot="form-field"
     >
-      <Text
-        as="label"
-        htmlFor={inputId}
-        variant="label"
-        size="md"
-        color={TextColor.default}
-        className={labelClassName}
-        data-slot="form-field-label"
-      >
-        {label}
-      </Text>
-      <Input
-        {...inputProps}
-        id={inputId}
-        color={color}
-        fullWidth={fullWidth}
-        className={inputClassName}
-        aria-describedby={ariaDescribedBy}
-      />
-      {hasMessage ? (
-        <Text
-          as="p"
-          id={messageId}
-          variant="body"
-          size="sm"
-          color={messageColor}
-          className={messageClassName}
-          data-slot="form-field-message"
-          // Announce validation errors to assistive tech.
-          role={color === "danger" ? "alert" : undefined}
-        >
-          {message}
-        </Text>
-      ) : null}
-    </div>
+      {(control) => (
+        <Input
+          {...inputProps}
+          {...control}
+          ref={ref}
+          id={inputId}
+          color={color}
+          fullWidth={fullWidth ?? true}
+          required={required ?? undefined}
+          disabled={disabled ?? undefined}
+          className={inputClassName}
+          aria-describedby={
+            [control["aria-describedby"], ariaDescribedByProp]
+              .filter(Boolean)
+              .join(" ") || undefined
+          }
+        />
+      )}
+    </Field>
   );
 }
+
+FormField.displayName = "FormField";

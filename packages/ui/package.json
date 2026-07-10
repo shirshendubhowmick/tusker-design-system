@@ -9,9 +9,11 @@
   ],
   "exports": {
     "./Button": "./src/components/Button/index.ts",
+    "./Field": "./src/components/Field/index.ts",
     "./FormField": "./src/components/FormField/index.ts",
     "./IconButton": "./src/components/IconButton/index.ts",
     "./Input": "./src/components/Input/index.ts",
+    "./Label": "./src/components/Label/index.ts",
     "./Spinner": "./src/components/Spinner/index.ts",
     "./Text": "./src/components/Text/index.ts",
     "./tokens": "./src/tokens/index.ts",

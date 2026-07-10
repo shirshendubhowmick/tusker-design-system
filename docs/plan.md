@@ -6,14 +6,15 @@ Living plan for what to build next. Context: the kit already has tokens, `Contro
 
 ## Already in place
 
-| Layer             | Notes                                                                           |
-| ----------------- | ------------------------------------------------------------------------------- |
-| Foundations       | Colors (incl. brand blue), typography, shadows, breakpoints, z-index, dark mode |
-| Control scale     | Shared `ControlSize` (`sm` / `md` / `lg`) — heights, box lock, glyphs           |
-| Focus ring        | `@design-system/ui/focus-ring` — self / within + intent tints                   |
-| Surface / overlay | `@design-system/ui/surface`, `@design-system/ui/overlay`                        |
-| Components        | `Button`, `IconButton`, `Input`, `FormField`, `Text`, `Spinner`                 |
-| Infra             | JIT exports, Storybook, sample `apps/web`, Vitest, Turbo, token codegen         |
+| Layer             | Notes                                                                             |
+| ----------------- | --------------------------------------------------------------------------------- |
+| Foundations       | Colors (incl. brand blue), typography, shadows, breakpoints, z-index, dark mode   |
+| Control scale     | Shared `ControlSize` (`sm` / `md` / `lg`) — heights, box lock, glyphs             |
+| Focus ring        | `@design-system/ui/focus-ring` — self / within + intent tints                     |
+| Surface / overlay | `@design-system/ui/surface`, `@design-system/ui/overlay`                          |
+| Field layout      | `@design-system/ui/Field`, `@design-system/ui/Label`                              |
+| Components        | `Button`, `IconButton`, `Input`, `FormField`, `Field`, `Label`, `Text`, `Spinner` |
+| Infra             | JIT exports, Storybook, sample `apps/web`, Vitest, Turbo, token codegen           |
 
 Z-index scale is ready for overlays:
 
@@ -67,23 +68,21 @@ Extracted as `@design-system/ui/focus-ring` (`src/utils/focus-ring.ts`):
 
 **Outcome:** one scrim recipe; dialog content uses `surfaceClass.dialog` + `z-modal`.
 
-### 4. Form control layout for non-text fields
+### 4. Form control layout for non-text fields — **done**
 
-`FormField` is Input-shaped (label above control). Choice controls need:
+`@design-system/ui/Field` — orientation-aware layout, not tied to Input:
 
-- Horizontal row: control + label
-- Optional description / error under the row
+- `orientation="vertical"` — label above control (text fields)
+- `orientation="horizontal"` — choice row: control + label (+ description)
+- Optional `description` + `message` (`messageTone` for success/danger/warning)
+- Merges `id` / `aria-describedby` / `aria-invalid` onto a single-element child
 
-**Options:**
+`FormField` is now a thin vertical `Field` + `Input` convenience.
 
-- Extend `FormField` (`orientation`, slotted control), or
-- Thin `Field` / `ChoiceField` layout primitive
+### 5. Label primitive (thin) — **done**
 
-**Do this before Checkbox** so layout isn’t rebuilt twice.
-
-### 5. Label primitive (thin)
-
-DS `Label` using `Text` (+ required / disabled styles). FormField should compose it. Can sit on Radix Label later if useful for a11y wiring.
+`@design-system/ui/Label` — `text-label-md`, `required` marker, `disabled` styles.
+`Field` / `FormField` compose it. Can later wrap Radix Label if needed.
 
 ### 6. Separator
 
@@ -110,14 +109,14 @@ Capture in `packages/ui/README.md` (or a short ADR) so every new component looks
 ```
 1. Focus ring util ✅
 2. Surface + Overlay recipes ✅
-3. Field layout (choice / horizontal)  ± Label
+3. Field layout (choice / horizontal)  ± Label ✅
 4. Separator
 5. Badge / Link (optional but cheap)
 6. Peer/deps + wrapper conventions (can start earlier; finish before first Radix PR)
 7. Then Radix components (below)
 ```
 
-**Minimum before first Radix control:** focus ring ✅ + choice-field layout.  
+**Minimum before first Radix control:** focus ring ✅ + choice-field layout ✅.  
 **Minimum before first overlay (Dialog / Drawer):** surface + scrim ✅.
 
 ---
@@ -169,14 +168,14 @@ Optional later overlays: **Popover**, **Drawer**, **Combobox** (Select + search)
 
 ## Quick reference — “what should I open a PR for?”
 
-| If you need…                | Build                                             |
-| --------------------------- | ------------------------------------------------- |
-| Consistent focus everywhere | Focus ring helper (§1) ✅                         |
-| Menus / dialogs / selects   | Surface + Overlay (§2–3) ✅                       |
-| Checkbox / Switch soon      | Choice field layout + Label (§4–5), then Checkbox |
-| Dense option lists          | Select (after surface + focus)                    |
-| Confirm destructive actions | Dialog (after surface + scrim)                    |
-| Icon-only affordances       | Tooltip (after z-index usage is proven in Dialog) |
+| If you need…                | Build                                                |
+| --------------------------- | ---------------------------------------------------- |
+| Consistent focus everywhere | Focus ring helper (§1) ✅                            |
+| Menus / dialogs / selects   | Surface + Overlay (§2–3) ✅                          |
+| Checkbox / Switch soon      | Choice field layout + Label (§4–5) ✅, then Checkbox |
+| Dense option lists          | Select (after surface + focus)                       |
+| Confirm destructive actions | Dialog (after surface + scrim)                       |
+| Icon-only affordances       | Tooltip (after z-index usage is proven in Dialog)    |
 
 ---
 
