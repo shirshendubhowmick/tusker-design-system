@@ -159,10 +159,7 @@ function SurfaceRow({
         {direction === "down" ? (
           <div className="flex flex-wrap items-end justify-start gap-5">
             {shadows.map((name) => (
-              <div
-                key={name}
-                className="flex w-[7.5rem] flex-col items-center gap-2"
-              >
+              <div key={name} className="flex w-30 flex-col items-center gap-2">
                 {/* Elevated sample sits on the semantic surface behind it */}
                 <div
                   className={`border-border-default bg-bg-surface flex h-20 w-full items-center justify-center rounded-lg border ${shadowClass[name]}`}
