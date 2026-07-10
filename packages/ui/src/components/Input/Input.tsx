@@ -7,6 +7,7 @@ import {
   controlHeightClass,
 } from "../../tokens/control";
 import { cn } from "../../utils/cn";
+import { FocusRingIntent, focusRingClass } from "../../utils/focus-ring";
 
 /**
  * Text input — product control on design-system semantic tokens.
@@ -19,21 +20,10 @@ import { cn } from "../../utils/cn";
  * Icons: pass any `ReactNode` via `startIcon` / `endIcon`. Prefer
  * `@radix-ui/react-icons` in apps (optional peer). Icons are decorative;
  * label the control with `aria-label` / `<label htmlFor>`.
+ *
+ * Focus rings use {@link focusRingClass}.within so validation intents share
+ * the same 3px geometry as Button (`shadow-focus`).
  */
-/**
- * Focus ring matching `shadow-focus` geometry (3px soft ring), tinted with a
- * semantic solid so validation colors keep their own focus affordance.
- * Applied with `focus-within` so the ring tracks the nested control.
- */
-const focusRing = {
-  default: "focus-within:shadow-focus",
-  success:
-    "focus-within:shadow-[0_0_0_3px_color-mix(in_srgb,var(--color-success-solid)_45%,transparent)]",
-  danger:
-    "focus-within:shadow-[0_0_0_3px_color-mix(in_srgb,var(--color-danger-solid)_45%,transparent)]",
-  warning:
-    "focus-within:shadow-[0_0_0_3px_color-mix(in_srgb,var(--color-warning-solid)_45%,transparent)]",
-} as const;
 
 /** Outer field chrome — border, surface, focus, size box. */
 export const inputFieldVariants = cva(
@@ -52,25 +42,25 @@ export const inputFieldVariants = cva(
           "border-border-default",
           "hover:has-[:enabled]:border-border-hover",
           "focus-within:border-accent-border",
-          focusRing.default,
+          focusRingClass.within[FocusRingIntent.default],
         ],
         success: [
           "border-success-border",
           "hover:has-[:enabled]:border-success-solid",
           "focus-within:border-success-solid",
-          focusRing.success,
+          focusRingClass.within[FocusRingIntent.success],
         ],
         danger: [
           "border-danger-border",
           "hover:has-[:enabled]:border-danger-solid",
           "focus-within:border-danger-solid",
-          focusRing.danger,
+          focusRingClass.within[FocusRingIntent.danger],
         ],
         warning: [
           "border-warning-border",
           "hover:has-[:enabled]:border-warning-solid",
           "focus-within:border-warning-solid",
-          focusRing.warning,
+          focusRingClass.within[FocusRingIntent.warning],
         ],
       },
       size: {

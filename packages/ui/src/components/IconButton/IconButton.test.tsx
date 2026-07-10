@@ -36,7 +36,7 @@ describe("IconButton", () => {
     expectHasClasses(button.className, [
       "bg-accent-solid",
       "!size-9",
-      "!p-0",
+      "p-0!",
       "inline-flex",
     ]);
   });
@@ -104,7 +104,7 @@ describe("IconButton", () => {
     expectHasClasses(button.className, [
       "text-accent-text",
       "!size-9",
-      "!p-0",
+      "p-0!",
       "!min-w-9",
       "!min-h-9",
     ]);
@@ -119,7 +119,7 @@ describe("IconButton", () => {
     expectHasClasses(button.className, [
       "text-accent-text",
       "!size-9",
-      "!p-0",
+      "p-0!",
       "!min-w-9",
       "!min-h-9",
     ]);

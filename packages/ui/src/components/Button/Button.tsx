@@ -7,6 +7,7 @@ import {
   resolveControlSize,
 } from "../../tokens/control";
 import { cn } from "../../utils/cn";
+import { focusRing } from "../../utils/focus-ring";
 import { Spinner } from "../Spinner";
 
 /**
@@ -30,7 +31,7 @@ export const buttonVariants = cva(
     "transition-[color,background-color,border-color,transform,filter,opacity]",
     "enabled:active:translate-y-px",
     "cursor-pointer",
-    "focus-visible:outline-none focus-visible:shadow-focus",
+    focusRing(),
     // 65% keeps secondary/tertiary readable on canvas (50% was too washed out).
     "disabled:cursor-not-allowed disabled:opacity-65",
     "select-none",

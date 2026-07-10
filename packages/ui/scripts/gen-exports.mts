@@ -44,6 +44,7 @@ export function fixedExports(): ExportsMap {
   return {
     "./tokens": "./src/tokens/index.ts",
     "./cn": "./src/utils/cn.ts",
+    "./focus-ring": "./src/utils/focus-ring.ts",
     "./styles.css": "./src/styles/index.css",
     "./package.json": "./package.json",
   };
