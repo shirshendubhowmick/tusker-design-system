@@ -65,4 +65,19 @@
   body {
     @apply bg-bg-canvas text-body-md text-fg-default font-sans antialiased;
   }
+
+  /*
+    Default product links — plain <a> and markdown/content anchors.
+    Button-as-link resets underline via buttonVariants (`no-underline`).
+    Utilities on the element still win over this base layer.
+  */
+  a {
+    @apply text-accent-text font-medium underline-offset-2;
+    @apply rounded-sm;
+    @apply focus-visible:shadow-focus focus-visible:outline-none;
+  }
+
+  a:hover {
+    @apply underline;
+  }
 }

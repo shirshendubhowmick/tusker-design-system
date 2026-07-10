@@ -6,15 +6,15 @@ Living plan for what to build next. Context: the kit already has tokens, `Contro
 
 ## Already in place
 
-| Layer             | Notes                                                                             |
-| ----------------- | --------------------------------------------------------------------------------- |
-| Foundations       | Colors (incl. brand blue), typography, shadows, breakpoints, z-index, dark mode   |
-| Control scale     | Shared `ControlSize` (`sm` / `md` / `lg`) — heights, box lock, glyphs             |
-| Focus ring        | `@design-system/ui/focus-ring` — self / within + intent tints                     |
-| Surface / overlay | `@design-system/ui/surface`, `@design-system/ui/overlay`                          |
-| Field layout      | `@design-system/ui/Field`, `@design-system/ui/Label`                              |
-| Components        | `Button`, `IconButton`, `Input`, `FormField`, `Field`, `Label`, `Text`, `Spinner` |
-| Infra             | JIT exports, Storybook, sample `apps/web`, Vitest, Turbo, token codegen           |
+| Layer             | Notes                                                                                                         |
+| ----------------- | ------------------------------------------------------------------------------------------------------------- |
+| Foundations       | Colors (incl. brand blue), typography, shadows, breakpoints, z-index, dark mode                               |
+| Control scale     | Shared `ControlSize` (`sm` / `md` / `lg`) — heights, box lock, glyphs                                         |
+| Focus ring        | `@design-system/ui/focus-ring` — self / within + intent tints                                                 |
+| Surface / overlay | `@design-system/ui/surface`, `@design-system/ui/overlay`                                                      |
+| Field layout      | `@design-system/ui/Field`, `@design-system/ui/Label`                                                          |
+| Components        | `Button` (polymorphic `as`), `IconButton`, `Input`, `FormField`, `Field`, `Label`, `Badge`, `Text`, `Spinner` |
+| Infra             | JIT exports, Storybook, sample `apps/web`, Vitest, Turbo, token codegen                                       |
 
 Z-index scale is ready for overlays:
 
@@ -88,9 +88,11 @@ Extracted as `@design-system/ui/focus-ring` (`src/utils/focus-ring.ts`):
 
 Minimal (CSS-only or Radix Separator with almost no logic). Menus, dialogs, toolbars, select groups.
 
-### 7. Badge + Link
+### 7. Badge + links — **done** (revised)
 
-Pure styling, little or no Radix. High reuse in tables, menus, dialogs, and docs. Cheap wins after the layout primitives.
+- `@design-system/ui/Badge` — soft / outline / solid × semantic colors × sm/md
+- **No separate Link component** — plain anchors get product styles from global CSS in `styles.css` (`a` / `a:hover` + focus ring).
+- **Polymorphic Button** — `as` prop (`"a"`, Next/React Router `Link`, …) for button-looking navigation.
 
 ### 8. Package / peer conventions for Radix
 
@@ -111,7 +113,7 @@ Capture in `packages/ui/README.md` (or a short ADR) so every new component looks
 2. Surface + Overlay recipes ✅
 3. Field layout (choice / horizontal)  ± Label ✅
 4. Separator
-5. Badge / Link (optional but cheap)
+5. Badge + global anchors + polymorphic Button ✅
 6. Peer/deps + wrapper conventions (can start earlier; finish before first Radix PR)
 7. Then Radix components (below)
 ```

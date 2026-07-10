@@ -74,6 +74,13 @@ const meta = {
       description: "Optional label while loading (defaults to children).",
       ...docsDefault("—", { type: "ReactNode" }),
     },
+    as: {
+      control: "select",
+      options: ["button", "a"],
+      description:
+        "Host element/component (`button` default). Use `as={Link}` for app routers.",
+      ...docsDefault("button", { type: "ElementType" }),
+    },
     children: {
       control: "text",
       ...docsDefault("—", { type: "ReactNode" }),
@@ -89,6 +96,7 @@ const meta = {
     disabled: false,
     loading: false,
     type: "button",
+    as: "button",
   },
 } satisfies Meta<typeof Button>;
 
@@ -175,6 +183,58 @@ export const Matrix: Story = {
             </div>
           );
         })}
+      </div>
+    );
+  },
+};
+
+/**
+ * Polymorphic host — button **look** on `<a>` (or a router `Link`).
+ * No disabled-link behavior: that isn't a native anchor concept.
+ * Plain text links use global `a` styles from `styles.css`.
+ */
+export const AsLink: Story = {
+  parameters: {
+    controls: { disable: true },
+  },
+  render: function AsLinkStory() {
+    return (
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <Text
+            as="p"
+            variant={TextVariant.label}
+            size={TextSize.sm}
+            color={TextColor.muted}
+          >
+            Button chrome as anchor (`as=&quot;a&quot;`)
+          </Text>
+          <div className="flex flex-wrap items-center gap-3">
+            <Button as="a" href="#primary">
+              Primary link
+            </Button>
+            <Button as="a" href="#secondary" variant="secondary">
+              Secondary link
+            </Button>
+            <Button as="a" href="#danger" variant="secondary" color="danger">
+              Danger link
+            </Button>
+          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Text
+            as="p"
+            variant={TextVariant.label}
+            size={TextSize.sm}
+            color={TextColor.muted}
+          >
+            Inline text anchors (global base styles — not Button)
+          </Text>
+          <Text as="p" variant={TextVariant.body} size={TextSize.md}>
+            See the <a href="#docs">documentation</a> for setup, or{" "}
+            <a href="https://example.com">external site</a>.
+          </Text>
+        </div>
       </div>
     );
   },

@@ -8,6 +8,7 @@
     "**/*.css"
   ],
   "exports": {
+    "./Badge": "./src/components/Badge/index.ts",
     "./Button": "./src/components/Button/index.ts",
     "./Field": "./src/components/Field/index.ts",
     "./FormField": "./src/components/FormField/index.ts",

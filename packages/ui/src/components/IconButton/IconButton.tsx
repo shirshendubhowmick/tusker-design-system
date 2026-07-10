@@ -1,8 +1,7 @@
-import type { ReactNode, Ref } from "react";
+import type { ElementType, ReactNode } from "react";
 
 import {
   ControlSize,
-  type ControlSize as ControlSizeToken,
   controlBoxLockClass,
   controlIconOnlyGlyphSvgClass,
 } from "../../tokens/control";
@@ -14,6 +13,9 @@ import { Button, type ButtonProps } from "../Button";
  *
  * Requires an accessible name via `aria-label`.
  * Pass a single icon as `children` (prefer `@radix-ui/react-icons`).
+ * Polymorphic via `as` (same as Button) for anchors / router links.
+ *
+ * `fullWidth` is accepted on the type (via {@link Button}) but always forced off.
  *
  * @example
  * ```tsx
@@ -23,56 +25,48 @@ import { Button, type ButtonProps } from "../Button";
  * <IconButton aria-label="Close" variant="tertiary">
  *   <Cross2Icon />
  * </IconButton>
+ *
+ * <IconButton as="a" href="/search" aria-label="Search">
+ *   <MagnifyingGlassIcon />
+ * </IconButton>
  * ```
  */
 
 /** @deprecated Prefer {@link ControlSize} — alias kept for call-site stability. */
-export type IconButtonSize = ControlSizeToken;
+export type IconButtonSize = ControlSize;
 
-export type IconButtonProps = Omit<
-  ButtonProps,
-  "fullWidth" | "children" | "aria-label" | "size"
-> & {
-  /** Icon node (decorative). */
-  "children": ReactNode;
-  /**
-   * Accessible name for the control (required for icon-only buttons).
-   * Prefer a short verb phrase, e.g. "Close dialog", "Search".
-   */
-  "aria-label": string;
-  /**
-   * Square control size ({@link ControlSize} — matches shared control heights).
-   * @default "md"
-   */
-  "size"?: ControlSizeToken;
-  "ref"?: Ref<HTMLButtonElement>;
-};
+/**
+ * {@link Button} props with a required accessible name and icon children.
+ * Polymorphic `as` / host props come from {@link ButtonProps}.
+ */
+export type IconButtonProps<T extends ElementType = "button"> =
+  ButtonProps<T> & {
+    "children": ReactNode;
+    "aria-label": string;
+    "size"?: ControlSize;
+  };
 
-export function IconButton(props: IconButtonProps) {
-  const {
-    children,
-    className,
-    size = ControlSize.md,
-    loading,
-    ...buttonProps
-  } = props;
+export function IconButton<T extends ElementType = "button">(
+  props: IconButtonProps<T>,
+) {
+  const size = props.size ?? ControlSize.md;
+  const loading = props.loading === true;
 
   return (
     <Button
-      {...buttonProps}
-      loading={loading}
+      {...props}
       fullWidth={false}
       size={size}
       className={cn(
         "inline-flex shrink-0 items-center justify-center gap-0! p-0!",
         controlBoxLockClass[size],
         controlIconOnlyGlyphSvgClass[size],
-        className,
+        props.className,
       )}
       data-slot="icon-button"
     >
       {/* Icon-only: swap glyph for spinner — do not stack both. */}
-      {loading ? null : children}
+      {loading ? null : props.children}
     </Button>
   );
 }

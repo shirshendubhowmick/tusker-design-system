@@ -1,5 +1,5 @@
 import { type VariantProps, cva } from "class-variance-authority";
-import type { ButtonHTMLAttributes, ReactNode, Ref } from "react";
+import type { ComponentPropsWithRef, ElementType, ReactNode } from "react";
 
 import {
   ControlSize,
@@ -22,17 +22,21 @@ import { Spinner } from "../Spinner";
  *
  * Style × intent are combined via compoundVariants (e.g. solid danger, ghost success).
  * Hover/active only apply when enabled. Active is stronger than hover for every variant.
+ *
+ * Polymorphic via `as` — render as `<a>`, Next.js/React Router `Link`, etc.
  */
 export const buttonVariants = cva(
   [
     "items-center justify-center gap-2",
     "rounded-md font-sans font-medium",
+    // Beat global anchor underline when rendered as `as="a"` / router Link.
+    "no-underline hover:no-underline",
     // Shared press affordance: nudge down on active (all variants).
     "transition-[color,background-color,border-color,transform,filter,opacity]",
     "enabled:active:translate-y-px",
     "cursor-pointer",
     focusRing(),
-    // 65% keeps secondary/tertiary readable on canvas (50% was too washed out).
+    // Native <button disabled> only — links don't have a disabled state.
     "disabled:cursor-not-allowed disabled:opacity-65",
     "select-none",
   ],
@@ -296,13 +300,10 @@ export const buttonVariants = cva(
 
 export type ButtonVariantProps = VariantProps<typeof buttonVariants>;
 
-export interface ButtonProps
-  extends
-    Omit<ButtonHTMLAttributes<HTMLButtonElement>, "color">,
-    ButtonVariantProps {
-  ref?: Ref<HTMLButtonElement>;
+type ButtonOwnProps = ButtonVariantProps & {
   /**
-   * Shows a spinner, sets `aria-busy`, and disables interaction.
+   * Shows a spinner and sets `aria-busy`.
+   * On a native `<button>`, also disables the control.
    * Label children stay mounted so the control width does not jump.
    * @default false
    */
@@ -312,64 +313,87 @@ export interface ButtonProps
    * Defaults to existing `children` (spinner is prepended either way).
    */
   loadingText?: ReactNode;
-}
+  /**
+   * Disable the control. Only applied on a native `<button>`
+   * (anchors / router links have no disabled state).
+   */
+  disabled?: boolean;
+  /**
+   * Native button `type`. Only applied when the host is `<button>`.
+   * @default "button"
+   */
+  type?: "button" | "submit" | "reset";
+  className?: string;
+  children?: ReactNode;
+};
 
-/** Strip CVA-only / component props so they are not forwarded to the DOM. */
-function getButtonDomProps(
-  props: ButtonProps,
-): ButtonHTMLAttributes<HTMLButtonElement> {
-  const {
-    variant: _variant,
-    color: _color,
-    size: _size,
-    fullWidth: _fullWidth,
-    bare: _bare,
-    className: _className,
-    children: _children,
-    loading: _loading,
-    loadingText: _loadingText,
-    ref: _ref,
-    ...domProps
-  } = props;
+/**
+ * Polymorphic button — host defaults to `"button"`.
+ * Use `as` only for button **look** on another host (`a`, router `Link`, …);
+ * `disabled` / default `type` stay native-button concerns.
+ *
+ * @example
+ * ```tsx
+ * <Button>Save</Button>
+ * <Button as="a" href="/settings">Settings</Button>
+ * <Button as={Link} to="/app">Dashboard</Button>
+ * ```
+ */
+export type ButtonProps<T extends ElementType = "button"> = ButtonOwnProps &
+  Omit<ComponentPropsWithRef<T>, keyof ButtonOwnProps | "color"> & {
+    /**
+     * Underlying element or component (`"button"` | `"a"` | Next/React Router `Link`, …).
+     * @default "button"
+     */
+    as?: T;
+  };
 
-  return domProps;
-}
+export function Button<T extends ElementType = "button">({
+  as,
+  variant,
+  color,
+  size,
+  fullWidth: fullWidthProp,
+  bare: bareProp,
+  className,
+  children,
+  loading = false,
+  loadingText,
+  disabled: disabledProp = false,
+  type = "button",
+  ...rest
+}: ButtonProps<T>) {
+  const Component = as ?? "button";
+  const isNativeButton = as == null || as === "button";
 
-export function Button(props: ButtonProps) {
-  const domProps = getButtonDomProps(props);
   // Tertiary is content-sized only; fullWidth does not apply (including bare).
-  const bare = props.bare === true;
-  const isTertiary = props.variant === "tertiary";
-  const fullWidth = isTertiary || bare ? false : props.fullWidth;
-  const loading = props.loading === true;
-  const disabled = loading || props.disabled === true;
-  const label =
-    loading && props.loadingText != null ? props.loadingText : props.children;
+  const bare = bareProp === true;
+  const isTertiary = variant === "tertiary";
+  const fullWidth = isTertiary || bare ? false : fullWidthProp;
+  const label = loading && loadingText != null ? loadingText : children;
 
   return (
-    <button
-      {...domProps}
-      ref={props.ref}
-      type={props.type ?? "button"}
-      disabled={disabled}
+    <Component
+      data-slot="button"
+      {...rest}
+      // Native <button> only: type + disabled (loading implies disabled).
+      {...(isNativeButton ? { type, disabled: loading || disabledProp } : {})}
       aria-busy={loading || undefined}
       className={cn(
         buttonVariants({
-          variant: props.variant,
-          color: props.color,
-          size: props.size,
+          variant,
+          color,
+          size,
           fullWidth,
           bare,
         }),
-        // Loading uses disabled styles; block pointer events while busy.
-        loading && "pointer-events-none",
-        props.className,
+        className,
       )}
       data-loading={loading ? "true" : undefined}
     >
-      {loading ? <Spinner size={resolveControlSize(props.size)} /> : null}
+      {loading ? <Spinner size={resolveControlSize(size)} /> : null}
       {label}
-    </button>
+    </Component>
   );
 }
 

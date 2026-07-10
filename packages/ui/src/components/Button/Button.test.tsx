@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createRef } from "react";
+import { type ReactNode, createRef } from "react";
 
 import { Button, buttonVariants } from "./Button";
 
@@ -340,6 +340,66 @@ describe("Button", () => {
     expect(ref.current).toBe(screen.getByRole("button", { name: "With ref" }));
   });
 
+  it('renders as an anchor when as="a"', () => {
+    render(
+      <Button as="a" href="/settings">
+        Settings
+      </Button>,
+    );
+    const link = screen.getByRole("link", { name: "Settings" });
+    expect(link.tagName).toBe("A");
+    expect(link).toHaveAttribute("href", "/settings");
+    expect(link).not.toHaveAttribute("type");
+    expectHasClasses(link.className, [
+      "bg-accent-solid",
+      "text-fg-on-accent",
+      "no-underline",
+    ]);
+  });
+
+  it("does not apply disabled semantics to non-button hosts", () => {
+    render(
+      <Button as="a" href="/x" disabled>
+        Settings
+      </Button>,
+    );
+    const link = screen.getByRole("link", { name: "Settings" });
+    // Look only — anchors have no disabled state.
+    expect(link).not.toHaveAttribute("disabled");
+    expect(link).not.toHaveAttribute("aria-disabled");
+    expect(link).toHaveAttribute("href", "/x");
+  });
+
+  it("renders a custom component via as (router Link stand-in)", () => {
+    function FakeLink({
+      to,
+      children,
+      className,
+      ...rest
+    }: {
+      to: string;
+      children?: ReactNode;
+      className?: string;
+      [key: string]: unknown;
+    }) {
+      return (
+        <a href={to} className={className} data-testid="fake-link" {...rest}>
+          {children}
+        </a>
+      );
+    }
+
+    render(
+      <Button as={FakeLink} to="/app">
+        Dashboard
+      </Button>,
+    );
+    const link = screen.getByTestId("fake-link");
+    expect(link).toHaveAttribute("href", "/app");
+    expect(link).toHaveTextContent("Dashboard");
+    expectHasClasses(link.className, ["bg-accent-solid"]);
+  });
+
   it("shows a spinner, keeps the label, and marks busy when loading", () => {
     render(<Button loading>Save</Button>);
     const button = screen.getByRole("button", { name: "Save" });
@@ -349,7 +409,7 @@ describe("Button", () => {
     expect(button).toHaveAttribute("data-loading", "true");
     expect(button.querySelector('[data-slot="spinner"]')).toBeInTheDocument();
     expect(button).toHaveTextContent("Save");
-    expectHasClasses(button.className, ["pointer-events-none"]);
+    expectHasClasses(button.className, ["disabled:cursor-not-allowed"]);
   });
 
   it("uses loadingText when provided", () => {
