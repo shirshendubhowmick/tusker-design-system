@@ -63,9 +63,10 @@ describe("FormField", () => {
     expect(input).toHaveValue("query");
   });
 
-  it("omits message slot when message is not provided", () => {
-    const { container } = render(<FormField label="Name" />);
-    expect(container.querySelector('[data-slot="field-message"]')).toBeNull();
+  it("omits message when message is not provided", () => {
+    render(<FormField label="Name" />);
+    expect(screen.getByLabelText("Name")).toBeInTheDocument();
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
   it("respects explicit id", () => {

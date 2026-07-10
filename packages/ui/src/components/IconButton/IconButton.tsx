@@ -63,7 +63,6 @@ export function IconButton<T extends ElementType = "button">(
         controlIconOnlyGlyphSvgClass[size],
         props.className,
       )}
-      data-slot="icon-button"
     >
       {/* Icon-only: swap glyph for spinner — do not stack both. */}
       {loading ? null : props.children}

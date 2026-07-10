@@ -56,17 +56,12 @@ export function Label(props: LabelProps) {
           : "text-fg-default",
         className,
       )}
-      data-slot="label"
       data-disabled={disabled ? "true" : undefined}
       data-required={required ? "true" : undefined}
     >
       {children}
       {required ? (
-        <span
-          className="text-danger-text font-medium"
-          aria-hidden
-          data-slot="label-required"
-        >
+        <span className="text-danger-text font-medium" aria-hidden>
           *
         </span>
       ) : null}

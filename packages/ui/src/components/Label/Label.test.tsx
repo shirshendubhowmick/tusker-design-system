@@ -24,12 +24,8 @@ describe("Label", () => {
     );
     const label = screen.getByText("Name").closest("label");
     expect(label).toHaveAttribute("data-required", "true");
-    expect(
-      label?.querySelector('[data-slot="label-required"]'),
-    ).toHaveTextContent("*");
-    expect(
-      label?.querySelector('[data-slot="label-required"]'),
-    ).toHaveAttribute("aria-hidden");
+    const marker = screen.getByText("*");
+    expect(marker).toHaveAttribute("aria-hidden", "true");
   });
 
   it("applies disabled styles", () => {

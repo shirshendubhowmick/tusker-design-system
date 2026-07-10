@@ -113,7 +113,7 @@ describe("Input", () => {
   });
 
   it("merges className on the field chrome and does not forward CVA props", () => {
-    const { container } = render(
+    render(
       <Input
         aria-label="X"
         color="success"
@@ -122,8 +122,8 @@ describe("Input", () => {
         className="custom-class"
       />,
     );
-    const field = container.querySelector('[data-slot="input-field"]');
-    const input = container.querySelector("input");
+    const input = screen.getByRole("textbox", { name: "X" });
+    const field = input.parentElement;
     expect(field?.className).toContain("custom-class");
     expect(field?.className).toContain("border-success-border");
     expect(input).not.toHaveAttribute("color");
@@ -134,11 +134,12 @@ describe("Input", () => {
     render(<Input aria-label="Disabled" disabled />);
     const input = screen.getByRole("textbox", { name: "Disabled" });
     expect(input).toBeDisabled();
-    const field = input.closest('[data-slot="input-field"]');
-    expectHasClasses(field?.className, ["has-[:disabled]:bg-bg-surface-hover"]);
+    expectHasClasses(input.parentElement?.className, [
+      "has-[:disabled]:bg-bg-surface-hover",
+    ]);
   });
 
-  it("renders start and end icons as decorative slots", () => {
+  it("renders start and end icons as decorative content", () => {
     render(
       <Input
         aria-label="Search"
@@ -146,6 +147,7 @@ describe("Input", () => {
         endIcon={<span data-testid="end-icon">×</span>}
       />,
     );
+    // Icons are decorative; presence is verified via test ids (last resort).
     expect(screen.getByTestId("start-icon")).toBeInTheDocument();
     expect(screen.getByTestId("end-icon")).toBeInTheDocument();
     expect(screen.getByRole("textbox", { name: "Search" }).className).toMatch(
@@ -153,11 +155,10 @@ describe("Input", () => {
     );
   });
 
-  it("does not render icon slots when icons are omitted", () => {
-    const { container } = render(<Input aria-label="Plain" />);
-    expect(
-      container.querySelector('[data-slot="input-start-icon"]'),
-    ).toBeNull();
-    expect(container.querySelector('[data-slot="input-end-icon"]')).toBeNull();
+  it("does not reserve icon padding when icons are omitted", () => {
+    render(<Input aria-label="Plain" />);
+    const className = screen.getByRole("textbox", { name: "Plain" }).className;
+    expect(className).not.toMatch(/pl-9/);
+    expect(className).not.toMatch(/pr-9/);
   });
 });

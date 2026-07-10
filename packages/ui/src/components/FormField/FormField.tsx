@@ -73,7 +73,6 @@ export function FormField(props: FormFieldProps) {
       className={className}
       labelClassName={labelClassName}
       messageClassName={messageClassName}
-      data-slot="form-field"
     >
       {(control) => (
         <Input

@@ -201,12 +201,10 @@ export function Input(props: InputProps) {
         inputFieldVariants({ color, size, fullWidth }),
         props.className,
       )}
-      data-slot="input-field"
     >
       {hasStartIcon ? (
         <span
           className={iconSlotVariants({ side: "start", size, color })}
-          data-slot="input-start-icon"
           aria-hidden
         >
           {props.startIcon}
@@ -221,12 +219,10 @@ export function Input(props: InputProps) {
           hasStartIcon,
           hasEndIcon,
         })}
-        data-slot="input"
       />
       {hasEndIcon ? (
         <span
           className={iconSlotVariants({ side: "end", size, color })}
-          data-slot="input-end-icon"
           aria-hidden
         >
           {props.endIcon}

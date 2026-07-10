@@ -58,16 +58,15 @@ describe("Badge", () => {
     render(<Badge>Active</Badge>);
     const el = screen.getByText("Active");
     expect(el.tagName).toBe("SPAN");
-    expect(el).toHaveAttribute("data-slot", "badge");
   });
 
   it("does not forward CVA-only props to the DOM", () => {
     render(
-      <Badge variant="outline" color="info" size="sm" data-testid="badge">
+      <Badge variant="outline" color="info" size="sm">
         Info
       </Badge>,
     );
-    const el = screen.getByTestId("badge");
+    const el = screen.getByText("Info");
     expect(el).not.toHaveAttribute("variant");
     expect(el).not.toHaveAttribute("color");
     expect(el).not.toHaveAttribute("size");

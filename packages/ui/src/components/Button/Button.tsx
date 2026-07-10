@@ -374,7 +374,6 @@ export function Button<T extends ElementType = "button">({
 
   return (
     <Component
-      data-slot="button"
       {...rest}
       // Native <button> only: type + disabled (loading implies disabled).
       {...(isNativeButton ? { type, disabled: loading || disabledProp } : {})}

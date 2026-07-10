@@ -34,7 +34,6 @@ describe("Spinner", () => {
     expect(el.tagName).toBe("svg");
     expect(el).toHaveAttribute("aria-hidden", "true");
     expect(el).not.toHaveAttribute("role");
-    expect(el).toHaveAttribute("data-slot", "spinner");
     expectHasClasses(el.getAttribute("class"), [
       "animate-spin",
       controlGlyphClass.md,
@@ -65,8 +64,6 @@ describe("Spinner", () => {
   it("exposes a status role when label is provided", () => {
     render(<Spinner label="Loading" />);
     const el = screen.getByRole("status", { name: "Loading" });
-
-    expect(el).toHaveAttribute("data-slot", "spinner");
     expect(el).not.toHaveAttribute("aria-hidden");
   });
 

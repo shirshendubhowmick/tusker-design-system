@@ -204,7 +204,6 @@ export function Field(props: FieldProps) {
       size={TextSize.sm}
       color={TextColor.muted}
       className={descriptionClassName}
-      data-slot="field-description"
     >
       {description}
     </Text>
@@ -218,7 +217,6 @@ export function Field(props: FieldProps) {
       size={TextSize.sm}
       color={MESSAGE_COLOR[messageTone]}
       className={messageClassName}
-      data-slot="field-message"
       role={messageTone === FieldMessageTone.danger ? "alert" : undefined}
     >
       {message}
@@ -232,7 +230,6 @@ export function Field(props: FieldProps) {
         isHorizontal && "flex shrink-0 items-center justify-center self-center",
         controlClassName,
       )}
-      data-slot="field-control"
     >
       {control}
     </div>
@@ -240,7 +237,6 @@ export function Field(props: FieldProps) {
 
   return (
     <div
-      data-slot="field"
       {...rootProps}
       ref={ref}
       id={idProp}
@@ -258,10 +254,7 @@ export function Field(props: FieldProps) {
             Description sits on row 2 under the label only — so it never pulls the
             control toward the top or bottom of a multi-line block.
           */}
-          <div
-            className="grid grid-cols-[auto_1fr] items-center gap-x-2 gap-y-0.5"
-            data-slot="field-row"
-          >
+          <div className="grid grid-cols-[auto_1fr] items-center gap-x-2 gap-y-0.5">
             <div className="col-start-1 row-start-1">{controlNode}</div>
             {hasLabel ? (
               <div className="col-start-2 row-start-1 min-w-0">{labelNode}</div>

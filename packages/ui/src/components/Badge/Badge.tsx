@@ -190,7 +190,6 @@ export function Badge(props: BadgeProps) {
         }),
         props.className,
       )}
-      data-slot="badge"
     >
       {props.children}
     </span>

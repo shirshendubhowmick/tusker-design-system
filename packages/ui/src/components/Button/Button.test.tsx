@@ -407,7 +407,8 @@ describe("Button", () => {
     expect(button).toBeDisabled();
     expect(button).toHaveAttribute("aria-busy", "true");
     expect(button).toHaveAttribute("data-loading", "true");
-    expect(button.querySelector('[data-slot="spinner"]')).toBeInTheDocument();
+    // Decorative spinner: hidden from a11y tree, present as SVG.
+    expect(button.querySelector("svg[aria-hidden='true']")).toBeTruthy();
     expect(button).toHaveTextContent("Save");
     expectHasClasses(button.className, ["disabled:cursor-not-allowed"]);
   });

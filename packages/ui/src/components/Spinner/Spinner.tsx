@@ -67,7 +67,6 @@ export function Spinner(props: SpinnerProps) {
       role={decorative ? undefined : "status"}
       aria-label={decorative ? undefined : label}
       aria-hidden={decorative || undefined}
-      data-slot="spinner"
     >
       <circle
         className="opacity-25"
