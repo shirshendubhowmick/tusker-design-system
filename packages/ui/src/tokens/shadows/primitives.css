@@ -56,6 +56,12 @@
   --shadow-border: 0 0 0 1px var(--color-border-default);
 
   --shadow-focus: 0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 45%, transparent);
+
+  --shadow-focus-success: 0 0 0 3px color-mix(in srgb, var(--green-9) 45%, transparent);
+
+  --shadow-focus-danger: 0 0 0 3px color-mix(in srgb, var(--red-9) 45%, transparent);
+
+  --shadow-focus-warning: 0 0 0 3px color-mix(in srgb, var(--amber-9) 45%, transparent);
 }
 
 /*
@@ -116,5 +122,17 @@
 
 @utility shadow-focus {
   box-shadow: var(--shadow-focus);
+}
+
+@utility shadow-focus-success {
+  box-shadow: var(--shadow-focus-success);
+}
+
+@utility shadow-focus-danger {
+  box-shadow: var(--shadow-focus-danger);
+}
+
+@utility shadow-focus-warning {
+  box-shadow: var(--shadow-focus-warning);
 }
 

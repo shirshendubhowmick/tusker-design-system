@@ -15,17 +15,19 @@ export type FocusRingIntent =
   (typeof FocusRingIntent)[keyof typeof FocusRingIntent];
 
 /**
- * Shadow utilities (no pseudo prefix).
- * Default uses the token `shadow-focus`; status intents tint with the solid.
+ * Shadow utilities (no pseudo prefix) — product tokens from the shadow scale.
+ * Status intents use named utilities (`shadow-focus-success`, …), not Tailwind
+ * arbitrary box-shadow color-mix values, so rings stay live CSS variables
+ * (dark mode) and avoid nested color-mix through mixed solid tokens.
+ *
+ * Note: do not write fake utility class strings in comments — Tailwind v4
+ * content scanning will try to generate them and can crash the CSS pipeline.
  */
 export const focusRingShadowClass = {
   [FocusRingIntent.default]: "shadow-focus",
-  [FocusRingIntent.success]:
-    "shadow-[0_0_0_3px_color-mix(in_srgb,var(--color-success-solid)_45%,transparent)]",
-  [FocusRingIntent.danger]:
-    "shadow-[0_0_0_3px_color-mix(in_srgb,var(--color-danger-solid)_45%,transparent)]",
-  [FocusRingIntent.warning]:
-    "shadow-[0_0_0_3px_color-mix(in_srgb,var(--color-warning-solid)_45%,transparent)]",
+  [FocusRingIntent.success]: "shadow-focus-success",
+  [FocusRingIntent.danger]: "shadow-focus-danger",
+  [FocusRingIntent.warning]: "shadow-focus-warning",
 } as const satisfies Record<FocusRingIntent, string>;
 
 export interface FocusRingOptions {

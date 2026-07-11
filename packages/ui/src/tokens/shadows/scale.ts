@@ -169,6 +169,40 @@ export const shadowTokens = {
       "0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 45%, transparent)",
     dark: "0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 70%, transparent)",
   },
+  /**
+   * Status focus rings — same 3px geometry as `focus`.
+   * Tint from Radix step 9 (solid hue), not `--color-*-solid`: those semantics
+   * may be `color-mix(...)` (darkened for white-label AA), and nesting that
+   * inside another color-mix breaks the ring in browsers / Tailwind arbitrary
+   * shadows. Step 9 is always a concrete scale color.
+   */
+  "focus-success": {
+    name: "focus-success",
+    group: "focus",
+    utility: "shadow-focus-success",
+    cssVar: "--shadow-focus-success",
+    description: "Focus ring for success / valid fields",
+    light: "0 0 0 3px color-mix(in srgb, var(--green-9) 45%, transparent)",
+    dark: "0 0 0 3px color-mix(in srgb, var(--green-9) 70%, transparent)",
+  },
+  "focus-danger": {
+    name: "focus-danger",
+    group: "focus",
+    utility: "shadow-focus-danger",
+    cssVar: "--shadow-focus-danger",
+    description: "Focus ring for danger / error fields",
+    light: "0 0 0 3px color-mix(in srgb, var(--red-9) 45%, transparent)",
+    dark: "0 0 0 3px color-mix(in srgb, var(--red-9) 70%, transparent)",
+  },
+  "focus-warning": {
+    name: "focus-warning",
+    group: "focus",
+    utility: "shadow-focus-warning",
+    cssVar: "--shadow-focus-warning",
+    description: "Focus ring for warning fields",
+    light: "0 0 0 3px color-mix(in srgb, var(--amber-9) 45%, transparent)",
+    dark: "0 0 0 3px color-mix(in srgb, var(--amber-9) 70%, transparent)",
+  },
 } as const satisfies Record<string, ShadowToken>;
 
 export type ShadowName = keyof typeof shadowTokens;
@@ -206,6 +240,9 @@ export const shadowOrder = [
   "inner",
   "border",
   "focus",
+  "focus-success",
+  "focus-danger",
+  "focus-warning",
 ] as const satisfies readonly ShadowName[];
 
 export const shadowGroups = ["elevation", "top", "focus", "utility"] as const;

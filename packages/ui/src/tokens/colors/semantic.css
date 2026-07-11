@@ -9,6 +9,11 @@
 
   Defaults use direct Radix vars so mode switches that update those
   vars immediately affect utilities. Dark remaps live in semantic-dark.css.
+
+  Mix-derived tokens (darkened solids / blended text) register as
+  var(--_ds-*) only. Concrete hex lives outside @theme — Tailwind v4's
+  color-mix polyfill crashes when a theme color is a resolved hex used
+  inside utility color-mix() (e.g. Button bare tertiary hover).
 */
 
 @theme {
@@ -23,7 +28,7 @@
   /* foreground */
   --color-fg-default: var(--slate-12);
   --color-fg-muted: var(--slate-11);
-  --color-fg-subtle: var(--slate-10);
+  --color-fg-subtle: var(--slate-11);
   --color-fg-on-accent: white;
   --color-fg-on-inverse: var(--slate-1);
   --color-fg-on-success: white;
@@ -46,37 +51,50 @@
   --color-accent-text: var(--blue-11);
 
   /* success */
-  --color-success-solid: var(--green-9);
-  --color-success-solid-hover: var(--green-10);
+  --color-success-solid: var(--_ds-success-solid);
+  --color-success-solid-hover: var(--_ds-success-solid-hover);
   --color-success-subtle: var(--green-3);
   --color-success-border: var(--green-7);
-  --color-success-text: var(--green-11);
+  --color-success-text: var(--_ds-success-text);
 
   /* warning */
   --color-warning-solid: var(--amber-9);
   --color-warning-solid-hover: var(--amber-10);
   --color-warning-subtle: var(--amber-3);
   --color-warning-border: var(--amber-7);
-  --color-warning-text: var(--amber-11);
+  --color-warning-text: var(--_ds-warning-text);
 
   /* danger */
-  --color-danger-solid: var(--red-9);
-  --color-danger-solid-hover: var(--red-10);
+  --color-danger-solid: var(--_ds-danger-solid);
+  --color-danger-solid-hover: var(--_ds-danger-solid-hover);
   --color-danger-subtle: var(--red-3);
   --color-danger-border: var(--red-7);
   --color-danger-text: var(--red-11);
 
   /* info */
-  --color-info-solid: var(--cyan-9);
-  --color-info-solid-hover: var(--cyan-10);
+  --color-info-solid: var(--_ds-info-solid);
+  --color-info-solid-hover: var(--_ds-info-solid-hover);
   --color-info-subtle: var(--cyan-3);
   --color-info-border: var(--cyan-7);
-  --color-info-text: var(--cyan-11);
+  --color-info-text: var(--_ds-info-text);
 
   /* focus */
   --color-focus-ring: var(--blue-8);
 
   /* overlay */
   --color-overlay-scrim: var(--black-a8);
+}
+
+/* Mix backing values (light). Not @theme — see header. */
+:root {
+  --_ds-success-solid: #268356;
+  --_ds-success-solid-hover: #22734c;
+  --_ds-success-text: #207852;
+  --_ds-warning-text: #9d5d05;
+  --_ds-danger-solid: #c33d41;
+  --_ds-danger-solid-hover: #a03236;
+  --_ds-info-solid: #007a95;
+  --_ds-info-solid-hover: #006981;
+  --_ds-info-text: #10738c;
 }
 
