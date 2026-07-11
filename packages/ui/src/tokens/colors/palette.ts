@@ -29,7 +29,7 @@ export const palette = {
     description: "App chrome: canvases, panels, borders, body text",
   },
   /**
-   * Brand / accent — custom navy-blue scale seeded from #2855E6, generated
+   * Brand / accent — custom navy-blue scale seeded from #0D5BD8, generated
    * with the Radix custom palette tool (`src/tokens/colors/blue.css`, not an
    * npm scale). Info uses cyan so brand and info never collide. Used for
    * primary CTAs, selected nav, focus.
