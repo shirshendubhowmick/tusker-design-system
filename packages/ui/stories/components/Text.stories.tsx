@@ -117,6 +117,27 @@ export const Variants: Story = {
   },
 };
 
+/** Canvas-safe text colors (`on-*` only belongs on solid fills). */
+const CANVAS_COLORS = [
+  TextColor.default,
+  TextColor.muted,
+  TextColor.subtle,
+  TextColor.accent,
+  TextColor.success,
+  TextColor.warning,
+  TextColor.danger,
+  TextColor.info,
+] as const;
+
+const ON_SOLID_COLORS: { color: TextColor; solidClass: string }[] = [
+  { color: TextColor.onAccent, solidClass: "bg-accent-solid" },
+  { color: TextColor.onSuccess, solidClass: "bg-success-solid" },
+  { color: TextColor.onWarning, solidClass: "bg-warning-solid" },
+  { color: TextColor.onDanger, solidClass: "bg-danger-solid" },
+  { color: TextColor.onInfo, solidClass: "bg-info-solid" },
+  { color: TextColor.onInverse, solidClass: "bg-bg-inverse" },
+];
+
 /** Body sizes + colors for visual QA */
 export const Matrix: Story = {
   parameters: {
@@ -146,9 +167,9 @@ export const Matrix: Story = {
         </div>
         <div className="flex flex-col gap-2">
           <Text as="h2" variant={TextVariant.heading} size={TextSize.sm}>
-            Colors
+            Colors on canvas
           </Text>
-          {COLORS.map(function renderColor(color) {
+          {CANVAS_COLORS.map(function renderColor(color) {
             return (
               <Text
                 key={color}
@@ -161,6 +182,30 @@ export const Matrix: Story = {
               </Text>
             );
           })}
+        </div>
+        <div className="flex flex-col gap-2">
+          <Text as="h2" variant={TextVariant.heading} size={TextSize.sm}>
+            On-solid ink (paired fills)
+          </Text>
+          <div className="flex flex-wrap gap-2">
+            {ON_SOLID_COLORS.map(function renderOnSolid({ color, solidClass }) {
+              return (
+                <span
+                  key={color}
+                  className={`${solidClass} rounded-md px-2 py-1`}
+                >
+                  <Text
+                    as="span"
+                    variant={TextVariant.label}
+                    size={TextSize.md}
+                    color={color}
+                  >
+                    {color}
+                  </Text>
+                </span>
+              );
+            })}
+          </div>
         </div>
       </div>
     );

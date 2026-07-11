@@ -6,6 +6,7 @@
  *
  * Do not hand-edit the generated *.css files under src/tokens/.
  */
+import * as radixColors from "@radix-ui/colors";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -13,7 +14,9 @@ import { fileURLToPath } from "node:url";
 import { breakpoints } from "../src/tokens/breakpoints/scale.ts";
 import { colorModeCssSelectors } from "../src/tokens/colors/modes.ts";
 import {
+  type PaletteName,
   RADIX_STEPS,
+  type RadixStep,
   overlays,
   palette,
 } from "../src/tokens/colors/palette.ts";
@@ -35,6 +38,103 @@ import { zIndexOrder, zIndexTokens } from "../src/tokens/z-index/scale.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const tokensRoot = join(__dirname, "../src/tokens");
+
+// ── Mix → hex (codegen only; Tailwind @theme cannot host color-mix) ──
+
+type BlueScale = Record<RadixStep, string>;
+
+function loadCustomBlueScales(): { light: BlueScale; dark: BlueScale } {
+  const css = readFileSync(join(tokensRoot, "colors/blue.css"), "utf8");
+  const darkIdx = css.search(/\.dark\b/);
+  const lightPart = darkIdx === -1 ? css : css.slice(0, darkIdx);
+  const darkPart = darkIdx === -1 ? "" : css.slice(darkIdx);
+
+  function parseBlock(block: string): BlueScale {
+    const out = {} as BlueScale;
+    for (const match of block.matchAll(
+      /--blue-(\d+):\s*(#[0-9A-Fa-f]{3,8})\b/g,
+    )) {
+      const step = Number(match[1]) as RadixStep;
+      const raw = match[2];
+      if (raw && step >= 1 && step <= 12) {
+        out[step] = raw.toLowerCase();
+      }
+    }
+    return out;
+  }
+
+  return { light: parseBlock(lightPart), dark: parseBlock(darkPart) };
+}
+
+const customBlue = loadCustomBlueScales();
+
+function parseHexRgb(hex: string): [number, number, number] {
+  let h = hex.trim().toLowerCase().replace(/^#/, "");
+  if (h.length === 3) {
+    h = h
+      .split("")
+      .map((c) => c + c)
+      .join("");
+  }
+  if (h.length === 8) h = h.slice(0, 6);
+  return [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16) / 255) as [
+    number,
+    number,
+    number,
+  ];
+}
+
+function mixHex(a: string, b: string, aPercent: number): string {
+  const t = aPercent / 100;
+  const ca = parseHexRgb(a);
+  const cb = parseHexRgb(b);
+  const mixed = [
+    ca[0] * t + cb[0] * (1 - t),
+    ca[1] * t + cb[1] * (1 - t),
+    ca[2] * t + cb[2] * (1 - t),
+  ];
+  return `#${mixed
+    .map((c) =>
+      Math.round(c * 255)
+        .toString(16)
+        .padStart(2, "0"),
+    )
+    .join("")}`;
+}
+
+function resolvePaletteStepHex(
+  paletteName: PaletteName,
+  step: RadixStep,
+  mode: "light" | "dark",
+): string {
+  const radixName = palette[paletteName].radix;
+  if (radixName === "blue") {
+    return customBlue[mode][step];
+  }
+  const scaleKey = mode === "dark" ? `${radixName}Dark` : radixName;
+  const scale = (radixColors as Record<string, Record<string, string>>)[
+    scaleKey
+  ];
+  const value = scale?.[`${radixName}${step}`];
+  if (!value?.startsWith("#")) {
+    throw new Error(`Missing hex for ${scaleKey}.${radixName}${step}`);
+  }
+  return value.toLowerCase();
+}
+
+function resolveMixToHex(
+  ref: Extract<SemanticRef, { kind: "mix" }>,
+  mode: "light" | "dark",
+): string {
+  const aHex = resolvePaletteStepHex(ref.a.palette, ref.a.step, mode);
+  const bHex =
+    "kind" in ref.b
+      ? ref.b.kind === "black"
+        ? "#000000"
+        : "#ffffff"
+      : resolvePaletteStepHex(ref.b.palette, ref.b.step, mode);
+  return mixHex(aHex, bHex, ref.aPercent);
+}
 
 /** When true, only verify generated files match (exit 1 on drift). */
 const checkOnly = process.argv.includes("--check");
@@ -62,13 +162,31 @@ function joinSelectors(selectors: readonly string[]): string {
   return selectors.join(",\n");
 }
 
-function refToCss(ref: SemanticRef): string {
+function paletteStepVar(
+  paletteName: keyof typeof palette,
+  step: number,
+): string {
+  const radix = palette[paletteName].radix;
+  return `var(--${radix}-${step})`;
+}
+
+/**
+ * Emit CSS for a semantic ref.
+ *
+ * `mix` refs are resolved to concrete hex at codegen time. Tailwind v4's
+ * `@theme` color-mix polyfill crashes on `color-mix(... var(--scale) ..., black)`
+ * (`Cannot read properties of undefined (reading 'kind')`). Hex keeps
+ * utilities stable; the TS catalog still expresses mixes from the scale.
+ */
+function refToCss(ref: SemanticRef, mode: "light" | "dark" = "light"): string {
   if ("kind" in ref && ref.kind === "fixed") return ref.value;
   if ("kind" in ref && ref.kind === "overlay") {
     return `var(--${ref.name}-a${ref.step})`;
   }
-  const radix = palette[ref.palette].radix;
-  return `var(--${radix}-${ref.step})`;
+  if ("kind" in ref && ref.kind === "mix") {
+    return resolveMixToHex(ref, mode);
+  }
+  return paletteStepVar(ref.palette, ref.step);
 }
 
 /** Emit a box-shadow value; split multi-layer values across lines. */
@@ -149,6 +267,20 @@ function generateColorPrimitives(): string {
 
 // ── Colors: semantic @theme (light defaults) ────────────────────────
 
+function isMixRef(ref: SemanticRef): boolean {
+  return "kind" in ref && ref.kind === "mix";
+}
+
+/** Token uses mix in either mode — needs a non-@theme backing var for Tailwind. */
+function tokenUsesMix(token: (typeof semanticColorTokens)[number]): boolean {
+  return isMixRef(token.light) || isMixRef(token.dark);
+}
+
+/** Private backing custom property for mix-resolved colors (not a Tailwind theme key). */
+function mixBackingVar(tokenName: string): string {
+  return `--_ds-${tokenName}`;
+}
+
 function generateColorSemanticTheme(): string {
   const lines: string[] = [
     "/*",
@@ -156,6 +288,11 @@ function generateColorSemanticTheme(): string {
     "",
     "  Defaults use direct Radix vars so mode switches that update those",
     "  vars immediately affect utilities. Dark remaps live in semantic-dark.css.",
+    "",
+    "  Mix-derived tokens (darkened solids / blended text) register as",
+    "  var(--_ds-*) only. Concrete hex lives outside @theme — Tailwind v4's",
+    "  color-mix polyfill crashes when a theme color is a resolved hex used",
+    "  inside utility color-mix() (e.g. Button bare tertiary hover).",
     "*/",
     "",
     "@theme {",
@@ -168,10 +305,29 @@ function generateColorSemanticTheme(): string {
       lines.push(`  /* ${token.group} */`);
       lastGroup = token.group;
     }
-    lines.push(`  --color-${token.name}: ${refToCss(token.light)};`);
+    if (tokenUsesMix(token)) {
+      lines.push(`  --color-${token.name}: var(${mixBackingVar(token.name)});`);
+    } else {
+      lines.push(`  --color-${token.name}: ${refToCss(token.light, "light")};`);
+    }
   }
 
   lines.push("}");
+
+  // Light defaults for mix backing vars (always on :root).
+  const mixTokens = semanticColorTokens.filter(tokenUsesMix);
+  if (mixTokens.length > 0) {
+    lines.push("");
+    lines.push("/* Mix backing values (light). Not @theme — see header. */");
+    lines.push(":root {");
+    for (const token of mixTokens) {
+      lines.push(
+        `  ${mixBackingVar(token.name)}: ${refToCss(token.light, "light")};`,
+      );
+    }
+    lines.push("}");
+  }
+
   return lines.join("\n") + "\n";
 }
 
@@ -188,9 +344,14 @@ function generatePaletteRebindLines(): string[] {
 }
 
 function generateSemanticRebindLines(mode: "light" | "dark"): string[] {
-  return semanticColorTokens.map(
-    (token) => `--color-${token.name}: ${refToCss(token[mode])};`,
-  );
+  return semanticColorTokens.map((token) => {
+    const value = refToCss(token[mode], mode);
+    // Mix tokens: only rebind the backing var; --color-* stays var(--_ds-*).
+    if (tokenUsesMix(token)) {
+      return `${mixBackingVar(token.name)}: ${value};`;
+    }
+    return `--color-${token.name}: ${value};`;
+  });
 }
 
 function generateColorModeScopes(): string {

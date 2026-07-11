@@ -64,5 +64,11 @@ html.dark,
   --shadow-border: 0 0 0 1px var(--color-border-default);
 
   --shadow-focus: 0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 70%, transparent);
+
+  --shadow-focus-success: 0 0 0 3px color-mix(in srgb, var(--green-9) 70%, transparent);
+
+  --shadow-focus-danger: 0 0 0 3px color-mix(in srgb, var(--red-9) 70%, transparent);
+
+  --shadow-focus-warning: 0 0 0 3px color-mix(in srgb, var(--amber-9) 70%, transparent);
 }
 

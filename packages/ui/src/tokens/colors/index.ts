@@ -27,16 +27,5 @@ export {
   type SemanticToken,
 } from "./semantic";
 
-export {
-  WCAG_AA_BODY,
-  WCAG_AA_LARGE,
-  contrastRatio,
-  relativeLuminance,
-  resolveSemanticRefToHex,
-  resolveSemanticTokenToHex,
-  semanticContrastPairs,
-  minRatioForPair,
-  modesForPair,
-  type ContrastRole,
-  type SemanticContrastPair,
-} from "./contrast";
+// contrast.ts is Node-only (reads blue.css via fs) — import from
+// `./contrast` in unit tests, not this barrel (Storybook/browser).

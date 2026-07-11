@@ -8,10 +8,24 @@ import type { PaletteName, RadixStep } from "./palette";
  * Components only use the semantic name; mode is chosen by `.light` / `.dark`.
  */
 
+/**
+ * Palette step, fixed CSS color, alpha overlay, or a **scale-derived mix**.
+ * Prefer palette / mix over one-off hex so rebrands stay in the scale system.
+ */
 export type SemanticRef =
   | { palette: PaletteName; step: RadixStep }
   | { kind: "fixed"; value: string }
-  | { kind: "overlay"; name: "black" | "white"; step: RadixStep };
+  | { kind: "overlay"; name: "black" | "white"; step: RadixStep }
+  | {
+      kind: "mix";
+      /** Weight of `a` as percent (1–99); remainder is `b`. */
+      aPercent: number;
+      a: { palette: PaletteName; step: RadixStep };
+      b:
+        | { palette: PaletteName; step: RadixStep }
+        | { kind: "black" }
+        | { kind: "white" };
+    };
 
 export interface SemanticToken {
   /** CSS / Tailwind token name without the `color-` prefix (e.g. `bg-canvas`). */
@@ -52,6 +66,47 @@ function both(
 function fixedBoth(value: string): Pick<SemanticToken, "light" | "dark"> {
   const ref = { kind: "fixed" as const, value };
   return { light: ref, dark: ref };
+}
+
+/**
+ * Mix two palette steps (or a step with black/white) via CSS `color-mix`.
+ * `aPercent` is the share of step `a` (e.g. 85 → mostly `a`, 15% `b`).
+ */
+function mix(
+  a: { palette: PaletteName; step: RadixStep },
+  b:
+    | { palette: PaletteName; step: RadixStep }
+    | { kind: "black" }
+    | { kind: "white" },
+  aPercent: number,
+): SemanticRef {
+  if (!Number.isInteger(aPercent) || aPercent < 1 || aPercent > 99) {
+    throw new Error(`mix aPercent must be integer 1–99, got ${aPercent}`);
+  }
+  return { kind: "mix", aPercent, a, b };
+}
+
+/** Same mix in light and dark (each mode still resolves its own scale values). */
+function mixBoth(
+  a: { palette: PaletteName; step: RadixStep },
+  b:
+    | { palette: PaletteName; step: RadixStep }
+    | { kind: "black" }
+    | { kind: "white" },
+  aPercent: number,
+): Pick<SemanticToken, "light" | "dark"> {
+  const ref = mix(a, b, aPercent);
+  return { light: ref, dark: ref };
+}
+
+/** Darken a scale step toward black (share of black = 100 - aPercent). */
+function darkenBoth(
+  palette: PaletteName,
+  step: RadixStep,
+  /** Percent of the original step kept (e.g. 80 → 20% black). */
+  keepPercent: number,
+): Pick<SemanticToken, "light" | "dark"> {
+  return mixBoth({ palette, step }, { kind: "black" }, keepPercent);
 }
 
 /**
@@ -118,8 +173,9 @@ export const semanticColorTokens = [
   {
     name: "fg-subtle",
     group: "foreground",
-    description: "Tertiary text (placeholders, disabled hints)",
-    ...both("gray", 10),
+    description:
+      "Tertiary text (placeholders, disabled hints). Step 11 — gray-10 fails WCAG AA body on canvas (~3.7:1). Same step as muted (no AA-safe step between 10 and 11).",
+    ...both("gray", 11),
   },
   {
     name: "fg-on-accent",
@@ -225,17 +281,21 @@ export const semanticColorTokens = [
   },
 
   // ── Success ────────────────────────────────────────────────────────
+  // Solids: Radix step 9 + white is only ~3:1 (AA large). Buttons/badges use
+  // text-label-* (~12–14px regular) → body AA 4.5:1. Darken step 9 toward black
+  // via color-mix (still scale-derived; works in both modes — step 11 in dark is
+  // a *light* ink and cannot be used as a solid fill).
   {
     name: "success-solid",
     group: "success",
-    description: "Solid success fill",
-    ...both("green", 9),
+    description: "Solid success fill (AA body with fg-on-success / white)",
+    ...darkenBoth("green", 9, 80),
   },
   {
     name: "success-solid-hover",
     group: "success",
     description: "Solid success hover",
-    ...both("green", 10),
+    ...darkenBoth("green", 9, 70),
   },
   {
     name: "success-subtle",
@@ -252,8 +312,16 @@ export const semanticColorTokens = [
   {
     name: "success-text",
     group: "success",
-    description: "Success-colored text / icons",
-    ...both("green", 11),
+    description:
+      "Success-colored text / icons (soft + outline + secondary/tertiary)",
+    // Light: blend 11→12 (pure 11 fails soft AA; pure 12 reads near-grey).
+    // Dark: step 11 (light green on dark canvas).
+    light: mix(
+      { palette: "green", step: 11 },
+      { palette: "green", step: 12 },
+      85,
+    ),
+    dark: p("green", 11),
   },
 
   // ── Warning ────────────────────────────────────────────────────────
@@ -285,21 +353,26 @@ export const semanticColorTokens = [
     name: "warning-text",
     group: "warning",
     description: "Warning-colored text / icons",
-    ...both("amber", 11),
+    light: mix(
+      { palette: "amber", step: 11 },
+      { palette: "amber", step: 12 },
+      85,
+    ),
+    dark: p("amber", 11),
   },
 
   // ── Danger ─────────────────────────────────────────────────────────
   {
     name: "danger-solid",
     group: "danger",
-    description: "Solid danger fill (destructive CTA)",
-    ...both("red", 9),
+    description: "Solid danger fill (destructive CTA, AA body with white)",
+    ...darkenBoth("red", 9, 85),
   },
   {
     name: "danger-solid-hover",
     group: "danger",
     description: "Solid danger hover",
-    ...both("red", 10),
+    ...darkenBoth("red", 9, 70),
   },
   {
     name: "danger-subtle",
@@ -324,14 +397,14 @@ export const semanticColorTokens = [
   {
     name: "info-solid",
     group: "info",
-    description: "Solid info fill",
-    ...both("cyan", 9),
+    description: "Solid info fill (AA body with fg-on-info / white)",
+    ...darkenBoth("cyan", 9, 75),
   },
   {
     name: "info-solid-hover",
     group: "info",
     description: "Solid info hover",
-    ...both("cyan", 10),
+    ...darkenBoth("cyan", 9, 65),
   },
   {
     name: "info-subtle",
@@ -349,7 +422,12 @@ export const semanticColorTokens = [
     name: "info-text",
     group: "info",
     description: "Info-colored text / icons",
-    ...both("cyan", 11),
+    light: mix(
+      { palette: "cyan", step: 11 },
+      { palette: "cyan", step: 12 },
+      85,
+    ),
+    dark: p("cyan", 11),
   },
 
   // ── Focus / overlay ────────────────────────────────────────────────
@@ -391,6 +469,11 @@ export function formatSemanticRef(ref: SemanticRef): string {
   if ("kind" in ref && ref.kind === "fixed") return ref.value;
   if ("kind" in ref && ref.kind === "overlay")
     return `${ref.name}-a${ref.step}`;
+  if ("kind" in ref && ref.kind === "mix") {
+    const a = `${ref.a.palette}.${ref.a.step}`;
+    const b = "kind" in ref.b ? ref.b.kind : `${ref.b.palette}.${ref.b.step}`;
+    return `mix(${a} ${ref.aPercent}%, ${b})`;
+  }
   return `${ref.palette}.${ref.step}`;
 }
 

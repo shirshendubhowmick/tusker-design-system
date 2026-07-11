@@ -18,6 +18,19 @@ function assertValidRef(ref: SemanticRef, label: string): void {
     expect(RADIX_STEPS).toContain(ref.step);
     return;
   }
+  if ("kind" in ref && ref.kind === "mix") {
+    expect(ref.aPercent, label).toBeGreaterThanOrEqual(1);
+    expect(ref.aPercent, label).toBeLessThanOrEqual(99);
+    expect(Object.keys(palette)).toContain(ref.a.palette);
+    expect(RADIX_STEPS).toContain(ref.a.step);
+    if ("kind" in ref.b) {
+      expect(["black", "white"]).toContain(ref.b.kind);
+    } else {
+      expect(Object.keys(palette)).toContain(ref.b.palette);
+      expect(RADIX_STEPS).toContain(ref.b.step);
+    }
+    return;
+  }
   expect(Object.keys(palette)).toContain(ref.palette);
   expect(RADIX_STEPS).toContain(ref.step);
 }
@@ -43,16 +56,20 @@ describe("semanticColorTokens", () => {
     }
   });
 
-  it("uses surface elevation overrides only where documented in light≠dark", () => {
+  it("uses light≠dark overrides only where documented", () => {
     const elevated = semanticColorTokens.filter(hasModeOverride);
     const names = elevated.map((t) => t.name).sort();
-    // These are intentional mode overrides in the catalog today.
+    // Intentional mode overrides in the catalog today.
     expect(names).toEqual(
       [
         "bg-surface",
         "bg-surface-active",
         "bg-surface-hover",
+        // Status text: darker step in light (AA on soft), step 11 in dark.
+        "info-text",
         "overlay-scrim",
+        "success-text",
+        "warning-text",
       ].sort(),
     );
   });

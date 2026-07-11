@@ -39,24 +39,27 @@ describe("inputFieldVariants", () => {
     expectHasClasses(success, [
       "border-success-border",
       "focus-within:border-success-solid",
+      "focus-within:shadow-focus-success",
     ]);
-    expect(success).toContain("--color-success-solid");
-    expect(success).not.toContain("shadow-focus");
+    // Brand focus utility only — status uses shadow-focus-success.
+    expect(success.split(/\s+/)).not.toContain("focus-within:shadow-focus");
 
     const danger = inputFieldVariants({ color: "danger" });
     expectHasClasses(danger, [
       "border-danger-border",
       "focus-within:border-danger-solid",
+      "focus-within:shadow-focus-danger",
     ]);
-    expect(danger).toContain("--color-danger-solid");
-    expect(danger).not.toContain("shadow-focus");
+    expect(danger.split(/\s+/)).not.toContain("focus-within:shadow-focus");
   });
 
   it("applies warning color with matching focus ring", () => {
     const warning = inputFieldVariants({ color: "warning" });
-    expectHasClasses(warning, ["border-warning-border"]);
-    expect(warning).toContain("--color-warning-solid");
-    expect(warning).not.toContain("shadow-focus");
+    expectHasClasses(warning, [
+      "border-warning-border",
+      "focus-within:shadow-focus-warning",
+    ]);
+    expect(warning.split(/\s+/)).not.toContain("focus-within:shadow-focus");
   });
 
   it("uses brand focus-within shadow-focus for default color only", () => {

@@ -18,7 +18,11 @@ describe("focusRing", () => {
     expect(focusRingClass.within.default).toBe(focusRing({ within: true }));
   });
 
-  it("tints status intents with the solid color (same 3px geometry)", () => {
+  it("uses named status shadow utilities (same 3px geometry as brand focus)", () => {
+    expect(focusRingShadowClass.success).toBe("shadow-focus-success");
+    expect(focusRingShadowClass.danger).toBe("shadow-focus-danger");
+    expect(focusRingShadowClass.warning).toBe("shadow-focus-warning");
+
     for (const intent of [
       FocusRingIntent.success,
       FocusRingIntent.danger,
@@ -31,7 +35,8 @@ describe("focusRing", () => {
       expect(self).toContain(`focus-visible:${focusRingShadowClass[intent]}`);
       expect(within).toBe(`focus-within:${focusRingShadowClass[intent]}`);
       expect(within).not.toContain("outline-none");
-      expect(within).not.toContain("shadow-focus");
+      // Brand token only — not the status utilities' prefix alone.
+      expect(within).not.toBe("focus-within:shadow-focus");
     }
   });
 

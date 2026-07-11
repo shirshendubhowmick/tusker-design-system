@@ -143,6 +143,48 @@ function radixScale(radixName: string, mode: ColorMode): RadixScaleModule {
   return scale;
 }
 
+function resolvePaletteStepToHex(
+  paletteName: PaletteName,
+  step: RadixStep,
+  mode: ColorMode,
+): string {
+  const radixName = palette[paletteName].radix;
+
+  if (radixName === "blue") {
+    return customBlue[mode][step];
+  }
+
+  const scale = radixScale(radixName, mode);
+  const key = `${radixName}${step}`;
+  const value = scale[key];
+  if (!value) {
+    throw new Error(`Missing ${key} on ${mode} scale`);
+  }
+  if (!value.startsWith("#")) {
+    throw new Error(`Expected hex for ${key}, got "${value}"`);
+  }
+  return normalizeHex(value);
+}
+
+/** sRGB mix of two hex colors (matches CSS color-mix in srgb for opaque hex). */
+function mixHex(a: string, b: string, aPercent: number): string {
+  const t = aPercent / 100;
+  const ca = parseHexRgb(a);
+  const cb = parseHexRgb(b);
+  const mixed: [number, number, number] = [
+    ca[0] * t + cb[0] * (1 - t),
+    ca[1] * t + cb[1] * (1 - t),
+    ca[2] * t + cb[2] * (1 - t),
+  ];
+  return `#${mixed
+    .map((c) =>
+      Math.round(c * 255)
+        .toString(16)
+        .padStart(2, "0"),
+    )
+    .join("")}`;
+}
+
 /** Resolve a single semantic ref to opaque sRGB `#rrggbb`. */
 export function resolveSemanticRefToHex(
   ref: SemanticRef,
@@ -156,24 +198,18 @@ export function resolveSemanticRefToHex(
       `Overlay refs (${ref.name}-a${ref.step}) are not opaque; skip in contrast pairs`,
     );
   }
-
-  const paletteName = ref.palette as PaletteName;
-  const radixName = palette[paletteName].radix;
-
-  if (radixName === "blue") {
-    return customBlue[mode][ref.step];
+  if ("kind" in ref && ref.kind === "mix") {
+    const aHex = resolvePaletteStepToHex(ref.a.palette, ref.a.step, mode);
+    const bHex =
+      "kind" in ref.b
+        ? ref.b.kind === "black"
+          ? "#000000"
+          : "#ffffff"
+        : resolvePaletteStepToHex(ref.b.palette, ref.b.step, mode);
+    return mixHex(aHex, bHex, ref.aPercent);
   }
 
-  const scale = radixScale(radixName, mode);
-  const key = `${radixName}${ref.step}`;
-  const value = scale[key];
-  if (!value) {
-    throw new Error(`Missing ${key} on ${mode} scale`);
-  }
-  if (!value.startsWith("#")) {
-    throw new Error(`Expected hex for ${key}, got "${value}"`);
-  }
-  return normalizeHex(value);
+  return resolvePaletteStepToHex(ref.palette, ref.step, mode);
 }
 
 /** Resolve a catalog token name to hex in the given color mode. */
@@ -233,102 +269,63 @@ function pair(
 
 /**
  * Product contrast contracts — every intentional fg/bg combination we claim.
- * Matrix stories fail when these are violated in real CSS; this table is the
- * token-level source of truth for *why* and *how hard*.
+ *
+ * Target is WCAG AA for how the kit actually paints type:
+ * - Buttons / badges use `text-label-*` at ~12–14px regular → **normal text → 4.5:1**
+ *   (not large-text 3:1; large would need ≥18pt or ≥14pt bold).
+ * - Soft / outline status uses `*-text` on canvas, surface, or `*-subtle` → **4.5:1**.
+ *
+ * Use `floor` only for deliberate, documented exceptions (none today).
+ * Use `large-ui` only if a pair is intentionally non-text UI chrome at 3:1.
  */
 export const semanticContrastPairs: readonly SemanticContrastPair[] = [
-  // ── Neutral text on surfaces (body AA) ─────────────────────────────
+  // ── Neutral text on surfaces ───────────────────────────────────────
   pair("fg-default", "bg-canvas", "body"),
   pair("fg-default", "bg-subtle", "body"),
   pair("fg-default", "bg-surface", "body"),
   pair("fg-muted", "bg-canvas", "body"),
   pair("fg-muted", "bg-surface", "body"),
+  pair("fg-subtle", "bg-canvas", "body", {
+    note: "Placeholders / tertiary — still body AA (same floor as muted)",
+  }),
+  pair("fg-subtle", "bg-surface", "body"),
   pair("fg-on-inverse", "bg-inverse", "body"),
-
-  // Tertiary / placeholder — gray-10 is below body AA on canvas (light ~3.7).
-  pair("fg-subtle", "bg-canvas", "floor", {
-    minRatio: 3.5,
-    note: "gray-10 tertiary; body AA not claimed until step/mapping changes",
-  }),
-  pair("fg-subtle", "bg-surface", "floor", {
-    minRatio: 3.4,
-    note: "gray-10 on surface; pin floor pending token work",
-  }),
 
   // ── Brand text ─────────────────────────────────────────────────────
   pair("accent-text", "bg-canvas", "body"),
   pair("accent-text", "bg-surface", "body"),
   pair("accent-text", "accent-subtle", "body"),
 
-  // ── Status text on canvas / surface / soft fills ───────────────────
-  // Danger + most dark-mode pairs clear body AA. Soft light-mode status
-  // on subtle is the Matrix debt (step 11 on step 3 ≈ 4.2–4.3).
+  // ── Status text (soft badges, messages, outline) ───────────────────
+  pair("success-text", "bg-canvas", "body"),
+  pair("success-text", "bg-surface", "body"),
+  pair("success-text", "success-subtle", "body"),
+  pair("warning-text", "bg-canvas", "body"),
+  pair("warning-text", "bg-surface", "body"),
+  pair("warning-text", "warning-subtle", "body"),
   pair("danger-text", "bg-canvas", "body"),
   pair("danger-text", "bg-surface", "body"),
   pair("danger-text", "danger-subtle", "body"),
-
-  pair("success-text", "bg-canvas", "body"),
-  pair("success-text", "bg-surface", "floor", {
-    minRatio: 4.4,
-    note: "light: green-11 on gray-2 ≈ 4.49; pin until raised to full body AA",
-  }),
-  pair("success-text", "success-subtle", "floor", {
-    minRatio: 4.1,
-    note: "light: green-11 on green-3 ≈ 4.21 — soft badge debt from Matrix",
-  }),
-
-  pair("warning-text", "bg-canvas", "floor", {
-    minRatio: 4.4,
-    note: "light: amber-11 on canvas ≈ 4.50 border; pin floor",
-  }),
-  pair("warning-text", "bg-surface", "floor", {
-    minRatio: 4.3,
-    note: "light: amber-11 on surface ≈ 4.38",
-  }),
-  pair("warning-text", "warning-subtle", "floor", {
-    minRatio: 4.1,
-    note: "light: amber-11 on amber-3 ≈ 4.25 — soft badge debt",
-  }),
-
   pair("info-text", "bg-canvas", "body"),
   pair("info-text", "bg-surface", "body"),
-  pair("info-text", "info-subtle", "floor", {
-    minRatio: 4.1,
-    note: "light: cyan-11 on cyan-3 ≈ 4.26 — soft badge debt",
-  }),
+  pair("info-text", "info-subtle", "body"),
 
-  // ── Solid fills + on-fill ink ──────────────────────────────────────
-  // Custom brand solid was tuned for white (body AA). Status Radix-9 solids
-  // are AA large / UI only with white (same as Radix docs).
+  // ── Solid fills + on-fill ink (button / solid badge labels) ────────
   pair("fg-on-accent", "accent-solid", "body", {
-    note: "Custom brand blue-9 seeded for white labels",
+    note: "Custom brand blue-9 seeded for white label text",
   }),
   pair("fg-on-accent", "accent-solid-hover", "body"),
-
   pair("fg-on-warning", "warning-solid", "body", {
     note: "Fixed dark ink on amber solid (not white)",
   }),
-
-  pair("fg-on-success", "success-solid", "large-ui", {
-    note: "Radix green-9 + white ≈ 3.2 — body AA not claimed for small labels",
+  pair("fg-on-success", "success-solid", "body", {
+    note: "Solid tuned for white labels at text-label-* sizes (4.5:1)",
   }),
-  pair("fg-on-danger", "danger-solid", "large-ui", {
-    note: "Radix red-9 + white ≈ 3.9",
-  }),
-  pair("fg-on-info", "info-solid", "large-ui", {
-    note: "Radix cyan-9 + white ≈ 3.0",
-  }),
-
-  // Hover solids can be lighter (esp. dark mode step 10) — pin large-ui / floor.
-  pair("fg-on-success", "success-solid-hover", "floor", {
-    minRatio: 2.7,
-    note: "dark green-10 + white dips under 3:1; track until solid hover retuned",
-  }),
-  pair("fg-on-danger", "danger-solid-hover", "large-ui"),
-  pair("fg-on-info", "info-solid-hover", "floor", {
-    minRatio: 2.5,
-    note: "dark cyan-10 + white under 3:1; track until solid hover retuned",
-  }),
+  pair("fg-on-success", "success-solid-hover", "body"),
+  pair("fg-on-danger", "danger-solid", "body"),
+  pair("fg-on-danger", "danger-solid-hover", "body"),
+  pair("fg-on-info", "info-solid", "body"),
+  pair("fg-on-info", "info-solid-hover", "body"),
 ] as const;
 
 export function minRatioForPair(pair: SemanticContrastPair): number {
