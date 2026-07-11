@@ -75,7 +75,14 @@ export default defineConfig({
           browser: {
             enabled: true,
             headless: true,
-            provider: playwright({}),
+            provider: playwright({
+              // Docker/devcontainers default /dev/shm to 64MB; Chromium exhausts
+              // it and the page crashes ("Browser connection was closed").
+              // Route its shared memory to /tmp instead. Harmless on CI runners.
+              launchOptions: {
+                args: ["--disable-dev-shm-usage"],
+              },
+            }),
             instances: [{ browser: "chromium" }],
           },
         },
