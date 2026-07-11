@@ -269,7 +269,11 @@ function ZIndexDoc({ theme }: { theme: ColorMode }) {
 
 const meta = {
   title: "Foundations/Z-Index",
-  parameters: { layout: "fullscreen" },
+  parameters: {
+    layout: "fullscreen",
+    // Stacking demo layers, not product chrome under a11y review.
+    a11y: { test: "off" },
+  },
 } satisfies Meta;
 
 export default meta;

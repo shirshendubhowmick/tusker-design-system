@@ -500,7 +500,11 @@ function BreakpointsDoc({ theme }: { theme: ColorMode }) {
 
 const meta = {
   title: "Foundations/Breakpoints",
-  parameters: { layout: "fullscreen" },
+  parameters: {
+    layout: "fullscreen",
+    // Layout documentation, not product components.
+    a11y: { test: "off" },
+  },
 } satisfies Meta;
 
 export default meta;

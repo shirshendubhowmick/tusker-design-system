@@ -530,7 +530,11 @@ function ShadowsDoc({ theme }: { theme: ColorMode }) {
 
 const meta = {
   title: "Foundations/Shadows",
-  parameters: { layout: "fullscreen" },
+  parameters: {
+    layout: "fullscreen",
+    // Elevation specimens only; not interactive product UI.
+    a11y: { test: "off" },
+  },
 } satisfies Meta;
 
 export default meta;

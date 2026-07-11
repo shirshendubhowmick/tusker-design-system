@@ -76,7 +76,7 @@ Orchestrated tasks (`dev`, `build`, `test`, `typecheck`) run via **Turborepo**. 
 | `pnpm tokens:check`                 | Fail if generated token CSS is stale                                  |
 | `pnpm exports:generate`             | Regenerate `@design-system/ui` package `exports` map                  |
 | `pnpm exports:check`                | Fail if package `exports` are stale                                   |
-| `pnpm test`                         | `turbo run test` — Vitest across packages                             |
+| `pnpm test`                         | `turbo run test` — unit suite (jsdom/node)                            |
 | `pnpm lint` / `pnpm lint:fix`       | ESLint (flat config at repo root; monorepo-wide)                      |
 | `pnpm format` / `pnpm format:check` | Prettier write / check                                                |
 | `pnpm build`                        | `turbo run build` — **apps only**; runs DS token/export codegen first |

@@ -664,6 +664,9 @@ const meta = {
   title: "Foundations/Colors",
   parameters: {
     layout: "fullscreen",
+    // Token swatches intentionally include low-contrast steps (1–12 scale).
+    // Product contrast is ADR-003 Layer 3 (semantic pair math), not story axe.
+    a11y: { test: "off" },
   },
 } satisfies Meta;
 
