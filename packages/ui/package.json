@@ -35,6 +35,7 @@
     "test": "vitest run --project unit",
     "test:unit": "vitest run --project unit",
     "test:storybook": "vitest run --project storybook",
+    "test:storybook:headed": "vitest --project storybook --browser.headless=false",
     "test:watch": "vitest",
     "test:coverage": "vitest run --project unit --coverage",
     "coverage": "vitest run --project unit --coverage",
