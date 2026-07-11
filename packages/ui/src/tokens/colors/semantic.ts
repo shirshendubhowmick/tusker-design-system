@@ -174,7 +174,7 @@ export const semanticColorTokens = [
     name: "fg-subtle",
     group: "foreground",
     description:
-      "Tertiary text (placeholders, disabled hints). Step 11 — gray-10 fails WCAG AA body on canvas (~3.7:1). Same step as muted (no AA-safe step between 10 and 11).",
+      "Faint UI text (placeholders, hints, de-emphasized chrome). Same step as muted (gray-11) so any use stays body-AA safe on canvas/surface — we cannot enforce “only on disabled,” so the token is safe everywhere rather than a fragile gray-10 exception.",
     ...both("gray", 11),
   },
   {

@@ -286,7 +286,7 @@ export const semanticContrastPairs: readonly SemanticContrastPair[] = [
   pair("fg-muted", "bg-canvas", "body"),
   pair("fg-muted", "bg-surface", "body"),
   pair("fg-subtle", "bg-canvas", "body", {
-    note: "Placeholders / tertiary — still body AA (same floor as muted)",
+    note: "Same step as muted (gray-11): faint token is safe for any use, not only disabled/hints",
   }),
   pair("fg-subtle", "bg-surface", "body"),
   pair("fg-on-inverse", "bg-inverse", "body"),
