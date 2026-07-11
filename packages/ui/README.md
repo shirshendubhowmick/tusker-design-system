@@ -386,17 +386,19 @@ pnpm --filter @design-system/ui storybook
 pnpm --filter @design-system/ui test
 ```
 
-| Command                 | Description                                         |
-| ----------------------- | --------------------------------------------------- |
-| `pnpm tokens:generate`  | Generate token CSS from TypeScript sources          |
-| `pnpm tokens:check`     | Fail if generated CSS is stale (CI-friendly)        |
-| `pnpm exports:generate` | Regenerate `package.json` `exports` from components |
-| `pnpm exports:check`    | Fail if `exports` are stale                         |
-| `pnpm test`             | Run Vitest (tokens, exports, components)            |
-| `pnpm test:watch`       | Vitest watch mode                                   |
-| `pnpm storybook`        | Generate tokens/exports + Storybook dev server      |
-| `pnpm build-storybook`  | Generate tokens/exports + static Storybook          |
-| `pnpm typecheck`        | TypeScript only (no emit / no lib build)            |
+| Command                 | Description                                                     |
+| ----------------------- | --------------------------------------------------------------- |
+| `pnpm tokens:generate`  | Generate token CSS from TypeScript sources                      |
+| `pnpm tokens:check`     | Fail if generated CSS is stale (CI-friendly)                    |
+| `pnpm exports:generate` | Regenerate `package.json` `exports` from components             |
+| `pnpm exports:check`    | Fail if `exports` are stale                                     |
+| `pnpm test`             | Vitest unit project (jsdom/node) — default CI                   |
+| `pnpm test:unit`        | Same as `test` (explicit)                                       |
+| `pnpm test:storybook`   | Storybook + axe in Chromium (ADR-003 L1; on-demand CI workflow) |
+| `pnpm test:watch`       | Vitest watch mode                                               |
+| `pnpm storybook`        | Generate tokens/exports + Storybook dev server                  |
+| `pnpm build-storybook`  | Generate tokens/exports + static Storybook                      |
+| `pnpm typecheck`        | TypeScript only (no emit / no lib build)                        |
 
 There is **no** package `dev` script — Storybook is opt-in via `pnpm storybook` (root or filter). App `pnpm dev` does not start Storybook.
 

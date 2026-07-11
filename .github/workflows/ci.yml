@@ -49,6 +49,7 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
+      # Unit / jsdom only — Storybook axe is the on-demand a11y workflow
       - name: Test
         run: pnpm test
 

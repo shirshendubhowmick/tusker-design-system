@@ -1,0 +1,65 @@
+# ADR-003 Layer 1 — Storybook portable stories + axe in Playwright Chromium.
+# On-demand only (workflow_dispatch) so PR CI stays cheap; run manually before
+# merge when changing components/stories/tokens that affect rendered UI.
+name: A11y (Storybook axe)
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  storybook-a11y:
+    name: Storybook · axe
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.7.0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Resolve Playwright version
+        id: playwright
+        run: |
+          version="$(pnpm --filter @design-system/ui exec -- node -p "require('playwright/package.json').version")"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+
+      # Browser binaries are large; cache by Playwright version so re-runs skip download.
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-chromium
+          restore-keys: |
+            playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-
+            playwright-${{ runner.os }}-
+
+      # Fresh cache miss: download Chromium + install OS packages.
+      - name: Install Playwright Chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm --filter @design-system/ui exec playwright install chromium --with-deps
+
+      # Cache hit: browsers restored; still need OS deps on the runner image.
+      - name: Install Playwright OS dependencies
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm --filter @design-system/ui exec playwright install-deps chromium
+
+      - name: Storybook axe (ADR-003 Layer 1)
+        run: pnpm --filter @design-system/ui test:storybook

@@ -772,7 +772,11 @@ function TypographyDoc({ theme }: { theme: ColorMode }) {
 
 const meta = {
   title: "Foundations/Typography",
-  parameters: { layout: "fullscreen" },
+  parameters: {
+    layout: "fullscreen",
+    // Specimen grids, not product UI — axe contrast noise from scale demos.
+    a11y: { test: "off" },
+  },
 } satisfies Meta;
 
 export default meta;

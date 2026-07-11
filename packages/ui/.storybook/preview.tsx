@@ -114,6 +114,19 @@ const preview: Preview = {
     docs: {
       container: ThemedDocsContainer,
     },
+    /**
+     * Accessibility (ADR-003 Layer 1).
+     * With `@storybook/addon-vitest`, `test: "error"` fails CI when axe finds
+     * violations. Foundation token grids opt out per-file — they intentionally
+     * render low-contrast steps; contrast is Layer 3 (token math).
+     */
+    a11y: {
+      test: "error",
+      // Component stories rarely need the page-level landmark rule.
+      config: {
+        rules: [{ id: "region", enabled: false }],
+      },
+    },
   },
   initialGlobals: {
     theme: "light",
