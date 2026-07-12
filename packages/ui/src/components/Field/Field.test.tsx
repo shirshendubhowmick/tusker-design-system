@@ -29,8 +29,8 @@ describe("Field", () => {
     );
   });
 
-  it("wires description and message into aria-describedby", () => {
-    render(
+  it("wires description and message into aria-describedby", async () => {
+    const { container } = render(
       <Field
         label="Username"
         htmlFor="user"
@@ -49,17 +49,20 @@ describe("Field", () => {
     expect(describedBy.split(/\s+/)).toEqual(
       expect.arrayContaining([description.id, message.id]),
     );
+    await expectNoA11yViolations(container);
   });
 
-  it("uses role=alert and aria-invalid for danger messages", () => {
-    render(
+  it("uses role=alert and aria-invalid for danger messages", async () => {
+    const { container } = render(
       <Field
         label="Password"
         htmlFor="pw"
         message="Too short"
         messageTone={FieldMessageTone.danger}
       >
-        {(control) => <input {...control} type="password" />}
+        {(control) => (
+          <input {...control} type="password" autoComplete="current-password" />
+        )}
       </Field>,
     );
     expect(screen.getByRole("alert")).toHaveTextContent("Too short");
@@ -67,6 +70,7 @@ describe("Field", () => {
       "aria-invalid",
       "true",
     );
+    await expectNoA11yViolations(container);
   });
 
   it("horizontal: associates choice control with label and description", () => {
@@ -86,8 +90,8 @@ describe("Field", () => {
     expect(screen.getByText("Weekly product news")).toBeInTheDocument();
   });
 
-  it("horizontal: shows danger message as alert under the control", () => {
-    render(
+  it("horizontal: shows danger message as alert under the control", async () => {
+    const { container } = render(
       <Field
         orientation={FieldOrientation.horizontal}
         label="I agree to the terms"
@@ -105,6 +109,7 @@ describe("Field", () => {
     expect(screen.getByRole("alert")).toHaveTextContent(
       "You must accept to continue.",
     );
+    await expectNoA11yViolations(container);
   });
 
   it("shows required marker and aria-required on the control", () => {

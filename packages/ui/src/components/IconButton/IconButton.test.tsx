@@ -24,8 +24,8 @@ function expectHasClasses(
 }
 
 describe("IconButton", () => {
-  it("renders a named icon button with default solid primary styles", () => {
-    render(
+  it("renders a named icon button with default solid primary styles", async () => {
+    const { container } = render(
       <IconButton aria-label="Search">
         <MagnifyingGlassIcon data-testid="icon" />
       </IconButton>,
@@ -39,6 +39,7 @@ describe("IconButton", () => {
       "p-0!",
       "inline-flex",
     ]);
+    await expectNoA11yViolations(container);
   });
 
   it("supports sizes as square hit targets", () => {
@@ -80,8 +81,8 @@ describe("IconButton", () => {
     ]);
   });
 
-  it("replaces the icon with a spinner when loading", () => {
-    render(
+  it("replaces the icon with a spinner when loading", async () => {
+    const { container } = render(
       <IconButton aria-label="Refresh" loading>
         <MagnifyingGlassIcon data-testid="icon" />
       </IconButton>,
@@ -92,6 +93,7 @@ describe("IconButton", () => {
     expect(button).toHaveAttribute("aria-busy", "true");
     expect(button.querySelector("svg[aria-hidden='true']")).toBeTruthy();
     expect(screen.queryByTestId("icon")).not.toBeInTheDocument();
+    await expectNoA11yViolations(container);
   });
 
   it("keeps tertiary (and bare) square — not tall/narrow", () => {

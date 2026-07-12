@@ -77,11 +77,12 @@ describe("inputFieldVariants", () => {
 });
 
 describe("Input", () => {
-  it("renders a text input by default", () => {
-    render(<Input aria-label="Email" />);
+  it("renders a text input by default", async () => {
+    const { container } = render(<Input aria-label="Email" />);
     const input = screen.getByRole("textbox", { name: "Email" });
     expect(input).toBeInTheDocument();
     expect(input).toHaveAttribute("type", "text");
+    await expectNoA11yViolations(container);
   });
 
   it("forwards ref and native attributes", async () => {

@@ -27,8 +27,8 @@ function expectHasClasses(
 }
 
 describe("Spinner", () => {
-  it("renders a decorative spinner by default", () => {
-    render(<Spinner data-testid="spin" />);
+  it("renders a decorative spinner by default", async () => {
+    const { container } = render(<Spinner data-testid="spin" />);
     const el = screen.getByTestId("spin");
 
     expect(el.tagName).toBe("svg");
@@ -39,6 +39,7 @@ describe("Spinner", () => {
       controlGlyphClass.md,
       "shrink-0",
     ]);
+    await expectNoA11yViolations(container);
   });
 
   it("supports every ControlSize", () => {
@@ -61,10 +62,11 @@ describe("Spinner", () => {
     ]);
   });
 
-  it("exposes a status role when label is provided", () => {
-    render(<Spinner label="Loading" />);
+  it("exposes a status role when label is provided", async () => {
+    const { container } = render(<Spinner label="Loading" />);
     const el = screen.getByRole("status", { name: "Loading" });
     expect(el).not.toHaveAttribute("aria-hidden");
+    await expectNoA11yViolations(container);
   });
 
   it("merges className and forwards ref", () => {
