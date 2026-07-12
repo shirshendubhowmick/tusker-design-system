@@ -8,3 +8,15 @@ declare module "*.module.css" {
 
 /** Allow side-effect and default CSS imports (Storybook / Vite). */
 declare module "*.css";
+
+interface ImportMetaEnv {
+  /**
+   * Set by Vite `define` on Vitest projects `storybook-light` / `storybook-dark`
+   * (`vitest.config.ts`). Unset in interactive Storybook (toolbar theme applies).
+   */
+  readonly STORYBOOK_TEST_THEME?: "light" | "dark";
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
