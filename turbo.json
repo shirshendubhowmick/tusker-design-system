@@ -3,9 +3,11 @@
   "globalDependencies": [
     "tsconfig.json",
     "pnpm-workspace.yaml",
+    ".nvmrc",
     "eslint.config.mjs",
     ".prettierrc.json"
   ],
+  "globalPassThroughEnv": ["CI", "NODE_ENV", "GITHUB_ACTIONS"],
   "tasks": {
     "tokens:generate": {
       "cache": false
@@ -18,14 +20,19 @@
     },
     "lint": {},
     "test": {
-      "dependsOn": ["^typecheck"]
+      "dependsOn": ["^typecheck"],
+      "outputs": []
     },
     "test:coverage": {
       "dependsOn": ["^typecheck"],
       "outputs": ["coverage/**"]
     },
+    "test:storybook": {
+      "cache": false,
+      "passThroughEnv": ["CI", "PLAYWRIGHT_BROWSERS_PATH", "PLAYWRIGHT_*"]
+    },
     "build": {
-      "dependsOn": ["^tokens:generate", "^exports:generate"],
+      "dependsOn": ["^tokens:generate", "^exports:generate", "^typecheck"],
       "outputs": [
         "dist/**",
         ".next/**",
@@ -33,8 +40,17 @@
         "storybook-static/**"
       ]
     },
+    "build-storybook": {
+      "dependsOn": ["tokens:generate", "exports:generate"],
+      "outputs": ["storybook-static/**"]
+    },
     "dev": {
       "dependsOn": ["^tokens:generate", "^exports:generate"],
+      "cache": false,
+      "persistent": true
+    },
+    "storybook": {
+      "dependsOn": ["tokens:generate", "exports:generate"],
       "cache": false,
       "persistent": true
     }

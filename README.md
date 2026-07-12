@@ -67,33 +67,44 @@ The design system ships **raw TypeScript** (ADR-001 JIT). Apps import subpaths l
 
 ### Useful root scripts
 
-Orchestrated tasks (`dev`, `build`, `test`, `typecheck`) run via **Turborepo**. Package-local scripts (Storybook, token/export codegen) still use `pnpm --filter`.
+Orchestrated tasks run via **Turborepo** (`turbo.json`). Package-local scripts (token/export codegen, Storybook) also exist as `pnpm --filter` entry points.
 
-| Command                             | Description                                                           |
-| ----------------------------------- | --------------------------------------------------------------------- |
-| `pnpm install`                      | Install dependencies for all workspaces                               |
-| `pnpm tokens:generate`              | Generate token CSS from TypeScript (single source of truth)           |
-| `pnpm tokens:check`                 | Fail if generated token CSS is stale                                  |
-| `pnpm exports:generate`             | Regenerate `@design-system/ui` package `exports` map                  |
-| `pnpm exports:check`                | Fail if package `exports` are stale                                   |
-| `pnpm test`                         | `turbo run test` — unit suite (jsdom/node)                            |
-| `pnpm lint` / `pnpm lint:fix`       | ESLint (flat config at repo root; monorepo-wide)                      |
-| `pnpm format` / `pnpm format:check` | Prettier write / check                                                |
-| `pnpm build`                        | `turbo run build` — **apps only**; runs DS token/export codegen first |
-| `pnpm dev`                          | `turbo run dev` — **app** dev servers only (e.g. Vite); not Storybook |
-| `pnpm storybook`                    | Storybook for `@design-system/ui` (explicit; not part of `dev`)       |
-| `pnpm typecheck`                    | `turbo run typecheck` across packages                                 |
-| `pnpm build-storybook`              | Static Storybook build                                                |
+| Command                             | Description                                                                |
+| ----------------------------------- | -------------------------------------------------------------------------- |
+| `pnpm install`                      | Install dependencies for all workspaces                                    |
+| `pnpm tokens:generate`              | Generate token CSS from TypeScript (single source of truth)                |
+| `pnpm tokens:check`                 | Fail if generated token CSS is stale                                       |
+| `pnpm exports:generate`             | Regenerate `@design-system/ui` package `exports` map                       |
+| `pnpm exports:check`                | Fail if package `exports` are stale                                        |
+| `pnpm test`                         | `turbo run test` — **unit** suite only (jsdom/node; not Storybook axe)     |
+| `pnpm test:storybook`               | `turbo run test:storybook` — Layer 1 axe (light+dark); **not cached**      |
+| `pnpm lint` / `pnpm lint:fix`       | ESLint (flat config at repo root; monorepo-wide)                           |
+| `pnpm format` / `pnpm format:check` | Prettier write / check                                                     |
+| `pnpm build`                        | `turbo run build` — **apps only**; DS codegen + typecheck first (JIT-safe) |
+| `pnpm dev`                          | `turbo run dev` — **app** dev servers only (e.g. Vite); not Storybook      |
+| `pnpm storybook`                    | Storybook for `@design-system/ui` (explicit; not part of `dev`)            |
+| `pnpm typecheck`                    | `turbo run typecheck` across packages                                      |
+| `pnpm build-storybook`              | Static Storybook build                                                     |
+
+**Turbo caching (high level):**
+
+- **Cached:** `typecheck`, `test` (unit), `test:coverage`, app `build`, `build-storybook`
+- **Never cached:** `tokens:generate`, `exports:generate`, `dev`, `storybook`, `test:storybook` (browser / long-lived / codegen)
+- **App `build`** depends on DS `tokens:generate` + `exports:generate` + `typecheck` so JIT source changes under `packages/ui` invalidate consumer builds (not only token CSS)
+- CI restores the `.turbo` directory between runs (see `ci.yml`); Storybook axe stays on-demand and uncached
 
 ### CI
 
 GitHub Actions: [`.github/workflows/ci.yml`](./.github/workflows/ci.yml) on `push`/`pull_request` to `main`:
 
 1. `pnpm install --frozen-lockfile`
-2. `tokens:check` · `exports:check` (codegen drift)
-3. `format:check` · `lint`
-4. `typecheck` · `test`
-5. `build` (apps only)
+2. Restore Turbo local cache (`.turbo`)
+3. `tokens:check` · `exports:check` (codegen drift)
+4. `format:check` · `lint`
+5. `typecheck` · `test` (unit only)
+6. `build` (apps only)
+
+On-demand a11y: [`.github/workflows/a11y.yml`](./.github/workflows/a11y.yml) → `pnpm test:storybook`
 
 Shared runtime peers (`react`, `react-dom`, `class-variance-authority`) are pinned in `pnpm-workspace.yaml` under `catalog:` and referenced as `"catalog:"` in package manifests so every workspace resolves the same version.
 

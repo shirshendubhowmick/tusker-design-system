@@ -62,4 +62,6 @@ jobs:
         run: pnpm --filter @design-system/ui exec playwright install-deps chromium
 
       - name: Storybook axe (ADR-003 Layer 1)
-        run: pnpm --filter @design-system/ui test:storybook
+        # Via turbo so task graph / passThroughEnv match local `pnpm test:storybook`.
+        # cache: false in turbo.json — browser axe is not restored from Turbo cache.
+        run: pnpm test:storybook

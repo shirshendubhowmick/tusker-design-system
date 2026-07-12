@@ -33,6 +33,18 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
+      # Local Turbo cache across CI runs (same branch / PR re-runs).
+      # Hash inputs still re-run tasks when sources change; this only restores
+      # unchanged package task artifacts (typecheck / unit test / app build).
+      - name: Cache Turbo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
+            turbo-${{ runner.os }}-
+
       # Codegen drift — must stay before app typecheck/build
       - name: Check token CSS is up to date
         run: pnpm tokens:check
