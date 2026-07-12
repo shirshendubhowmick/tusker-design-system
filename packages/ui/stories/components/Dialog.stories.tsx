@@ -324,43 +324,6 @@ export const Sizes: Story = {
   ),
 };
 
-/**
- * Destructive confirm with actions — uses Dialog `sm` until Alert Dialog lands.
- * Prefer Alert Dialog for true alert/confirm chrome later.
- */
-export const ConfirmDanger: Story = {
-  argTypes: {
-    footer: { table: { disable: true }, control: false },
-  },
-  render: function ConfirmRender() {
-    return (
-      <Root>
-        <Trigger asChild>
-          <Button color="danger" variant="secondary">
-            Delete project
-          </Button>
-        </Trigger>
-        <DialogShell
-          title="Delete project?"
-          description="This removes the project and its deploy history. This cannot be undone."
-          size="sm"
-        >
-          <ActionFooter>
-            <Close asChild>
-              <Button variant="secondary">Cancel</Button>
-            </Close>
-            <Close asChild>
-              <Button color="danger" variant="primary">
-                Delete
-              </Button>
-            </Close>
-          </ActionFooter>
-        </DialogShell>
-      </Root>
-    );
-  },
-};
-
 /** Controlled open — close after a simulated async save. */
 export const ControlledAsync: Story = {
   argTypes: {
