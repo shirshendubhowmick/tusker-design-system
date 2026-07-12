@@ -10,6 +10,7 @@
   "exports": {
     "./Badge": "./src/components/Badge/index.ts",
     "./Button": "./src/components/Button/index.ts",
+    "./Checkbox": "./src/components/Checkbox/index.ts",
     "./Field": "./src/components/Field/index.ts",
     "./FormField": "./src/components/FormField/index.ts",
     "./IconButton": "./src/components/IconButton/index.ts",
@@ -52,6 +53,7 @@
   },
   "dependencies": {
     "@radix-ui/colors": "^3.0.0",
+    "@radix-ui/react-checkbox": "^1.3.7",
     "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
