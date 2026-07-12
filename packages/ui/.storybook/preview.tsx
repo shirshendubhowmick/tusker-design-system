@@ -24,8 +24,9 @@ function resolveMode(value: unknown): ColorMode {
  *
  * Vitest projects `storybook-light` / `storybook-dark` set
  * `import.meta.env.STORYBOOK_TEST_THEME` via Vite `define` in `vitest.config.ts`
- * so Layer 1 axe covers both themes. Interactive Storybook leaves it unset and
- * uses the toolbar `globals.theme` instead.
+ * so Layer 1 axe covers both themes. Dark uses configDir `.storybook-dark`
+ * (re-export of this preview) so Storybook UI gets unique Vitest project names.
+ * Interactive Storybook leaves the env unset and uses toolbar `globals.theme`.
  */
 function resolveStoryTheme(toolbarTheme: unknown): ColorMode {
   const fromVitestConfig = import.meta.env.STORYBOOK_TEST_THEME;

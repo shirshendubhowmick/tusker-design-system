@@ -21,6 +21,7 @@
     "scripts/**/*.ts",
     "scripts/**/*.mts",
     ".storybook/**/*",
+    ".storybook-dark/**/*",
     "vite.config.ts",
     "vitest.config.ts"
   ],

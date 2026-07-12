@@ -11,11 +11,20 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 /**
  * Storybook + axe project for one color mode.
  *
- * Theme is pinned in this config via Vite `define` →
- * `import.meta.env.STORYBOOK_TEST_THEME`, which `.storybook/preview.tsx` reads.
- * No shell env vars required.
+ * Theme is pinned via Vite `define` → `import.meta.env.STORYBOOK_TEST_THEME`
+ * (read in `.storybook/preview.tsx`). No shell env vars required.
+ *
+ * Light and dark use **different** `configDir`s. `@storybook/addon-vitest`
+ * renames projects to `storybook:${configDir}` when Storybook UI launches
+ * Vitest (`VITEST_STORYBOOK=true`). Sharing one configDir makes that name
+ * collide and fails with "Project name is not unique".
  */
 function storybookProject(theme: "light" | "dark"): ViteUserConfig {
+  const configDir =
+    theme === "light"
+      ? path.join(dirname, ".storybook")
+      : path.join(dirname, ".storybook-dark");
+
   return {
     define: {
       "import.meta.env.STORYBOOK_TEST_THEME": JSON.stringify(theme),
@@ -24,7 +33,8 @@ function storybookProject(theme: "light" | "dark"): ViteUserConfig {
       react(),
       tailwindcss(),
       storybookTest({
-        configDir: path.join(dirname, ".storybook"),
+        configDir,
+        // Interactive Storybook always uses `.storybook` (not the dark mirror).
         storybookScript: "pnpm storybook --no-open",
       }),
     ],
