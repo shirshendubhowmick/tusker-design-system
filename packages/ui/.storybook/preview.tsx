@@ -20,6 +20,22 @@ function resolveMode(value: unknown): ColorMode {
 }
 
 /**
+ * Color mode for the current story render.
+ *
+ * Vitest projects `storybook-light` / `storybook-dark` set
+ * `import.meta.env.STORYBOOK_TEST_THEME` via Vite `define` in `vitest.config.ts`
+ * so Layer 1 axe covers both themes. Interactive Storybook leaves it unset and
+ * uses the toolbar `globals.theme` instead.
+ */
+function resolveStoryTheme(toolbarTheme: unknown): ColorMode {
+  const fromVitestConfig = import.meta.env.STORYBOOK_TEST_THEME;
+  if (fromVitestConfig === "dark" || fromVitestConfig === "light") {
+    return fromVitestConfig;
+  }
+  return resolveMode(toolbarTheme);
+}
+
+/**
  * Apply product color mode on the preview document (html/body).
  * Shared by story canvas and Docs so token utilities resolve correctly.
  */
@@ -151,7 +167,7 @@ const preview: Preview = {
   },
   decorators: [
     (Story, context) => {
-      const theme = resolveMode(context.globals.theme);
+      const theme = resolveStoryTheme(context.globals.theme);
       applyColorMode(theme);
 
       return (

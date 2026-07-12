@@ -4,19 +4,56 @@ import react from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { defineConfig } from "vitest/config";
+import { type ViteUserConfig, defineConfig } from "vitest/config";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /**
- * Two Vitest projects:
- * 1. unit — existing token/component tests (node + jsdom via pragma)
- * 2. storybook — portable stories in Playwright Chromium + axe (ADR-003 Layer 1)
+ * Storybook + axe project for one color mode.
+ *
+ * Theme is pinned in this config via Vite `define` →
+ * `import.meta.env.STORYBOOK_TEST_THEME`, which `.storybook/preview.tsx` reads.
+ * No shell env vars required.
+ */
+function storybookProject(theme: "light" | "dark"): ViteUserConfig {
+  return {
+    define: {
+      "import.meta.env.STORYBOOK_TEST_THEME": JSON.stringify(theme),
+    },
+    plugins: [
+      react(),
+      tailwindcss(),
+      storybookTest({
+        configDir: path.join(dirname, ".storybook"),
+        storybookScript: "pnpm storybook --no-open",
+      }),
+    ],
+    test: {
+      name: `storybook-${theme}`,
+      // // One story file at a time: parallel browser pages OOM constrained hosts.
+      // fileParallelism: false,
+      browser: {
+        enabled: true,
+        headless: true,
+        provider: playwright({
+          launchOptions: {
+            args: ["--disable-dev-shm-usage"],
+          },
+        }),
+        // Unique instance name per theme — Vitest forbids two bare "chromium" instances.
+        instances: [{ browser: "chromium", name: `chromium-${theme}` }],
+      },
+    },
+  };
+}
+
+/**
+ * Projects:
+ * 1. unit — token/component tests (node + jsdom)
+ * 2–3. storybook-light / storybook-dark — stories + axe (ADR-003 Layer 1)
  */
 export default defineConfig({
   test: {
-    // Root-level defaults shared when projects set `extends: true` carefully;
-    // each project sets its own name/environment so they stay isolated.
     passWithNoTests: false,
     coverage: {
       provider: "v8",
@@ -45,9 +82,7 @@ export default defineConfig({
         plugins: [react()],
         test: {
           name: "unit",
-          // describe / it / expect / vi available without importing from "vitest".
           globals: true,
-          // Token/helpers stay on Node; component tests opt into jsdom via file pragma.
           environment: "node",
           include: [
             "src/**/*.test.ts",
@@ -57,36 +92,8 @@ export default defineConfig({
           setupFiles: ["./src/test/setup.ts"],
         },
       },
-      {
-        // Storybook project needs the same Vite plugins as Storybook (Tailwind).
-        plugins: [
-          react(),
-          tailwindcss(),
-          // Transforms stories into Vitest tests; injects a11y checks from addon-a11y.
-          // See: https://storybook.js.org/docs/writing-tests/integrations/vitest-addon
-          storybookTest({
-            configDir: path.join(dirname, ".storybook"),
-            // Used for failure links in watch mode; CI does not need Storybook running.
-            storybookScript: "pnpm storybook --no-open",
-          }),
-        ],
-        test: {
-          name: "storybook",
-          browser: {
-            enabled: true,
-            headless: true,
-            provider: playwright({
-              // Docker/devcontainers default /dev/shm to 64MB; Chromium exhausts
-              // it and the page crashes ("Browser connection was closed").
-              // Route its shared memory to /tmp instead. Harmless on CI runners.
-              launchOptions: {
-                args: ["--disable-dev-shm-usage"],
-              },
-            }),
-            instances: [{ browser: "chromium" }],
-          },
-        },
-      },
+      storybookProject("light"),
+      storybookProject("dark"),
     ],
   },
 });
