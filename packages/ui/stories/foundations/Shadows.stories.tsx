@@ -15,6 +15,7 @@ import {
 import {
   type ShadowName,
   shadowElevationOrder,
+  shadowOrder,
   shadowTokens,
   shadowTopOrder,
 } from "../../src/tokens/shadows";
@@ -34,6 +35,9 @@ const shadowClass: Record<ShadowName, string> = {
   "inner": "shadow-inner",
   "border": "shadow-border",
   "focus": "shadow-focus",
+  "focus-success": "shadow-focus-success",
+  "focus-danger": "shadow-focus-danger",
+  "focus-warning": "shadow-focus-warning",
 };
 
 /**
@@ -468,7 +472,15 @@ function ShadowsDoc({ theme }: { theme: ColorMode }) {
             <SurfaceRow
               key={`special-${surface.token}`}
               surface={surface}
-              shadows={["inner", "border", "focus", "none"]}
+              shadows={[
+                "inner",
+                "border",
+                "focus",
+                "focus-success",
+                "focus-danger",
+                "focus-warning",
+                "none",
+              ]}
               direction="down"
               theme={theme}
             />
@@ -495,16 +507,7 @@ function ShadowsDoc({ theme }: { theme: ColorMode }) {
               </tr>
             </thead>
             <tbody>
-              {(
-                [
-                  ...elevationShadows,
-                  ...shadowTopOrder,
-                  "inner",
-                  "border",
-                  "focus",
-                  "none",
-                ] as ShadowName[]
-              ).map((name) => {
+              {shadowOrder.map((name) => {
                 const token = shadowTokens[name];
                 return (
                   <tr key={name} className="border-border-default border-t">

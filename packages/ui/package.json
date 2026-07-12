@@ -73,6 +73,7 @@
     "@vitest/browser-playwright": "4.1.9",
     "@vitest/coverage-v8": "^4.1.9",
     "@vitest/ui": "4.1.9",
+    "axe-core": "^4.12.1",
     "class-variance-authority": "catalog:",
     "jsdom": "^29.1.1",
     "playwright": "1.61.1",

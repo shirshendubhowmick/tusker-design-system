@@ -293,11 +293,14 @@ describe("Button", () => {
     expectHasClasses(button.className, ["bg-accent-solid", "h-9"]);
   });
 
-  it("forwards native attributes and the disabled state", () => {
-    render(
-      <Button disabled aria-describedby="hint" name="save" value="1">
-        Disabled
-      </Button>,
+  it("forwards native attributes and the disabled state", async () => {
+    const { container } = render(
+      <>
+        <span id="hint">Helper text</span>
+        <Button disabled aria-describedby="hint" name="save" value="1">
+          Disabled
+        </Button>
+      </>,
     );
     const button = screen.getByRole("button", { name: "Disabled" });
 
@@ -305,6 +308,7 @@ describe("Button", () => {
     expect(button).toHaveAttribute("aria-describedby", "hint");
     expect(button).toHaveAttribute("name", "save");
     expect(button).toHaveAttribute("value", "1");
+    await expectNoA11yViolations(container);
   });
 
   it("invokes onClick when enabled", async () => {
@@ -400,8 +404,8 @@ describe("Button", () => {
     expectHasClasses(link.className, ["bg-accent-solid"]);
   });
 
-  it("shows a spinner, keeps the label, and marks busy when loading", () => {
-    render(<Button loading>Save</Button>);
+  it("shows a spinner, keeps the label, and marks busy when loading", async () => {
+    const { container } = render(<Button loading>Save</Button>);
     const button = screen.getByRole("button", { name: "Save" });
 
     expect(button).toBeDisabled();
@@ -411,6 +415,7 @@ describe("Button", () => {
     expect(button.querySelector("svg[aria-hidden='true']")).toBeTruthy();
     expect(button).toHaveTextContent("Save");
     expectHasClasses(button.className, ["disabled:cursor-not-allowed"]);
+    await expectNoA11yViolations(container);
   });
 
   it("uses loadingText when provided", () => {

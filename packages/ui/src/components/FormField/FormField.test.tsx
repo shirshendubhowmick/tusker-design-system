@@ -7,15 +7,18 @@ import { createRef } from "react";
 import { FormField } from "./FormField";
 
 describe("FormField", () => {
-  it("associates label with the input", () => {
-    render(<FormField label="Email" placeholder="you@acme.com" />);
+  it("associates label with the input", async () => {
+    const { container } = render(
+      <FormField label="Email" placeholder="you@acme.com" />,
+    );
     const input = screen.getByLabelText("Email");
     expect(input).toBeInTheDocument();
     expect(input).toHaveAttribute("placeholder", "you@acme.com");
+    await expectNoA11yViolations(container);
   });
 
-  it("wires message via aria-describedby and shows message text", () => {
-    render(
+  it("wires message via aria-describedby and shows message text", async () => {
+    const { container } = render(
       <FormField
         label="Username"
         message="Available"
@@ -28,15 +31,17 @@ describe("FormField", () => {
     expect(message).toBeInTheDocument();
     expect(input.getAttribute("aria-describedby")).toBe(message.id);
     expect(message.className).toContain("text-success-text");
+    await expectNoA11yViolations(container);
   });
 
-  it("uses role=alert for danger messages", () => {
-    render(
+  it("uses role=alert for danger messages", async () => {
+    const { container } = render(
       <FormField
         label="Password"
         message="Too short"
         color="danger"
         type="password"
+        autoComplete="current-password"
       />,
     );
     expect(screen.getByRole("alert")).toHaveTextContent("Too short");
@@ -44,6 +49,7 @@ describe("FormField", () => {
       "aria-invalid",
       "true",
     );
+    await expectNoA11yViolations(container);
   });
 
   it("forwards ref and supports icons / typing", async () => {

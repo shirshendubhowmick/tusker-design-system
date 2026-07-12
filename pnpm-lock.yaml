@@ -184,6 +184,9 @@ importers:
       '@vitest/ui':
         specifier: 4.1.9
         version: 4.1.9(vitest@4.1.9)
+      axe-core:
+        specifier: ^4.12.1
+        version: 4.12.1
       class-variance-authority:
         specifier: 'catalog:'
         version: 0.7.1
