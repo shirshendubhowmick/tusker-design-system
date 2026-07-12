@@ -19,11 +19,12 @@ This document is the contract every app under `apps/*` must satisfy. Copy the ch
 }
 ```
 
-| Requirement      | Why                                                                          |
-| ---------------- | ---------------------------------------------------------------------------- |
-| `workspace:*`    | Same monorepo; no registry publish                                           |
-| `catalog:` peers | One React / CVA version across DS + apps (avoids duplicate-React hooks bugs) |
-| App owns React   | DS lists them as **peer** dependencies only                                  |
+| Requirement                   | Why                                                                                                                                       |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `workspace:*`                 | Same monorepo; no registry publish                                                                                                        |
+| `catalog:` peers              | One React / CVA version across DS + apps (avoids duplicate-React hooks bugs)                                                              |
+| No app-level Radix primitives | `@radix-ui/react-*` controls are deps of `@design-system/ui`; import from `@design-system/ui/<Name>` (Radix API, DS styles) — see ADR-002 |
+| App owns React                | DS lists them as **peer** dependencies only                                                                                               |
 
 ---
 

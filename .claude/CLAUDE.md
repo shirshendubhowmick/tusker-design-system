@@ -115,7 +115,7 @@ Every new component, including future Radix wrappers, follows the shared-chrome 
 - **Focus rings** via `focusRing()` / `focusRingClass` (`@design-system/ui/focus-ring`) — no per-component ring shadows.
 - **Floating chrome** (menus, dialogs, popovers) via `surface()` / `overlay()` (`/surface`, `/overlay`) — no ad-hoc panel/scrim classes.
 - **Hit targets** use the shared `ControlSize` scale (`sm`/`md`/`lg`) — do not hardcode `h-8`/`h-9`/`h-10`.
-- **Radix owns behavior** (keyboard, focus trap, a11y primitives); the DS owns look, tokens, and product API — keep wrappers thin.
+- **Radix primitives:** `dependencies` of `@design-system/ui` (apps do not install them); re-export **as-is** (Radix API/docs); DS only styles via tokens / focus-ring / surface / overlay. See ADR-002.
 - **JIT export** — new public component = `src/components/<Name>/index.ts`, then `pnpm exports:generate` (never hand-edit `exports`).
 
 Code review treats local focus/panel CSS or raw palette steps as drift. Full rationale + what's shipped: `docs/adr/adr_2026-07-11_002.md`.

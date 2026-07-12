@@ -39,6 +39,8 @@ No design-system library build step. In an app under `apps/`:
 | `react` / `react-dom`      | `catalog:` |
 | `class-variance-authority` | `catalog:` |
 
+**Not peers:** `@radix-ui/react-*` **primitives** are **`dependencies` of this package**. Apps do **not** install Radix primitives; they import styled re-exports from `@design-system/ui/<Name>`. Behavior/API match [Radix Primitives](https://www.radix-ui.com/primitives/docs/overview/introduction); the DS only applies tokens / shared chrome. Full rules: [ADR-002](../../docs/adr/adr_2026-07-11_002.md) (“Radix dependency + public API”).
+
 ### Public subpaths
 
 | Import                         | Path                                                    |
