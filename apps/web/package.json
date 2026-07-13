@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Minimal Vite app proving JIT consumption of @design-system/ui (ADR-001 Phase 5)",
+  "description": "Reference Vite consumer — Northstar dummy deploy console using @design-system/ui (ADR-001 JIT)",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit -p tsconfig.json && vite build",
@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@design-system/ui": "workspace:*",
+    "@radix-ui/react-icons": "^1.3.2",
     "class-variance-authority": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:"
@@ -23,6 +24,7 @@
     "@tailwindcss/vite": "^4.3.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^6.0.3",
